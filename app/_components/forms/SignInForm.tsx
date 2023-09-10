@@ -7,8 +7,8 @@ import { signIn } from 'next-auth/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Input } from '../atoms/Input';
 import { Button } from '../atoms/Button';
-import { redirect } from 'next/navigation';
 import { useRouter } from 'next/navigation';
+import { InputErrorMessage } from '../atoms/InputErrorMessage';
 
 export const SignInForm = () => {
   const router = useRouter();
@@ -37,7 +37,7 @@ export const SignInForm = () => {
         return;
       }
 
-      router.push('/');
+      router.replace('/');
     } catch (e) {
       console.log('예상치 못한 에러: ', e);
     }
@@ -59,6 +59,7 @@ export const SignInForm = () => {
           className="mt-1"
         />
       </div>
+      <InputErrorMessage message={errors.email?.message} />
       <div>
         <label htmlFor="password" className="text-sm">
           패스워드
@@ -70,8 +71,10 @@ export const SignInForm = () => {
           className="mt-1"
         />
       </div>
-      <p>{errors.password?.message}</p>
-      <Button type="submit">로그인</Button>
+      <InputErrorMessage message={errors.password?.message} />
+      <Button type="submit" className="mt-2">
+        로그인
+      </Button>
     </form>
   );
 };

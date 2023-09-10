@@ -4,13 +4,13 @@ import {
   RegisterUserInput,
   registerUser,
 } from '@/app/(auth)/register/_actions';
-import { cn } from '@/libs/utils';
 import { RegisterUserFormSchema } from '@/libs/validationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Input } from '../atoms/Input';
 import { Button } from '../atoms/Button';
+import { InputErrorMessage } from '../atoms/InputErrorMessage';
 
 export const RegisterForm = () => {
   const {
@@ -56,6 +56,7 @@ export const RegisterForm = () => {
           {...register('email')}
           className="mt-1"
         />
+        <InputErrorMessage message={errors.email?.message} />
       </div>
       <div>
         <label htmlFor="password" className="text-sm">
@@ -67,9 +68,11 @@ export const RegisterForm = () => {
           {...register('password')}
           className="mt-1"
         />
+        <InputErrorMessage message={errors.password?.message} />
       </div>
-      <p>{errors.password?.message}</p>
-      <Button type="submit">회원가입</Button>
+      <Button type="submit" className="mt-2">
+        회원가입
+      </Button>
     </form>
   );
 };
