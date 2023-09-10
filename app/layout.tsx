@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google';
 
 import { getServerSession } from 'next-auth';
 import SessionProvider from './_components/SessionProvider';
+import { authOptions } from './api/auth/[...nextauth]/route';
 
 // Next의 런타임 참고
 // https://nextjs.org/docs/app/building-your-application/rendering/edge-and-nodejs-runtimes#edge-runtime
@@ -27,9 +28,9 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   return (
-    <html lang="ko">
+    <html lang="en">
       <body className={inter.className}>
         <SessionProvider session={session}>{children}</SessionProvider>
       </body>
