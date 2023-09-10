@@ -1,15 +1,18 @@
 import { BrandLogo } from '@/components/atoms/BrandLogo';
 import { SocialSignInList } from '@/components/SocialSignInList';
 import { Separater } from '@/components/atoms/Separator';
-import { RegisterForm } from '@/components/forms/RegisterForm';
 import { getProviders } from 'next-auth/react';
 import Link from 'next/link';
+import { SignInForm } from '@/components/forms/SignInForm';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/api/auth/[...nextauth]/route';
+import { redirect } from 'next/navigation';
 
 export const metadata = {
-  title: 'Cplay | Register',
+  title: 'Cplay | Login',
 };
 
-export default async function RegisterPage() {
+export default async function LoginPage() {
   const providers = await getProviders();
 
   return (
@@ -19,11 +22,11 @@ export default async function RegisterPage() {
           <Link href="/" className="mb-8">
             <BrandLogo size="lg" />
           </Link>
-          <h1 className="text-4xl font-semibold mt-8 mb-2">회원가입</h1>
+          <h1 className="text-4xl font-semibold mt-8 mb-2">로그인</h1>
           <p className="text-foreground/60">
-            이미 계정이 있으신가요?{' '}
-            <Link href="/signin" className="text-foreground underline">
-              로그인
+            아직 회원이 아닌가요?{' '}
+            <Link href="/register" className="text-foreground underline">
+              회원가입
             </Link>
           </p>
         </header>
@@ -32,7 +35,7 @@ export default async function RegisterPage() {
 
         <Separater text="OR CONTINUE WITH" />
 
-        <RegisterForm />
+        <SignInForm />
       </div>
     </div>
   );

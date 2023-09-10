@@ -7,13 +7,12 @@ export const UserMenu = () => {
   const { data: session } = useSession();
 
   return session ? (
-    <div onClick={() => signOut()}>아이콘 및 메뉴</div>
+    <div onClick={() => signOut()}>{session.user.name}</div>
   ) : (
     <div className="flex items-center gap-2">
       <Link
-        href="/login"
+        href="/signin"
         className="px-4 py-1.5 text-foreground/60 hover:text-foreground"
-        onClick={() => signIn()}
       >
         로그인
       </Link>

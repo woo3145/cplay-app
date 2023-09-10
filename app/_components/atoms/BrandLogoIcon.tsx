@@ -1,13 +1,26 @@
-'use client';
+import { cva } from 'class-variance-authority';
 
 interface Props {
-  className?: string;
+  size?: 'sm' | 'md' | 'lg';
 }
 
-export const LogoIcon = ({ className }: Props) => {
+const brandLogoIcon = cva([], {
+  variants: {
+    size: {
+      sm: 'w-6 h-6',
+      md: 'w-7 h-7',
+      lg: 'w-8 h-8',
+    },
+  },
+  defaultVariants: {
+    size: 'md',
+  },
+});
+
+export const BrandLogoIcon = ({ size = 'md' }: Props) => {
   return (
     <svg
-      className={className}
+      className={brandLogoIcon({ size })}
       version="1.1"
       id="_x32_"
       xmlns="http://www.w3.org/2000/svg"
@@ -28,7 +41,6 @@ export const LogoIcon = ({ className }: Props) => {
        c20.6,19.264,34.104,45.92,36.312,75.776l0.864,11.8l11.407,3.144c24.361,6.72,45.552,21.232,60.624,40.712
        c15.081,19.488,24.017,43.784,24.032,70.368C484.6,346.624,471.72,375.36,450.824,396.296z"
         />
-        app-index.js:31 Warning: Prop `d` did not match. Server
         <path
           className="fill-current"
           d="M205.76,316.176c-5.24-0.816-10.88-0.568-16.512,1.208c-16.88,5.304-26.912,21.192-22.417,35.48
