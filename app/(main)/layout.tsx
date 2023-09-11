@@ -1,3 +1,4 @@
+import { SideBar } from '@/components/SideBar';
 import { Header } from '../_components/Header';
 
 export default function MainLayout({
@@ -6,9 +7,14 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div>
+    <div className="pt-16">
       <Header />
-      {children}
+      <div className="flex min-h-[calc(100vh-4rem)]">
+        <div className="hidden lg:flex flex-shrink-0 w-56 min-h-full">
+          <SideBar />
+        </div>
+        <main className="w-full px-4 pt-4">{children}</main>
+      </div>
     </div>
   );
 }

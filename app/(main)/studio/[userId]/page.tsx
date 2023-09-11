@@ -1,7 +1,7 @@
-export default function CommunityPage() {
+export default function StudioPage() {
   return (
     <div className="flex flex-col items-center justify-between">
-      <div>Community</div>
+      <div>Studio</div>
     </div>
   );
 }
