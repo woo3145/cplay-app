@@ -1,13 +1,24 @@
 'use client';
 
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { Skeleton } from './atoms/Skeleton';
+import { Avatar } from './atoms/Avatar';
 
 export const UserMenu = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+
+  if (status === 'loading') {
+    return <Skeleton className="w-9 h-9 rounded-full" />;
+  }
 
   return session ? (
-    <div onClick={() => signOut()}>{session.user.name}</div>
+    <Avatar
+      src={session.user.image}
+      circle
+      onClick={() => signOut()}
+      className="w-9 h-9 cursor-pointer"
+    />
   ) : (
     <div className="flex items-center gap-2">
       <Link
