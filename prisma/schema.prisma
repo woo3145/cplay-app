@@ -60,3 +60,58 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+model Genres {
+  id   Int    @id @default(autoincrement())
+  tag  String @unique
+  slug String @unique
+
+  tracks Track[]
+}
+
+model Track {
+  id          Int      @id @default(autoincrement())
+  title       String
+  createdAt   DateTime // 트랙 추가일
+  imageUrl    String
+  length      Int // 트랙 길이 (초)
+  bpm         Int // 트랙 템포
+  releaseDate DateTime // 트랙 공개일
+  isPublish   Boolean // 트랙 릴리즈 여부
+
+  // 1 to Many
+  creator   Creator? @relation(fields: [creatorId], references: [id], onDelete: SetNull)
+  creatorId Int?
+  stems     Stem[] // 원곡을 이루는 개별트랙
+
+  // Many to Many
+  genres Genres[]
+  moods  Mood[]
+}
+
+model Stem {
+  id       Int    @id @default(autoincrement())
+  stemType String // full, drum, bass, guitar 등등
+  mp3Src   String // 오디오 소스 url
+
+  // 1 to Many
+  track   Track? @relation(fields: [trackId], references: [id], onDelete: SetNull)
+  trackId Int?
+}
+
+model Mood {
+  id  Int    @id @default(autoincrement())
+  tag String @unique
+
+  // Many to Many
+  traks Track[]
+}
+
+model Creator {
+  id           Int    @id @default(autoincrement())
+  creativeType String
+  name         String
+
+  // 1 to Many
+  tracks Track[]
+}
