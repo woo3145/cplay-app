@@ -1,6 +1,7 @@
 'use client';
 
 import { cn } from '@/libs/utils';
+import { Role } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -39,6 +40,24 @@ export const SideBar = () => {
 
   return (
     <div className="w-full overflow-y-auto border-r border-border font-semibold tracking-widest">
+      {session?.user.role === Role.ADMIN ? (
+        <div className="py-4 border-b border-border pt-4">
+          <ul className="text-sm">
+            <li>
+              <Link
+                href={'/admin'}
+                className={cn(
+                  'flex items-center w-full px-4 py-2.5 cursor-pointer',
+                  'hover:bg-accent rounded-lg'
+                )}
+              >
+                🚪 어드민 페이지
+              </Link>
+            </li>
+          </ul>
+        </div>
+      ) : null}
+
       <div className="py-4">
         <ul className="text-sm">
           {topNavigations.map((nav) => {
