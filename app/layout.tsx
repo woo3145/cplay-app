@@ -19,9 +19,9 @@ export const runtime = 'nodejs'; // [edge, nodejs]
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'CanPlay',
+  title: 'JAZZiT',
   description:
-    'CanPlay is a platform for musicians to perform and share their improvisations',
+    'JAZZiT is a platform for musicians to perform and share their improvisations',
 };
 
 export default async function RootLayout({

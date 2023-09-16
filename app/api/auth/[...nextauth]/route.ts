@@ -5,6 +5,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 
 import prisma from '@/prisma';
 import * as bcrypt from 'bcrypt';
+import { Role } from '@prisma/client';
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -12,6 +13,15 @@ export const authOptions: AuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID ?? '',
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
+      profile: (profile) => {
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
+          role: Role.USER,
+        };
+      },
     }),
     CredentialsProvider({
       name: 'Credentials',
@@ -56,13 +66,24 @@ export const authOptions: AuthOptions = {
           throw new Error('이메일 또는 패스워드가 잘못되었습니다.');
         }
 
-        return user;
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          image: user.image,
+          role: user.role,
+        };
       },
     }),
   ],
   callbacks: {
+    async jwt({ token, user }) {
+      if (user) token.role = user.role;
+      return token;
+    },
     async session({ session, token }) {
       session.user.id = token.sub as string;
+      session.user.role = token.role as string;
       return session;
     },
   },
@@ -70,14 +91,6 @@ export const authOptions: AuthOptions = {
     strategy: 'jwt',
   },
 };
-
-declare module 'next-auth' {
-  interface Session {
-    user: {
-      id: string;
-    } & DefaultSession['user'];
-  }
-}
 
 const handler = NextAuth(authOptions);
 

@@ -1,4 +1,4 @@
-# CanPlay
+# Jazzit app
 
 ### env
 
@@ -8,4 +8,6 @@ NEXTAUTH_SECRET=
 
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
+
+DATABASE_URL=
 ```

@@ -7,7 +7,7 @@ import { SignInForm } from '@/components/forms/SignInForm';
 import Image from 'next/image';
 
 export const metadata = {
-  title: 'Cplay | Login',
+  title: 'JAZZiT | Login',
 };
 
 const SAMPLE_IMAGE =

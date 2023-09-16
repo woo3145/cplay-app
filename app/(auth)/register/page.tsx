@@ -7,7 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'Cplay | Register',
+  title: 'JAZZiT | Register',
 };
 
 const SAMPLE_IMAGE =

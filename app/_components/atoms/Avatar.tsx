@@ -12,15 +12,17 @@ export const Avatar = ({ className, src, circle, ...props }: AvatarProps) => {
       className={cn('relative bg-foreground/20 rounded-full', className)}
       {...props}
     >
-      <Image
-        src={src || ''}
-        alt="avatar"
-        fill
-        style={{
-          objectFit: 'fill',
-          borderRadius: circle ? '100%' : '10%',
-        }}
-      />
+      {src ? (
+        <Image
+          src={src}
+          alt="avatar"
+          fill
+          style={{
+            objectFit: 'fill',
+            borderRadius: circle ? '100%' : '10%',
+          }}
+        />
+      ) : null}
     </div>
   );
 };

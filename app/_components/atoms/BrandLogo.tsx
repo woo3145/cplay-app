@@ -25,7 +25,7 @@ export const BrandLogo = ({ size = 'md' }: Props) => {
   return (
     <div className={brandLogo({ size })}>
       <BrandLogoIcon size={size} />
-      <span>CanPlay</span>
+      <span>JAZZiT</span>
     </div>
   );
 };
