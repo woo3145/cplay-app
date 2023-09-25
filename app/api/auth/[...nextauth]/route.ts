@@ -6,7 +6,6 @@ import { Role } from '@prisma/client';
 
 import prisma from '@/libs/db/prisma';
 import { userAuthorize } from '@/modules/user/application/userAuthorize';
-import { repository } from '@/modules/config/repository';
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -35,7 +34,7 @@ export const authOptions: AuthOptions = {
         },
       },
       async authorize(credentials, req) {
-        const user = await userAuthorize(repository.user)({
+        const user = await userAuthorize()({
           email: credentials?.email,
           password: credentials?.password,
         });

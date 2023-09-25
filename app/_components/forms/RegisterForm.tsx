@@ -11,7 +11,6 @@ import {
   RegisterUserFormData,
   registerUserServerAction,
 } from '@/modules/user/application/userRegisterServerAction';
-import { repository } from '@/modules/config/repository';
 
 export const RegisterForm = () => {
   const {
@@ -25,7 +24,7 @@ export const RegisterForm = () => {
 
   const onSubmit: SubmitHandler<RegisterUserFormData> = async (data) => {
     try {
-      const result = await registerUserServerAction(repository.user)(data);
+      const result = await registerUserServerAction()(data);
 
       // serverActions 이후 클라이언트 처리
       if (!result.success) {

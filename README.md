@@ -105,12 +105,18 @@ Hexagonal Architecture의 핵심은 비즈니스 로직을 외부(DB, 백엔드,
     - domain - Entity 및 Port(외부의 인터페이스 {ex. 어댑터 인터페이스})
     - infrastructure - Adapter(특정 기술을 domain 인터페이스에 맞도록 구현 {ex. DB, 웹서버})
 
-#### 각 비즈니스 로직은 커링 패턴으로 필요한 어댑터를 주입받음 (Class형태는 X)
+#### 각 비즈니스 로직은 커링 패턴으로 필요한 (서브)어댑터를 주입받음 (Class형태는 X)
 
 ```ts
 'use server';
 export const registerUser =
-  (userRepository: UserRepository, mailAdapter: MailAdapter) => (data) => {
+  (
+    subUserRepository: UserRepository | null = null,
+    subMailAdapter: MailAdapter | null = null
+  ) =>
+  (data) => {
+    const userRepo = subUserRepository || config.repository.user;
+    const mailAdapter = subMailAdapter || config.adapter.mail;
     const user = await userRepository.createUser(data);
     await mailAdapter.sendEmail(user.email, '안녕하세요');
 
@@ -122,8 +128,10 @@ export const registerUser =
 
   - 비즈니스 로직은 서버 작업으로 처리되어야함(보안 및 bcrypt나 fs 등등 클라이언트에서 사용불가한 모듈들이 많음)
   - 따라서 'use server'를 적용하여 로직을 서버 액션으로 만듬 (클라이언트 의존성 X)
-  - 이때 Class를 사용하면 생성자로 클래스를 생성할때 클라이언트에 서버 코드가 생성됨으로 에러 (form 내부 또는 useTransition 훅을 사용해서 서버 액션을 호출해야함)
+  - 이때 Class를 사용하면 생성자로 클래스를 생성할때 클라이언트에 서버 코드가 생성됨으로 에러 (form action 또는 useTransition 훅을 사용해서 서버 액션을 호출해야함)
 
-- 비즈니스 로직 호출전에 주입받아야 테스트에 용이하며 좀더 유연하게 사용가능
-  ex. mailAdapter를 구현하는 객체가 여러개 존재하는데 여러개를 쓸 경우
-  ex. memoryRepository를 생성하여 비즈니스 로직을 테스트할 때 DB를 사용하지 않고 테스트
+- 메인이 아닌 서브 어댑터를 주입받는 이유
+  - serverAction은 클라이언트에 전송되지 않고 서버에서 호출됨
+  - 하지만 클라이언트에서 serverAction을 호출 할 때 어댑터를 주입받으면 클라이언트에 해당 어댑터를 import해야해서 전송하게 됨
+  - 따라서 기본적으로 'use server'를 사용하는 파일에서 config 파일를 통하여 불러오도록 구현하고
+  - 테스트 코드를 작성할 때 sub어댑터로 교체할 수 있도록 커링 패턴은 유지시킴
