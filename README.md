@@ -105,23 +105,22 @@ Hexagonal Architecture의 핵심은 비즈니스 로직을 외부(DB, 백엔드,
     - domain - Entity 및 Port(외부의 인터페이스 {ex. 어댑터 인터페이스})
     - infrastructure - Adapter(특정 기술을 domain 인터페이스에 맞도록 구현 {ex. DB, 웹서버})
 
-#### 각 비즈니스 로직은 커링 패턴으로 필요한 (서브)어댑터를 주입받음 (Class형태는 X)
+#### 각 비즈니스 로직은 필요 시 (서브)어댑터를 주입받음 (Class형태는 X)
 
 ```ts
 'use server';
-export const registerUser =
-  (
-    subUserRepository: UserRepository | null = null,
-    subMailAdapter: MailAdapter | null = null
-  ) =>
-  (data) => {
-    const userRepo = subUserRepository || config.repository.user;
-    const mailAdapter = subMailAdapter || config.adapter.mail;
-    const user = await userRepository.createUser(data);
-    await mailAdapter.sendEmail(user.email, '안녕하세요');
+export const registerUser = (
+  data,
+  subUserRepository: UserRepository | null = null,
+  subMailAdapter: MailAdapter | null = null
+) => {
+  const userRepo = subUserRepository || config.repository.user;
+  const mailAdapter = subMailAdapter || config.adapter.mail;
+  const user = await userRepository.createUser(data);
+  await mailAdapter.sendEmail(user.email, '안녕하세요');
 
-    return user;
-  };
+  return user;
+};
 ```
 
 - 비즈니스 로직이 클래스면 안되는 이유
@@ -134,4 +133,4 @@ export const registerUser =
   - serverAction은 클라이언트에 전송되지 않고 서버에서 호출됨
   - 하지만 클라이언트에서 serverAction을 호출 할 때 어댑터를 주입받으면 클라이언트에 해당 어댑터를 import해야해서 전송하게 됨
   - 따라서 기본적으로 'use server'를 사용하는 파일에서 config 파일를 통하여 불러오도록 구현하고
-  - 테스트 코드를 작성할 때 sub어댑터로 교체할 수 있도록 커링 패턴은 유지시킴
+  - 테스트 코드를 작성할 때 sub어댑터로 교체할 수 있도록 파라미터로 지원

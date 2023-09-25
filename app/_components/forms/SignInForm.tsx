@@ -1,6 +1,5 @@
 'use client';
 
-import { RegisterUserFormSchema } from '@/libs/validationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -8,7 +7,10 @@ import { Input } from '../atoms/Input';
 import { Button } from '../atoms/Button';
 import { useRouter } from 'next/navigation';
 import { InputErrorMessage } from '../atoms/InputErrorMessage';
-import { RegisterUserFormData } from '@/modules/user/application/userRegisterServerAction';
+import {
+  RegisterUserFormData,
+  RegisterUserFormSchema,
+} from '@/modules/user/domain/user.validation';
 
 export const SignInForm = () => {
   const router = useRouter();

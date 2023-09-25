@@ -7,6 +7,7 @@ export class GenresPrismaRepository implements GenresRepository {
     const genres = await unstable_cache(
       async () => {
         const data = await prisma.genres.findMany({});
+        console.log('Prisma 호출 : Genres');
         return data;
       },
       ['allGenres'],

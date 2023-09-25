@@ -34,9 +34,9 @@ export const authOptions: AuthOptions = {
         },
       },
       async authorize(credentials, req) {
-        const user = await userAuthorize()({
-          email: credentials?.email,
-          password: credentials?.password,
+        const user = await userAuthorize({
+          email: credentials?.email ?? '',
+          password: credentials?.password ?? '',
         });
 
         return user;

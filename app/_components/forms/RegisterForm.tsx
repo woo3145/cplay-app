@@ -1,16 +1,16 @@
 'use client';
 
-import { RegisterUserFormSchema } from '@/libs/validationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Input } from '../atoms/Input';
 import { Button } from '../atoms/Button';
 import { InputErrorMessage } from '../atoms/InputErrorMessage';
+import { registerUserServerAction } from '@/modules/user/application/userRegisterServerAction';
 import {
   RegisterUserFormData,
-  registerUserServerAction,
-} from '@/modules/user/application/userRegisterServerAction';
+  RegisterUserFormSchema,
+} from '@/modules/user/domain/user.validation';
 
 export const RegisterForm = () => {
   const {
@@ -24,7 +24,7 @@ export const RegisterForm = () => {
 
   const onSubmit: SubmitHandler<RegisterUserFormData> = async (data) => {
     try {
-      const result = await registerUserServerAction()(data);
+      const result = await registerUserServerAction(data);
 
       // serverActions 이후 클라이언트 처리
       if (!result.success) {
