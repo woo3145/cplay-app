@@ -11,10 +11,10 @@ import {
 export const createGenres = adminGuard(
   async (
     data: CreateGenresFormData,
-    subUserRepository: GenresRepository | null = null
+    subGenresRepository: GenresRepository | null = null
   ) => {
     const { tag, slug } = CreateGenresFormSchema.parse(data);
-    const repo = subUserRepository || repository.genres;
+    const repo = subGenresRepository || repository.genres;
     const genres = await repo.createGenres(tag, slug);
 
     return genres;

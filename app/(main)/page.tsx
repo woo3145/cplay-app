@@ -1,4 +1,4 @@
-import { getAllGenres } from '@/modules/genres/application/getGenres';
+import { getAllGenres } from '@/modules/genres/application/getAllGenres';
 
 export default async function HomePage() {
   const genres = await getAllGenres();
