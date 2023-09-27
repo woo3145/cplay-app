@@ -7,8 +7,10 @@ export const checkAdmin = async () => {
   return session?.user.role === Role.ADMIN;
 };
 
-export const adminGuard = (fn: Function) => {
-  return async (...args: any[]) => {
+export const adminGuard = <T extends any[], R>(
+  fn: (...args: T) => Promise<R>
+) => {
+  return async (...args: T): Promise<R> => {
     const isAdmin = await checkAdmin();
     if (!isAdmin) {
       throw new Error('Unauthorized');
