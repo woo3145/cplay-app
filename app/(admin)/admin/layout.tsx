@@ -1,4 +1,4 @@
-import { Header } from '@/components/Header';
+import { Header } from '@/app/_components/Header';
 import { AdminSideBar } from '../_components/AdminSideBarMenu';
 
 export default function AdminLayout({

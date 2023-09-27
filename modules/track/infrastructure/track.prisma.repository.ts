@@ -1,4 +1,4 @@
-import prisma from '@/libs/db/prisma';
+import prisma from '@/lib/db/prisma';
 import { revalidateTag, unstable_cache } from 'next/cache';
 import { TrackRepository } from '../domain/track.repository';
 import { CreateTrackFormData } from '@/modules/admin/domain/track.validation';

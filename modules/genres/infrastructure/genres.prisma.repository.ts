@@ -1,4 +1,4 @@
-import prisma from '@/libs/db/prisma';
+import prisma from '@/lib/db/prisma';
 import { GenresRepository } from '../domain/genres.repository';
 import { revalidateTag, unstable_cache } from 'next/cache';
 

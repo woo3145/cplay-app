@@ -1,4 +1,4 @@
-import prisma from '@/libs/db/prisma';
+import prisma from '@/lib/db/prisma';
 import { revalidateTag, unstable_cache } from 'next/cache';
 import { MoodRepository } from '../domain/mood.repository';
 

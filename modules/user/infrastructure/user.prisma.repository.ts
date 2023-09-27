@@ -1,5 +1,5 @@
 import { UserRepository } from '@/modules/user/domain/user.repository';
-import prisma from '@/libs/db/prisma';
+import prisma from '@/lib/db/prisma';
 
 export class UserPrismaRepository implements UserRepository {
   async getUserByEmail(email: string) {

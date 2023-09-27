@@ -1,6 +1,6 @@
 'use server';
 
-import { adminGuard } from '@/libs/guard/adminGuard';
+import { adminGuard } from '@/lib/guard/adminGuard';
 import { FileRepository } from '../../upload/domain/file.repository';
 import { repository } from '@/modules/config/repository';
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@/libs/utils';
+import { cn } from '@/lib/utils';
 import { Role } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';

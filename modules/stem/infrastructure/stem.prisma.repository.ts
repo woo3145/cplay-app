@@ -1,4 +1,4 @@
-import prisma from '@/libs/db/prisma';
+import prisma from '@/lib/db/prisma';
 import { StemRepository } from '../domain/stem.repository';
 import { CreateStemFormData } from '@/modules/admin/domain/stem.validation';
 

@@ -1,10 +1,10 @@
-import { BrandLogo } from '@/components/atoms/BrandLogo';
-import { SocialSignInList } from '@/components/SocialSignInList';
-import { Separater } from '@/components/atoms/Separator';
 import { getProviders } from 'next-auth/react';
 import Link from 'next/link';
-import { SignInForm } from '@/components/forms/SignInForm';
 import Image from 'next/image';
+import { BrandLogo } from '@/app/_components/atoms/BrandLogo';
+import { SocialSignInList } from '@/app/_components/SocialSignInList';
+import { Separater } from '@/app/_components/atoms/Separator';
+import { SignInForm } from '@/app/_components/forms/SignInForm';
 
 export const metadata = {
   title: 'JAZZiT | Login',

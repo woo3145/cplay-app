@@ -4,7 +4,7 @@ import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { Role } from '@prisma/client';
 
-import prisma from '@/libs/db/prisma';
+import prisma from '@/lib/db/prisma';
 import { userAuthorize } from '@/modules/user/application/userAuthorize';
 
 export const authOptions: AuthOptions = {

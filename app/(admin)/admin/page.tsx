@@ -5,8 +5,8 @@ export default function AdminPage() {
     'use server';
     try {
       const genres = await createGenres({
-        tag: data.get('tag') || '',
-        slug: data.get('slug') || '',
+        tag: (data.get('tag') as string) ?? '',
+        slug: (data.get('slug') as string) ?? '',
       });
       console.log(genres);
     } catch (e) {

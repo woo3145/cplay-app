@@ -1,7 +1,7 @@
 'use server';
 
 import { repository } from '@/modules/config/repository';
-import { adminGuard } from '@/libs/guard/adminGuard';
+import { adminGuard } from '@/lib/guard/adminGuard';
 import {
   CreateStemFormData,
   CreateStemFormSchema,

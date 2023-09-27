@@ -1,8 +1,7 @@
 import Link from 'next/link';
-import { DarkModeToggle } from '@/components/DarkModeToggle';
 import { UserMenu } from './UserMenu';
-import { HeaderNavigation } from './HeaderNavigation';
 import { BrandLogo } from './atoms/BrandLogo';
+import { DarkModeToggle } from '@/components/DarkModeToggle';
 
 export const Header = async () => {
   return (
