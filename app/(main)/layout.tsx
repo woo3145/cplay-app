@@ -1,7 +1,7 @@
 import { Header } from '@/components/common/Header';
 import { SideBar } from '@/components/common/SideBar';
 
-export default function MainLayout({
+export default async function MainLayout({
   children,
 }: {
   children: React.ReactNode;
