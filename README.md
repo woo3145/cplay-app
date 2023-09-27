@@ -56,6 +56,7 @@ Pro - 모든 잼트랙의 개별 stem 제공 (개별 트랙 조작 가능)
   - 각 stem 추가 (+sample)
   - 앨범 이미지 추가
   - 최종 검토 후 publish
+  - 최적화 : mp3는 큰 파일에 속하기 때문에 next 서버를 거치지 않고 s3의 presigned url방식으로 클라이언트에서 업로드
 
 ## 📝 메모
 
@@ -140,3 +141,61 @@ export const registerUser = (
   - 하지만 클라이언트에서 serverAction을 호출 할 때 어댑터를 주입받으면 클라이언트에 해당 어댑터를 import해야해서 전송하게 됨
   - 따라서 기본적으로 'use server'를 사용하는 파일에서 config 파일를 통하여 불러오도록 구현하고
   - 테스트 코드를 작성할 때 sub어댑터로 교체할 수 있도록 파라미터로 지원
+
+## 🚨 에러 모음
+
+#### @aws-sdk/signature-v4-crt 경고
+
+```
+./node_modules/@aws-sdk/signature-v4-multi-region/dist-cjs/load-crt.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/@aws-sdk/signature-v4-multi-region/dist-cjs/load-crt.js
+./node_modules/@aws-sdk/signature-v4-multi-region/dist-cjs/SignatureV4MultiRegion.js
+./node_modules/@aws-sdk/signature-v4-multi-region/dist-cjs/index.js
+./node_modules/@aws-sdk/s3-request-presigner/dist-cjs/presigner.js
+./node_modules/@aws-sdk/s3-request-presigner/dist-cjs/index.js
+./modules/upload/infrastructure/file.s3.repository.ts
+./modules/config/repository.ts
+./modules/user/application/userAuthorize.ts
+./app/api/auth/[...nextauth]/route.ts
+```
+
+##### 발생
+
+nextjs에서 @aws-sdk/s3-request-presigner를 사용하면 위 경고 발생
+
+##### 원인
+
+- 1. webpack에서 빌드할 때 entry 부터 시작하여 import나 require로 연결된 파일을 찾아 관계트리를 만들어야함
+- 2. 하지만 동적 모듈 불러오기는 번들링 과정에 추가적인 복잡성이 발생하여 번들러 성능 등에 영향을 미침
+- 3. 여기서 aws-sdk 3.420.0는 @aws-sdk/signature-v4-crt를 불러올때 동적으로 모듈을 불러오고 있음
+  - [참고 aws-sdk-js-v3/packages/signature-v4-multi-region/src/load-crt.ts](https://github.com/kuhe/aws-sdk-js-v3/blob/8c61b0979f1c04bbc16015334b318a4d56bbd8c4/packages/signature-v4-multi-region/src/load-crt.ts)
+- 4. 그래서 성능 향상을 위해 aws-sdk-js-v3의 추후 버전에서 이러한 동적 모듈 불러오기를 제거 할 계획으로 밝힘
+  - [참고 aws-sdk-js-v3 발표](https://github.com/aws/aws-sdk-js-v3/issues/5229)
+- 5. 동적 불러오기가 완전히 제거 될 경우 에러가 되기 때문에 미리 대응하라고 2023-09-25일에 위 경고가 추가 됨
+
+##### 해결
+
+- [참고 aws-sdk-js-v3 발표](https://github.com/aws/aws-sdk-js-v3/issues/5229) 이 발표문에 나온데로 @aws-sdk/signature-v4-crt 패키지를 프로젝트에 설치하고 사용하는 곳에서 직접 import 하여 해결
+
+- 또는 next.config.js파일에서 웹팩 설정을 수정하여 해결
+  - externals로 @aws-sdk/signature-v4-multi-region 모듈을 웹팩 번들에서 제거하고 실행시점에 로드하는 방법
+  - 이 방법은 클라이언트측에서 해당 모듈이 사용되면 번들링할때 제외되어 브라우저에 보내지기 때문에 해당 모듈을 사용하지 못하여 에러가 발생하게 됨
+  - 따라서 이 방법을 사용하면 해당 모듈이 서버에서만 사용되어야 함
+
+```js
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+    config.externals.push({
+      '@aws-sdk/signature-v4-multi-region':
+        'commonjs @aws-sdk/signature-v4-multi-region',
+    });
+
+    return config;
+  },
+};
+module.exports = nextConfig;
+```
