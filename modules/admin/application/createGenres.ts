@@ -1,7 +1,7 @@
 'use server';
 
 import { repository } from '@/modules/config/repository';
-import { adminGuard } from '../adminGuard';
+import { adminGuard } from '@/libs/guard/adminGuard';
 import { GenresRepository } from '@/modules/genres/domain/genres.repository';
 import {
   CreateGenresFormData,

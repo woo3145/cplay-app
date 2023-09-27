@@ -1,12 +1,12 @@
 'use server';
 
 import { repository } from '@/modules/config/repository';
-import { adminGuard } from '../adminGuard';
 import {
   CreateCreatorFormData,
   CreateCreatorFormSchema,
 } from '../domain/creator.validation';
 import { CreatorRepository } from '@/modules/creator/domain/creator.repository';
+import { adminGuard } from '@/libs/guard/adminGuard';
 
 export const createCreator = adminGuard(
   async (
