@@ -6,7 +6,7 @@ import { repository } from '@/modules/config/repository';
 import {
   RegisterUserFormData,
   RegisterUserFormSchema,
-} from '@/modules/user/domain/user.validation';
+} from '@/modules/auth/domain/user.auth.validation';
 
 export const registerUserServerAction = async (
   data: RegisterUserFormData,

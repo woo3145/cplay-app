@@ -3,9 +3,10 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
 import { getServerSession } from 'next-auth';
-import SessionProvider from './_components/SessionProvider';
 import { authOptions } from './api/auth/[...nextauth]/route';
-import { ThemeProvider } from '@/components/themeProvider';
+import { ThemeProvider } from '@/components/ThemeProvider';
+import SessionProvider from '@/components/SessionProvider';
+import { Toaster } from '@/components/ui/toaster';
 
 // Next의 런타임 참고
 // https://nextjs.org/docs/app/building-your-application/rendering/edge-and-nodejs-runtimes#edge-runtime
@@ -44,6 +45,7 @@ export default async function RootLayout({
             {children}
           </ThemeProvider>
         </SessionProvider>
+        <Toaster />
       </body>
     </html>
   );

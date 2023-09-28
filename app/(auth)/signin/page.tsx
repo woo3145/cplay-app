@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { BrandLogo } from '@/app/_components/atoms/BrandLogo';
 import { SocialSignInList } from '@/app/_components/SocialSignInList';
 import { Separater } from '@/app/_components/atoms/Separator';
-import { SignInForm } from '@/app/_components/forms/SignInForm';
+import { LoginForm } from '@/modules/auth/application/LoginForm';
 
 export const metadata = {
   title: 'JAZZiT | Login',
@@ -37,7 +37,7 @@ export default async function LoginPage() {
 
           <Separater text="OR CONTINUE WITH" />
 
-          <SignInForm />
+          <LoginForm />
         </div>
       </div>
 

@@ -5,7 +5,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { Role } from '@prisma/client';
 
 import prisma from '@/lib/db/prisma';
-import { userAuthorize } from '@/modules/user/application/userAuthorize';
+import { userAuthorize } from '@/modules/auth/application/userAuthorize';
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),

@@ -2,12 +2,12 @@
 
 import bcrypt from 'bcrypt';
 import { User as DomainUser } from '@/modules/user/domain/user';
-import { UserRepository } from '../domain/user.repository';
+import { UserRepository } from '../../user/domain/user.repository';
 import { repository } from '@/modules/config/repository';
 import {
   AuthorizeUserFormData,
   AuthorizeUserFormSchema,
-} from '../domain/user.validation';
+} from '@/modules/auth/domain/user.auth.validation';
 
 export const userAuthorize = async (
   data: AuthorizeUserFormData,

@@ -1,7 +1,7 @@
 import { SocialSignInList } from '@/app/_components/SocialSignInList';
-import { BrandLogo } from '@/app/_components/atoms/BrandLogo';
 import { Separater } from '@/app/_components/atoms/Separator';
-import { RegisterForm } from '@/app/_components/forms/RegisterForm';
+import { BrandLogo } from '@/components/common/BrandLogo';
+import { RegisterForm } from '@/modules/auth/application/RegisterForm';
 import { getProviders } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
