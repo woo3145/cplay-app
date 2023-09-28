@@ -5,7 +5,7 @@ import { BrandLogo } from '@/components/common/BrandLogo';
 
 export const Header = async () => {
   return (
-    <header className="fixed top-0 left-0 w-full border-b border-border bg-background">
+    <header className="fixed top-0 left-0 w-full z-40 border-b border-border bg-background">
       <div className="flex items-center justify-between w-full h-16 px-4 mx-auto font-medium transition-colors duration-200">
         <section className="flex lg:flex-shrink-0 lg:w-52">
           <Link href="/">

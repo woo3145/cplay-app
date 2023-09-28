@@ -1,20 +1,20 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { Role } from '@prisma/client';
 import {
   CreditCard,
   DoorOpen,
   Home,
   LineChart,
   ListMusic,
+  MessagesSquare,
   PanelTopOpen,
   Settings,
+  Tag,
   Users,
 } from 'lucide-react';
 
@@ -44,7 +44,16 @@ const adminNavigations = [
     icon: <CreditCard className="mr-2 h-4 w-4" />,
     name: '결제 및 환불 관리',
   },
-
+  {
+    href: '/admin/community',
+    icon: <MessagesSquare className="mr-2 h-4 w-4" />,
+    name: '커뮤니티 관리',
+  },
+  {
+    href: '/admin/tags',
+    icon: <Tag className="mr-2 h-4 w-4" />,
+    name: '태그 및 카테고리 관리',
+  },
   {
     href: '/admin/support',
     icon: <Home className="mr-2 h-4 w-4" />,
@@ -68,7 +77,6 @@ interface SidebarProps {
 
 export function AdminSideBar({ className }: SidebarProps) {
   const pathname = usePathname();
-  const { data: session } = useSession();
   return (
     <div className={cn('pb-12', className)}>
       <div className="space-y-4 py-4">
@@ -94,7 +102,7 @@ export function AdminSideBar({ className }: SidebarProps) {
             {adminNavigations.map((nav) => {
               const isActive = pathname === nav.href;
               return (
-                <Link href={nav.href} prefetch={false}>
+                <Link key={nav.name} href={nav.href} prefetch={false}>
                   <Button
                     variant="ghost"
                     className={cn(

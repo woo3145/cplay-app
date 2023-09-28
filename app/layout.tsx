@@ -5,7 +5,6 @@ import { Inter } from 'next/font/google';
 import { getServerSession } from 'next-auth';
 import SessionProvider from './_components/SessionProvider';
 import { authOptions } from './api/auth/[...nextauth]/route';
-import { DarkModeTrigger } from './_components/DarkModeTrigger';
 import { ThemeProvider } from '@/components/themeProvider';
 
 // Next의 런타임 참고
@@ -33,7 +32,7 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions);
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <SessionProvider session={session}>
           <ThemeProvider

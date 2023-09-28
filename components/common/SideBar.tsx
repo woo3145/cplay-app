@@ -89,7 +89,7 @@ export function SideBar({ className }: SidebarProps) {
             {discoverNavigations.map((nav) => {
               const isActive = pathname === nav.href;
               return (
-                <Link href={nav.href} prefetch={false}>
+                <Link key={nav.name} href={nav.href} prefetch={false}>
                   <Button
                     variant="ghost"
                     className={cn(
@@ -113,7 +113,7 @@ export function SideBar({ className }: SidebarProps) {
             <div className="space-y-1">
               {userNavigations(session.user.id).map((nav) => {
                 return (
-                  <Link href={nav.href} prefetch={false}>
+                  <Link key={nav.name} href={nav.href} prefetch={false}>
                     <Button variant="ghost" className="w-full justify-start">
                       {nav.icon}
                       {nav.name}
