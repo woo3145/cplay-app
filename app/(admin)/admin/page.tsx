@@ -1,4 +1,4 @@
-import { createGenres } from '@/modules/admin/application/createGenres';
+import { createGenres } from '@/modules/admin/application/createGenres/createGenresServerAction';
 
 export default function AdminPage() {
   const onSubmit = async (data: FormData) => {

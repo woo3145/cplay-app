@@ -6,17 +6,21 @@ import { MoodRepository } from '@/modules/mood/domain/mood.repository';
 import {
   CreateMoodFormData,
   CreateMoodFormSchema,
-} from '../domain/mood.validation';
+} from '../../domain/mood.validation';
 
-export const createMood = adminGuard(
+export const createMoodServerAction = adminGuard(
   async (
     data: CreateMoodFormData,
     subMoodRepository: MoodRepository | null = null
   ) => {
     const { tag } = CreateMoodFormSchema.parse(data);
     const repo = subMoodRepository || repository.mood;
-    const mood = await repo.createMood(tag);
 
-    return mood;
+    try {
+      const mood = await repo.createMood(tag);
+      return { success: true, mood };
+    } catch (e) {
+      return { success: false, message: '서버에 문제가 발생하였습니다.' };
+    }
   }
 );

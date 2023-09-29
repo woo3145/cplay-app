@@ -8,16 +8,8 @@ import { getAllMoods } from '@/modules/mood/application/getAllMoods';
 import { DataTable } from '@/components/dataTable/DataTable';
 import { genresColumns } from '@/components/admin/dataTableColumns/GenresColumns';
 import { moodColumns } from '@/components/admin/dataTableColumns/MoodColumns';
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
+import { CreateGenresDialog } from '@/modules/admin/application/createGenres/CreateGenresDialog';
+import { CreateMoodDialog } from '@/modules/admin/application/createMood/CreateMoodDialog';
 
 export default async function TagsPage() {
   const genres = await getAllGenres();
@@ -47,36 +39,7 @@ export default async function TagsPage() {
               </p>
             </div>
             <div className="ml-auto mr-4">
-              <Dialog>
-                <DialogTrigger className="w-full">
-                  <Button>
-                    <PlusCircle className="mr-2 h-4 w-4" />
-                    Add Genres
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
-                  <DialogHeader>
-                    <DialogTitle>Add Genres</DialogTitle>
-                  </DialogHeader>
-                  <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="tag" className="text-right">
-                        Tag
-                      </Label>
-                      <Input id="tag" className="col-span-3" />
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="slug" className="text-right">
-                        slug
-                      </Label>
-                      <Input id="slug" className="col-span-3" />
-                    </div>
-                  </div>
-                  <DialogFooter>
-                    <Button type="submit">생성</Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
+              <CreateGenresDialog />
             </div>
           </div>
           <Separator className="my-4" />
@@ -105,10 +68,7 @@ export default async function TagsPage() {
               </p>
             </div>
             <div className="ml-auto mr-4">
-              <Button>
-                <PlusCircle className="mr-2 h-4 w-4" />
-                Add Mood
-              </Button>
+              <CreateMoodDialog />
             </div>
           </div>
           <Separator className="my-4" />
