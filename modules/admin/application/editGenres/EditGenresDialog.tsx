@@ -29,9 +29,9 @@ export const EditGenresDialog = ({ children, genres }: Props) => {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{genres.tag}를 정말 삭제하시겠습니까?</DialogTitle>
+          <DialogTitle>{genres.tag}를 정말 수정하시겠습니까?</DialogTitle>
           <DialogDescription>
-            기존에 사용중인 장르 태그가 제거됩니다.
+            기존에 사용중인 장르 태그도 모두 변경됩니다.
           </DialogDescription>
         </DialogHeader>
 

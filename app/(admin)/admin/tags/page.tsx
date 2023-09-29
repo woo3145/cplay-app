@@ -2,11 +2,11 @@ import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getAllGenres } from '@/modules/genres/application/getAllGenres';
 import { getAllMoods } from '@/modules/mood/application/getAllMoods';
-import { DataTable } from '@/components/dataTable/DataTable';
-import { genresColumns } from '@/components/admin/dataTableColumns/GenresColumns';
-import { moodColumns } from '@/components/admin/dataTableColumns/MoodColumns';
 import { CreateGenresDialog } from '@/modules/admin/application/createGenres/CreateGenresDialog';
 import { CreateMoodDialog } from '@/modules/admin/application/createMood/CreateMoodDialog';
+import { DataTable } from '@/components/dataTable/DataTable';
+import { genresColumns } from '@/modules/admin/application/dataTableColumns/GenresColumns';
+import { moodColumns } from '@/modules/admin/application/dataTableColumns/MoodColumns';
 
 export default async function TagsPage() {
   const genres = await getAllGenres();
