@@ -43,7 +43,7 @@ export function UserMenu() {
         <DropdownMenuSeparator />
 
         <DropdownMenuGroup>
-          <Link href="/" prefetch={false}>
+          <Link href="/account/general" prefetch={false}>
             <DropdownMenuItem>
               <User className="mr-2 h-4 w-4" />
               <span>프로필 관리</span>

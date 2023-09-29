@@ -10,10 +10,12 @@ export default async function MainLayout({
     <div className="pt-16">
       <Header />
       <div className="flex min-h-[calc(100vh-4rem)]">
-        <div className="hidden lg:flex flex-shrink-0 w-56 min-h-full">
+        <div className="fixed left-0 hidden h-full lg:block w-56 overflow-auto">
           <SideBar />
         </div>
-        <main className="w-full px-4 pt-4">{children}</main>
+        <main className="w-full lg:pl-56">
+          <div className="h-full lg:border-l">{children}</div>
+        </main>
       </div>
     </div>
   );
