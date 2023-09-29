@@ -5,6 +5,9 @@ export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
 };
 
-export function sanitizeFilename(filename: string) {
+export const sanitizeFilename = (filename: string) => {
   return filename.replace(/\//g, '_');
-}
+};
+export const getFileExtension = (filename: string) => {
+  return filename.split('.').pop();
+};

@@ -2,7 +2,6 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import * as z from 'zod';
 
 import { toast } from '@/components/ui/use-toast';
 import {
@@ -17,24 +16,18 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { useSession } from 'next-auth/react';
 import { User } from 'next-auth';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { AvatarUpload } from './AvatarUpload';
 import { useState } from 'react';
-
-const profileFormSchema = z.object({
-  name: z
-    .string()
-    .min(2, {
-      message: 'Username must be at least 2 characters.',
-    })
-    .max(30, {
-      message: 'Username must not be longer than 30 characters.',
-    }),
-});
-
-type ProfileFormValues = z.infer<typeof profileFormSchema>;
+import {
+  EditUserFormData,
+  EditUserFormSchema,
+} from '@/modules/user/domain/user.validation';
+import { getPresignedUrlToAvatar } from '@/modules/upload/application/getPresignedUrlToAvatar';
+import { getFileExtension } from '@/lib/utils';
+import { uploadFileToPresigendUrl } from '@/modules/upload/application/uploadFileToPresigendUrl';
+import { editUserServerAction } from '@/modules/user/application/editUserServerAction';
+import { Loader2 } from 'lucide-react';
 
 interface Props {
   user: User;
@@ -42,25 +35,63 @@ interface Props {
 
 export function ProfileForm({ user }: Props) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const form = useForm<ProfileFormValues>({
-    resolver: zodResolver(profileFormSchema),
+  const form = useForm<Omit<EditUserFormData, 'imageUrl'>>({
+    resolver: zodResolver(EditUserFormSchema.omit({ imageUrl: true })),
     defaultValues: {
       name: user.name ?? '닉네임을 설정해주세요.',
     },
     mode: 'onChange',
   });
 
-  function onSubmit(data: ProfileFormValues) {
-    console.log(selectedFile);
-    toast({
-      title: '프로필 수정',
-    });
+  async function onSubmit(data: Omit<EditUserFormData, 'imageUrl'>) {
+    setIsLoading(true);
+    try {
+      let imageUrl = user.image ?? '';
+      if (selectedFile) {
+        const extended = getFileExtension(selectedFile.name);
+        const presignedUrl = await getPresignedUrlToAvatar(
+          `${user.id}-profile.${extended}`,
+          selectedFile.type
+        );
+
+        imageUrl = await uploadFileToPresigendUrl(presignedUrl, selectedFile);
+      }
+
+      const result = await editUserServerAction(user.id, {
+        name: data.name,
+        imageUrl,
+      });
+
+      if (!result.success) {
+        toast({
+          variant: 'destructive',
+          title: result.message,
+        });
+        return;
+      }
+
+      toast({
+        variant: 'success',
+        title: '성공적으로 프로필을 수정했습니다.',
+      });
+    } catch (e) {
+      toast({
+        variant: 'destructive',
+        title: '예상치 못한 에러가 발생하였습니다.',
+      });
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-8">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex gap-8 flex-col md:flex-row"
+      >
         <AvatarUpload
           initialUrl={user.image}
           user={user}
@@ -88,7 +119,10 @@ export function ProfileForm({ user }: Props) {
             )}
           />
 
-          <Button type="submit" className="ml-auto">
+          <Button type="submit" className="ml-auto" disabled={isLoading}>
+            {isLoading ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : null}
             프로필 업데이트
           </Button>
         </div>

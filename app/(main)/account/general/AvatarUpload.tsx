@@ -8,17 +8,7 @@ import { User } from 'next-auth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-
-const profileFormSchema = z.object({
-  name: z
-    .string()
-    .min(2, {
-      message: 'Username must be at least 2 characters.',
-    })
-    .max(30, {
-      message: 'Username must not be longer than 30 characters.',
-    }),
-});
+import Image from 'next/image';
 
 interface Props {
   initialUrl?: string | null;
@@ -40,7 +30,14 @@ export function AvatarUpload({ initialUrl, user, onFileSelect }: Props) {
   return (
     <div className="space-y-4 flex flex-col items-center">
       <Avatar className="w-48 h-48">
-        <AvatarImage src={previewUrl ?? ''} alt="user avatar" />
+        <AvatarImage asChild src={previewUrl ?? ''}>
+          <Image
+            src={previewUrl ?? ''}
+            alt="user avatar"
+            width={192}
+            height={192}
+          />
+        </AvatarImage>
         <AvatarFallback>{user.name}</AvatarFallback>
       </Avatar>
       <Input
