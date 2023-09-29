@@ -20,6 +20,8 @@ import { Label } from '@/components/ui/label';
 import { useSession } from 'next-auth/react';
 import { User } from 'next-auth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { AvatarUpload } from './AvatarUpload';
+import { useState } from 'react';
 
 const profileFormSchema = z.object({
   name: z
@@ -39,7 +41,8 @@ interface Props {
 }
 
 export function ProfileForm({ user }: Props) {
-  const { data: session } = useSession();
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
@@ -49,6 +52,7 @@ export function ProfileForm({ user }: Props) {
   });
 
   function onSubmit(data: ProfileFormValues) {
+    console.log(selectedFile);
     toast({
       title: '프로필 수정',
     });
@@ -57,24 +61,15 @@ export function ProfileForm({ user }: Props) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-8">
-        <div className="space-y-4 flex flex-col items-center">
-          <Avatar className="w-48 h-48">
-            <AvatarImage src={user.image ?? ''} alt="user avatar" />
-            <AvatarFallback>{user.name}</AvatarFallback>
-          </Avatar>
-          <Button type="button" variant="outline">
-            사진 선택
-          </Button>
-        </div>
+        <AvatarUpload
+          initialUrl={user.image}
+          user={user}
+          onFileSelect={(file) => setSelectedFile(file)}
+        />
         <div className="flex flex-col w-full space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">이메일</Label>
-            <Input
-              disabled
-              type="email"
-              id="email"
-              value={session?.user.email || ''}
-            />
+            <Input disabled type="email" id="email" value={user.email || ''} />
           </div>
           <FormField
             control={form.control}
