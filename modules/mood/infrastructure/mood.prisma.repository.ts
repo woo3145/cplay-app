@@ -7,7 +7,7 @@ export class MoodPrismaRepository implements MoodRepository {
   async getAll() {
     const moods = await unstable_cache(
       async () => {
-        const data = await prisma.mood.findMany({});
+        const data = await prisma.mood.findMany({ orderBy: { id: 'desc' } });
         console.log('Prisma 호출 : Mood');
         return data;
       },
