@@ -11,17 +11,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import { DataTableColumnHeader } from '@/components/dataTable/DataTableColumnHeader';
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
 import { DeleteGenresDialog } from '@/modules/admin/application/deleteGenres/DeleteGenresDialog';
+import { EditGenresDialog } from '@/modules/admin/application/editGenres/EditGenresDialog';
 
 export const genresColumns: ColumnDef<Genres>[] = [
   {
@@ -63,43 +54,11 @@ export const genresColumns: ColumnDef<Genres>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-[160px]">
-            <Dialog>
-              <DialogTrigger className="w-full">
-                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                  Edit
-                </DropdownMenuItem>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>Edit Genres</DialogTitle>
-                </DialogHeader>
-                <div className="grid gap-4 py-4">
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="tag" className="text-right">
-                      Tag
-                    </Label>
-                    <Input
-                      id="tag"
-                      defaultValue={genres.tag}
-                      className="col-span-3"
-                    />
-                  </div>
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="slug" className="text-right">
-                      slug
-                    </Label>
-                    <Input
-                      id="slug"
-                      defaultValue={genres.slug}
-                      className="col-span-3"
-                    />
-                  </div>
-                </div>
-                <DialogFooter>
-                  <Button type="submit">저장</Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+            <EditGenresDialog genres={genres}>
+              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                Edit
+              </DropdownMenuItem>
+            </EditGenresDialog>
 
             <DeleteGenresDialog genres={genres}>
               <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
