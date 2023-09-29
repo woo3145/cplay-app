@@ -1,6 +1,3 @@
-import { PlusCircle } from 'lucide-react';
-
-import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getAllGenres } from '@/modules/genres/application/getAllGenres';

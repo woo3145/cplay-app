@@ -3,6 +3,6 @@
 import { repository } from '@/modules/config/repository';
 
 export const getAllGenres = async () => {
-  const genres = await repository.genres.getAllGenres();
+  const genres = await repository.genres.getAll();
   return genres;
 };

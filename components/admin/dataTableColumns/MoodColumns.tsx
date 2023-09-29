@@ -11,6 +11,17 @@ import {
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import { DataTableColumnHeader } from '@/components/dataTable/DataTableColumnHeader';
+import { DeleteMoodDialog } from '@/modules/admin/application/deleteMood/deleteMoodDialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 
 export const moodColumns: ColumnDef<Mood>[] = [
   {
@@ -45,20 +56,39 @@ export const moodColumns: ColumnDef<Mood>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-[160px]">
-            <DropdownMenuItem
-              onClick={() => {
-                console.log(mood, '수정');
-              }}
-            >
-              Edit
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => {
-                console.log(mood, '삭제');
-              }}
-            >
-              Delete
-            </DropdownMenuItem>
+            <Dialog>
+              <DialogTrigger className="w-full">
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                  Edit
+                </DropdownMenuItem>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Edit Genres</DialogTitle>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="tag" className="text-right">
+                      Tag
+                    </Label>
+                    <Input
+                      id="tag"
+                      defaultValue={mood.tag}
+                      className="col-span-3"
+                    />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button type="submit">저장</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+
+            <DeleteMoodDialog mood={mood}>
+              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                Delete
+              </DropdownMenuItem>
+            </DeleteMoodDialog>
           </DropdownMenuContent>
         </DropdownMenu>
       );

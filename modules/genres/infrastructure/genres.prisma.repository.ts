@@ -3,7 +3,7 @@ import { GenresRepository } from '../domain/genres.repository';
 import { revalidateTag, unstable_cache } from 'next/cache';
 
 export class GenresPrismaRepository implements GenresRepository {
-  async getAllGenres() {
+  async getAll() {
     const genres = await unstable_cache(
       async () => {
         const data = await prisma.genres.findMany({});
@@ -18,7 +18,7 @@ export class GenresPrismaRepository implements GenresRepository {
     return genres;
   }
 
-  async createGenres(tag: string, slug: string) {
+  async create(tag: string, slug: string) {
     const genres = await prisma.genres.create({
       data: {
         tag,
@@ -28,5 +28,17 @@ export class GenresPrismaRepository implements GenresRepository {
     revalidateTag('allGenres');
 
     return genres;
+  }
+
+  async delete(id: number) {
+    const exist = await prisma.genres.findFirst({ where: { id } });
+
+    if (!exist) {
+      throw new Error('Genres가 존재하지 않습니다.');
+    }
+
+    await prisma.genres.delete({ where: { id } });
+
+    revalidateTag('allGenres');
   }
 }

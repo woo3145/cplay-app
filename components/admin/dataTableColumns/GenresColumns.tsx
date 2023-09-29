@@ -14,7 +14,6 @@ import { DataTableColumnHeader } from '@/components/dataTable/DataTableColumnHea
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -22,6 +21,7 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { DeleteGenresDialog } from '@/modules/admin/application/deleteGenres/DeleteGenresDialog';
 
 export const genresColumns: ColumnDef<Genres>[] = [
   {
@@ -54,7 +54,6 @@ export const genresColumns: ColumnDef<Genres>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const genres = row.original;
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -102,25 +101,11 @@ export const genresColumns: ColumnDef<Genres>[] = [
               </DialogContent>
             </Dialog>
 
-            <Dialog>
-              <DialogTrigger className="w-full">
-                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                  Delete
-                </DropdownMenuItem>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>정말 삭제하시겠습니까?</DialogTitle>
-                  <DialogDescription>
-                    기존에 사용중인 장르 태그가 제거됩니다.
-                  </DialogDescription>
-                </DialogHeader>
-
-                <DialogFooter>
-                  <Button type="submit">확인</Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+            <DeleteGenresDialog genres={genres}>
+              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                Delete
+              </DropdownMenuItem>
+            </DeleteGenresDialog>
           </DropdownMenuContent>
         </DropdownMenu>
       );

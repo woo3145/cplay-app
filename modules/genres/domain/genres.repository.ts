@@ -1,6 +1,7 @@
 import { Genres as DomainGenres } from './genres';
 
 export interface GenresRepository {
-  getAllGenres: () => Promise<DomainGenres[]>;
-  createGenres: (tag: string, slug: string) => Promise<DomainGenres>;
+  getAll: () => Promise<DomainGenres[]>;
+  create: (tag: string, slug: string) => Promise<DomainGenres>;
+  delete: (id: number) => Promise<void>;
 }

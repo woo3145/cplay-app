@@ -52,7 +52,11 @@ export const CreateGenresForm = ({ closeModal }: Props) => {
 
       closeModal();
     } catch (e) {
-      console.log('예상치 못한 에러가 발생하였습니다.', e);
+      toast({
+        variant: 'destructive',
+        title: '예상치 못한 에러가 발생하였습니다.',
+      });
+      form.reset();
     }
   };
 
