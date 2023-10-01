@@ -42,15 +42,16 @@ enum Role {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String          @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?         @unique
   emailVerified DateTime?
   image         String?
   password      String?
-  role          Role      @default(USER)
+  role          Role            @default(USER)
   accounts      Account[]
   sessions      Session[]
+  PaymentMethod PaymentMethod[]
 }
 
 model VerificationToken {
@@ -115,4 +116,19 @@ model Creator {
 
   // 1 to Many
   tracks Track[]
+}
+
+// 결제 관련
+
+enum PaymentType {
+  KAKAOPAY
+}
+
+model PaymentMethod {
+  id      String      @id @default(cuid())
+  type    PaymentType
+  details Json // ex. 각 간편결제 서비스에 맞도록 {tid: string, sid: string}
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 }

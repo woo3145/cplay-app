@@ -25,7 +25,7 @@ export const registerUserServerAction = async (
 
   const hashedPassword = await bcrypt.hash(password, 10);
   const name = Math.random().toString(36).substring(2, 11);
-  const user = await repo.createUser(email, hashedPassword, name);
+  const user = await repo.create(email, hashedPassword, name);
 
   return { success: true, user };
 };

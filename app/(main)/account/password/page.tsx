@@ -1,7 +1,21 @@
-export default function AccountPasswordPage() {
+import { Separator } from '@/components/ui/separator';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/api/auth/[...nextauth]/route';
+import { redirect } from 'next/navigation';
+
+export default async function ChangePasswordPage() {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    redirect('/signin');
+  }
+
   return (
-    <div className="flex flex-col items-center justify-between">
-      <div>Password Change</div>
+    <div className="space-y-6">
+      <div>
+        <h3 className="text-3xl font-medium">패스워드 변경</h3>
+      </div>
+      <Separator />
     </div>
   );
 }

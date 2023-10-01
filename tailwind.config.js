@@ -38,6 +38,10 @@ module.exports = {
           DEFAULT: 'hsl(var(--success))',
           foreground: 'hsl(var(--success-foreground))',
         },
+        kakao: {
+          DEFAULT: 'hsl(var(--kakao))',
+          foreground: 'hsl(var(--kakao-foreground))',
+        },
         muted: {
           DEFAULT: 'hsl(var(--muted))',
           foreground: 'hsl(var(--muted-foreground))',

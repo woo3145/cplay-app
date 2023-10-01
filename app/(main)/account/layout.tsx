@@ -7,7 +7,7 @@ const sidebarNavItems = [
     href: '/account/general',
   },
   {
-    title: '결제 수단',
+    title: '결제 / 구독',
     href: '/account/billing',
   },
   {

@@ -28,6 +28,9 @@
     --input: 0 0% 89.8%;
     --ring: 0 72.2% 50.6%;
     --radius: 0.3rem;
+
+    --kakao: 54 100% 50%;
+    --kakao-foreground: 0 36% 16%;
   }
 
   .dark {
@@ -54,6 +57,9 @@
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
     --ring: 0 72.2% 50.6%;
+
+    --kakao: 54 100% 50%;
+    --kakao-foreground: 0 36% 16%;
   }
 }
 

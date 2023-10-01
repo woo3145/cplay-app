@@ -18,7 +18,11 @@ export class FileS3Repository implements FileRepository {
     });
   }
 
-  async getPresignedUrl(name: string, mimeType: string) {
+  async getPresignedUrl(
+    name: string,
+    mimeType: string,
+    expiresIn: number = 30
+  ) {
     const params: PutObjectCommandInput = {
       Bucket: process.env.S3_BUCKET_NAME,
       Key: name,
@@ -27,7 +31,7 @@ export class FileS3Repository implements FileRepository {
 
     const command = new PutObjectCommand(params);
     const url = await getSignedUrl(this.s3, command, {
-      expiresIn: 3600,
+      expiresIn: expiresIn,
     });
 
     return url;
