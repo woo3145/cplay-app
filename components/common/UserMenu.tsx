@@ -12,28 +12,26 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { signOut, useSession } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
+import { User as DomainUser } from '@/modules/user/domain/user';
 
-export function UserMenu() {
-  const { data: session, status } = useSession();
+interface Props {
+  user: DomainUser | null;
+}
+
+export function UserMenu({ user }: Props) {
   const onClickLogout = () => {
-    if (!session) return;
     signOut();
   };
 
-  if (status === 'loading') {
-    return <Skeleton className="h-10 w-10 rounded-full" />;
-  }
-
-  return session?.user ? (
+  return user ? (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="cursor-pointer">
         <Avatar>
-          <AvatarImage src={session.user.image ?? ''} alt="user avatar" />
-          <AvatarFallback>{session.user.name}</AvatarFallback>
+          <AvatarImage src={user.image ?? ''} alt="user avatar" />
+          <AvatarFallback>{user.name}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 mr-4">

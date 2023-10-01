@@ -2,13 +2,12 @@ import { z } from 'zod';
 
 export const EditUserFormSchema = z.object({
   name: z
-    .string({
-      required_error: 'name는 필수 입력 사항입니다.',
-    })
-    .min(2, 'name은 2 ~ 20글자 사이입니다.')
-    .max(20, 'name은 2 ~ 20글자 사이입니다.'),
+    .string()
+    .min(2, '닉네임은 2 ~ 20글자 사이입니다.')
+    .max(20, '닉네임은 2 ~ 20글자 사이입니다.')
+    .optional(),
 
-  imageUrl: z.string(),
+  imageUrl: z.string().optional(),
 });
 export type EditUserFormData = z.infer<typeof EditUserFormSchema>;
 
@@ -21,7 +20,7 @@ export const ChangePasswordFormSchema = z
       .min(1, '해당 필드는 필수 입력 사항입니다.'),
     newPassword: z
       .string({
-        required_error: '새패스워드는 필수 입력 사항입니다.',
+        required_error: '새 패스워드는 필수 입력 사항입니다.',
       })
       .min(8, '패스워드는 8글자 이상입니다.'),
   })

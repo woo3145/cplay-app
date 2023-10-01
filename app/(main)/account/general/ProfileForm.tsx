@@ -37,7 +37,7 @@ interface Props {
 export function ProfileForm({ user }: Props) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { data: session, update: sessionUpdate } = useSession();
+  const { update: sessionUpdate } = useSession();
   const form = useForm<Omit<EditUserFormData, 'imageUrl'>>({
     resolver: zodResolver(EditUserFormSchema.omit({ imageUrl: true })),
     defaultValues: {
