@@ -18,7 +18,11 @@ export default async function ChangePasswordPage() {
       </div>
       <Separator />
 
-      <ChangePasswordForm userId={session.user.id} />
+      {session.user.isSocialLogin ? (
+        <div>소셜 로그인 된 계정입니다.</div>
+      ) : (
+        <ChangePasswordForm userId={session.user.id} />
+      )}
     </div>
   );
 }

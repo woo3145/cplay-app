@@ -14,12 +14,12 @@ export const authOptions: AuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID ?? '',
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
       profile: (profile) => {
+        // 최초 가입시에만 호출 됨
         return {
           id: profile.sub,
           name: profile.name,
           email: profile.email,
           image: profile.picture,
-          role: Role.USER,
         };
       },
     }),
@@ -45,12 +45,16 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user }) {
-      if (user) token.role = user.role ?? Role.USER;
+      if (user) {
+        token.role = user.role ?? Role.USER;
+        token.isSocialLogin = user?.isSocialLogin !== false;
+      }
       return token;
     },
     async session({ session, token }) {
       session.user.id = token.sub as string;
       session.user.role = token.role as Role;
+      session.user.isSocialLogin = token.isSocialLogin as boolean;
       return session;
     },
   },

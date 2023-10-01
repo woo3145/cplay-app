@@ -7,16 +7,19 @@ declare module 'next-auth' {
     user: {
       id: string;
       role: Role;
+      isSocialLogin: boolean;
     } & DefaultSession['user'];
   }
 
   interface User extends DefaultUser {
     role?: Role;
+    isSocialLogin?: boolean;
   }
 }
 
 declare module 'next-auth/jwt' {
   interface JWT extends DefaultUser {
     role?: Role;
+    isSocialLogin?: boolean;
   }
 }

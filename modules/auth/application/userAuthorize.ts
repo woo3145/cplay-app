@@ -16,7 +16,7 @@ export const userAuthorize = async (
   const { email, password } = AuthorizeUserFormSchema.parse(data);
 
   const repo = subUserRepository || repository.user;
-  const user = await repo.getUserByEmailWithPassword(email);
+  const user = await repo.findByEmailWithPassword(email);
 
   if (!user) throw new Error('이메일 또는 패스워드가 잘못되었습니다.');
 
@@ -26,11 +26,5 @@ export const userAuthorize = async (
 
   if (!isValid) throw new Error('이메일 또는 패스워드가 잘못되었습니다.');
 
-  return {
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    image: user.image,
-    role: user.role,
-  };
+  return user;
 };

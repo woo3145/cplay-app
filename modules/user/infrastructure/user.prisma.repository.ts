@@ -2,20 +2,27 @@ import { UserRepository } from '@/modules/user/domain/user.repository';
 import prisma from '@/lib/db/prisma';
 import { EditUserFormData } from '../domain/user.validation';
 import bcrypt from 'bcrypt';
+import { User as DomainUser } from '../domain/user';
+import { User as PrismaUser } from '@prisma/client';
 
 export class UserPrismaRepository implements UserRepository {
+  toDomainModel(record: PrismaUser): DomainUser {
+    return {
+      id: record.id,
+      name: record.name,
+      email: record.email,
+      image: record.image,
+      role: record.role,
+      isSocialLogin: record.password ? false : true,
+    };
+  }
+
   async findByEmail(email: string) {
     const user = await prisma.user.findUnique({ where: { email } });
 
     if (!user) return null;
 
-    return {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      image: user.image,
-      role: user.role,
-    };
+    return this.toDomainModel(user);
   }
   async findByEmailWithPassword(email: string) {
     const user = await prisma.user.findUnique({ where: { email } });
@@ -23,13 +30,16 @@ export class UserPrismaRepository implements UserRepository {
     if (!user) return null;
 
     return {
-      id: user.id,
-      name: user.name,
-      email: user.email,
+      ...this.toDomainModel(user),
       password: user.password,
-      image: user.image,
-      role: user.role,
     };
+  }
+  async findById(id: string) {
+    const user = await prisma.user.findUnique({ where: { id } });
+
+    if (!user) return null;
+
+    return this.toDomainModel(user);
   }
   async findByIdWithPassword(id: string) {
     const user = await prisma.user.findUnique({ where: { id } });
@@ -37,17 +47,13 @@ export class UserPrismaRepository implements UserRepository {
     if (!user) return null;
 
     return {
-      id: user.id,
-      name: user.name,
-      email: user.email,
+      ...this.toDomainModel(user),
       password: user.password,
-      image: user.image,
-      role: user.role,
     };
   }
 
   async create(email: string, hashedPassword: string, name: string) {
-    const user = prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         name,
         email,
@@ -55,7 +61,7 @@ export class UserPrismaRepository implements UserRepository {
       },
     });
 
-    return user;
+    return this.toDomainModel(user);
   }
 
   async edit(userId: string, { name, imageUrl }: EditUserFormData) {
@@ -72,7 +78,7 @@ export class UserPrismaRepository implements UserRepository {
 
     // 모든 필드가 undefined라면 기존 user 반환
     if (Object.values(updatedField).every((val) => val === undefined)) {
-      return exist;
+      return this.toDomainModel(exist);
     }
 
     const updatedUser = await prisma.user.update({
@@ -80,7 +86,7 @@ export class UserPrismaRepository implements UserRepository {
       data: updatedField,
     });
 
-    return updatedUser;
+    return this.toDomainModel(updatedUser);
   }
 
   async changePassword(userId: string, newPassword: string) {
