@@ -1,13 +1,12 @@
 import { Separator } from '@/components/ui/separator';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/api/auth/[...nextauth]/route';
 import { redirect } from 'next/navigation';
 import { ChangePasswordForm } from './ChangePasswordForm';
+import { getSessionUser } from '@/modules/user/application/getSessionUser';
 
 export default async function ChangePasswordPage() {
-  const session = await getServerSession(authOptions);
+  const user = await getSessionUser();
 
-  if (!session) {
+  if (!user) {
     redirect('/signin');
   }
 
@@ -18,10 +17,10 @@ export default async function ChangePasswordPage() {
       </div>
       <Separator />
 
-      {session.user.isSocialLogin ? (
+      {user.isSocialLogin ? (
         <div>소셜 로그인 된 계정입니다.</div>
       ) : (
-        <ChangePasswordForm userId={session.user.id} />
+        <ChangePasswordForm userId={user.id} />
       )}
     </div>
   );

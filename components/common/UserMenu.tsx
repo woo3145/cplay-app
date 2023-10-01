@@ -19,7 +19,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 export function UserMenu() {
   const { data: session, status } = useSession();
-
   const onClickLogout = () => {
     if (!session) return;
     signOut();

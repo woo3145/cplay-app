@@ -7,6 +7,7 @@ import {
 } from '../domain/user.validation';
 import { UserRepository } from '../domain/user.repository';
 import { userGuard } from '@/lib/guard/userGuard';
+import { revalidateTag } from 'next/cache';
 
 export const editUserServerAction = userGuard(
   async (
@@ -19,6 +20,7 @@ export const editUserServerAction = userGuard(
 
     try {
       const result = await repo.edit(id, { name, imageUrl });
+      revalidateTag(`userId-${id}`);
       return { success: true, user: result };
     } catch (e) {
       return { success: false, message: '서버에 문제가 발생하였습니다.' };

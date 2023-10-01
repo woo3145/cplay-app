@@ -28,6 +28,7 @@ import { getFileExtension } from '@/lib/utils';
 import { uploadFileToPresigendUrl } from '@/modules/upload/application/uploadFileToPresigendUrl';
 import { editUserServerAction } from '@/modules/user/application/editUserServerAction';
 import { Loader2 } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 
 interface Props {
   user: User;
@@ -36,7 +37,7 @@ interface Props {
 export function ProfileForm({ user }: Props) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
+  const { data: session, update: sessionUpdate } = useSession();
   const form = useForm<Omit<EditUserFormData, 'imageUrl'>>({
     resolver: zodResolver(EditUserFormSchema.omit({ imageUrl: true })),
     defaultValues: {
@@ -71,11 +72,16 @@ export function ProfileForm({ user }: Props) {
         });
         return;
       }
-
-      toast({
-        variant: 'success',
-        title: '성공적으로 프로필을 수정했습니다.',
-      });
+      if (result.user) {
+        await sessionUpdate({
+          name: result.user.name,
+          picture: result.user.image,
+        });
+        toast({
+          variant: 'success',
+          title: '성공적으로 프로필을 수정했습니다.',
+        });
+      }
     } catch (e) {
       toast({
         variant: 'destructive',

@@ -11,6 +11,7 @@ import { moodColumns } from '@/modules/admin/application/dataTableColumns/MoodCo
 export default async function TagsPage() {
   const genres = await getAllGenres();
   const moods = await getAllMoods();
+
   return (
     <div className="h-full px-4 py-6 lg:px-8">
       <Tabs defaultValue="genres" className="h-full space-y-6">
