@@ -1,9 +1,10 @@
 import { UserRepository } from '@/modules/user/domain/user.repository';
 import prisma from '@/lib/db/prisma';
 import { EditUserFormData } from '../domain/user.validation';
+import bcrypt from 'bcrypt';
 
 export class UserPrismaRepository implements UserRepository {
-  async getUserByEmail(email: string) {
+  async findByEmail(email: string) {
     const user = await prisma.user.findUnique({ where: { email } });
 
     if (!user) return null;
@@ -16,8 +17,22 @@ export class UserPrismaRepository implements UserRepository {
       role: user.role,
     };
   }
-  async getUserByEmailWithPassword(email: string) {
+  async findByEmailWithPassword(email: string) {
     const user = await prisma.user.findUnique({ where: { email } });
+
+    if (!user) return null;
+
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      password: user.password,
+      image: user.image,
+      role: user.role,
+    };
+  }
+  async findByIdWithPassword(id: string) {
+    const user = await prisma.user.findUnique({ where: { id } });
 
     if (!user) return null;
 
@@ -66,5 +81,13 @@ export class UserPrismaRepository implements UserRepository {
     });
 
     return updatedUser;
+  }
+
+  async changePassword(userId: string, newPassword: string) {
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await prisma.user.update({
+      where: { id: userId },
+      data: { password: hashedPassword },
+    });
   }
 }
