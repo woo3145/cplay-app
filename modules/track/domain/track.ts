@@ -1,6 +1,7 @@
 import { Creator } from '@/modules/creator/domain/creator';
 import { Genres } from '@/modules/genres/domain/genres';
 import { Mood } from '@/modules/mood/domain/mood';
+import { Stem } from '@/modules/stem/domain/stem';
 
 export interface Track {
   id: number;
@@ -14,8 +15,8 @@ export interface Track {
 
   genres: Genres[];
   moods: Mood[];
+  stems: Stem[]; //원곡을 이루는 개별트랙
 
   creator: Creator | null;
   creatorId: number | null;
-  // stems: Stem[]; //원곡을 이루는 개별트랙
 }

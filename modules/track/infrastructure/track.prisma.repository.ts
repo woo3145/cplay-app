@@ -4,7 +4,7 @@ import { TrackRepository } from '../domain/track.repository';
 import { CreateTrackFormData } from '@/modules/admin/domain/track.validation';
 
 export class TrackPrismaRepository implements TrackRepository {
-  async getTracks() {
+  async findAll() {
     const tracks = await unstable_cache(
       async () => {
         const data = await prisma.track.findMany({
@@ -12,6 +12,7 @@ export class TrackPrismaRepository implements TrackRepository {
             creator: true,
             moods: true,
             genres: true,
+            stems: true,
           },
         });
         console.log('Prisma 호출 : Tracks');
@@ -25,7 +26,7 @@ export class TrackPrismaRepository implements TrackRepository {
     return tracks;
   }
 
-  async createTrack(data: CreateTrackFormData) {
+  async create(data: CreateTrackFormData) {
     const { creatorId, moodIds, genresIds, ...rest } = data;
     const track = await prisma.track.create({
       data: {
@@ -51,6 +52,7 @@ export class TrackPrismaRepository implements TrackRepository {
         genres: true,
         moods: true,
         creator: true,
+        stems: true,
       },
     });
     revalidateTag('allTracks');
