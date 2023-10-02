@@ -1,8 +1,5 @@
-import { DataTable } from '@/components/dataTable/DataTable';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { genresColumns } from '@/modules/admin/application/dataTableColumns/GenresColumns';
-import { trackColumns } from '@/modules/admin/application/dataTableColumns/TrackColumns';
 import { getAllGenres } from '@/modules/genres/application/getAllGenres';
 import { MockTracks } from '@/modules/track/domain/track.mock';
 import Link from 'next/link';
@@ -26,13 +23,7 @@ export default async function TracksPage() {
       <Separator className="my-4" />
 
       <div className="relative w-full">
-        <div className=" mx-auto py-5">
-          <DataTable
-            columns={trackColumns}
-            data={tracks}
-            filterField={'title'}
-          />
-        </div>
+        <div className=" mx-auto py-5"></div>
       </div>
     </div>
   );

@@ -1,17 +1,17 @@
-import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { useState } from 'react';
 import { toast } from '@/components/ui/use-toast';
 import { deleteMoodServerAction } from './deleteMoodServerAction';
 import { Mood } from '@/modules/mood/domain/mood';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 
 interface Props {
   mood: Mood;
@@ -19,7 +19,6 @@ interface Props {
 }
 
 export const DeleteMoodDialog = ({ children, mood }: Props) => {
-  const [open, setOpen] = useState(false);
   const onSubmit = async () => {
     try {
       const result = await deleteMoodServerAction({ id: mood.id });
@@ -39,31 +38,27 @@ export const DeleteMoodDialog = ({ children, mood }: Props) => {
         variant: 'destructive',
         title: '예상치 못한 에러가 발생하였습니다.',
       });
-    } finally {
-      setOpen(false);
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="w-full" asChild>
-        {children}
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>{mood.tag}를 정말 삭제하시겠습니까?</DialogTitle>
-          <DialogDescription>
-            기존에 사용중인 분위기 태그가 제거됩니다.
-          </DialogDescription>
-        </DialogHeader>
-
-        <DialogFooter>
-          <DialogTrigger asChild>
-            <Button variant={'ghost'}>취소</Button>
-          </DialogTrigger>
-          <Button onClick={onSubmit}>확인</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>
+            &apos;{mood.tag}&apos; 을 정말 삭제하시겠습니까?
+          </AlertDialogTitle>
+          <AlertDialogDescription>
+            이작업은 최소할 수 없습니다. 또한 기존에 사용중인 분위기 태그가 모두
+            삭제됩니다.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={onSubmit}>Continue</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
