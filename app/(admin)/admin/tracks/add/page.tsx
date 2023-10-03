@@ -1,8 +1,12 @@
 import { Separator } from '@/components/ui/separator';
-import { MockTracks } from '@/modules/track/domain/track.mock';
+import { getAllGenres } from '@/modules/genres/application/getAllGenres';
+import { AddTrackForm } from './AddTrackForm';
+import { getAllMoods } from '@/modules/mood/application/getAllMoods';
 
 export default async function TracksPage() {
-  const tracks = MockTracks;
+  const genres = await getAllGenres();
+  const moods = await getAllMoods();
+
   return (
     <div className="flex flex-col items-center justify-between">
       <div className="flex items-center justify-between w-full">
@@ -12,9 +16,7 @@ export default async function TracksPage() {
       </div>
       <Separator className="my-4" />
 
-      <div className="relative w-full">
-        <div className=" mx-auto py-5"></div>
-      </div>
+      <AddTrackForm genres={genres} moods={moods} />
     </div>
   );
 }
