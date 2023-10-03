@@ -1,3 +1,4 @@
+import { TrackState } from '@prisma/client';
 import { z } from 'zod';
 
 export const CreateTrackFormSchema = z.object({
@@ -5,12 +6,13 @@ export const CreateTrackFormSchema = z.object({
   imageUrl: z.string(),
   length: z.number(),
   bpm: z.number(),
-  isPublish: z.boolean(),
-  moodIds: z.number().array(),
-  genresIds: z.number().array(),
-  creatorId: z.number(),
+  isPublish: z.nativeEnum(TrackState),
 });
 export type CreateTrackFormData = z.infer<typeof CreateTrackFormSchema>;
+
+// moodIds: z.number().array(),
+// genresIds: z.number().array(),
+// creatorId: z.string(),
 
 export const DeleteTrackFormSchema = z.object({
   id: z.number({

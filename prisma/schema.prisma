@@ -51,6 +51,7 @@ model User {
   role          Role      @default(USER)
   accounts      Account[]
   sessions      Session[]
+  Track         Track[]
 }
 
 model VerificationToken {
@@ -69,20 +70,26 @@ model Genres {
   tracks Track[]
 }
 
+enum TrackState {
+  HIDDEN
+  PUBLISH
+}
+
 model Track {
-  id          Int       @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   title       String
   createdAt   DateTime // 트랙 추가일
   imageUrl    String
   length      Int // 트랙 길이 (초)
   bpm         Int // 트랙 템포
   releaseDate DateTime? // 트랙 공개일
-  isPublish   Boolean // 트랙 릴리즈 여부
+  state       TrackState // 트랙 릴리즈 여부
 
   // 1 to Many
-  creator   Creator? @relation(fields: [creatorId], references: [id], onDelete: SetNull)
-  creatorId Int?
-  stems     Stem[] // 원곡을 이루는 개별트랙
+  creator   User?   @relation(fields: [creatorId], references: [id], onDelete: SetNull)
+  creatorId String?
+
+  stems Stem[] // 원곡을 이루는 개별트랙
 
   // Many to Many
   genres Genres[]
@@ -105,16 +112,6 @@ model Mood {
 
   // Many to Many
   traks Track[]
-}
-
-model Creator {
-  id           Int    @id @default(autoincrement())
-  creativeType String
-  name         String
-  imageUrl     String
-
-  // 1 to Many
-  tracks Track[]
 }
 
 // 결제 관련

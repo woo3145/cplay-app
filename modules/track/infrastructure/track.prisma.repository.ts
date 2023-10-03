@@ -1,7 +1,6 @@
 import prisma from '@/lib/db/prisma';
 import { revalidateTag, unstable_cache } from 'next/cache';
-import { TrackRepository } from '../domain/track.repository';
-import { CreateTrackFormData } from '@/modules/admin/domain/track.validation';
+import { CreateTrackInput, TrackRepository } from '../domain/track.repository';
 
 export class TrackPrismaRepository implements TrackRepository {
   async findAll() {
@@ -26,7 +25,7 @@ export class TrackPrismaRepository implements TrackRepository {
     return tracks;
   }
 
-  async create(data: CreateTrackFormData) {
+  async create(data: CreateTrackInput) {
     const { creatorId, moodIds, genresIds, ...rest } = data;
     const track = await prisma.track.create({
       data: {
