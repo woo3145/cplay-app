@@ -26,7 +26,7 @@ export const DeleteGenresDialog = ({ children, genres }: Props) => {
       const result = await deleteGenresServerAction({ id: genres.id });
 
       if (!result.success) {
-        toast({
+        return toast({
           variant: 'destructive',
           title: result.message,
         });
@@ -54,7 +54,7 @@ export const DeleteGenresDialog = ({ children, genres }: Props) => {
             &apos;{genres.tag}&apos; 을 정말 삭제하시겠습니까?
           </AlertDialogTitle>
           <AlertDialogDescription>
-            이작업은 최소할 수 없습니다. 또한 기존에 사용중인 장르 태그가 모두
+            이작업은 취소할 수 없습니다. 또한 기존에 사용중인 장르 태그가 모두
             삭제됩니다.
           </AlertDialogDescription>
         </AlertDialogHeader>

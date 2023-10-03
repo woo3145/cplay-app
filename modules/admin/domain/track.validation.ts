@@ -11,3 +11,10 @@ export const CreateTrackFormSchema = z.object({
   creatorId: z.number(),
 });
 export type CreateTrackFormData = z.infer<typeof CreateTrackFormSchema>;
+
+export const DeleteTrackFormSchema = z.object({
+  id: z.number({
+    required_error: 'id는 필수 입력 사항입니다.',
+  }),
+});
+export type DeleteTrackFormData = z.infer<typeof DeleteTrackFormSchema>;

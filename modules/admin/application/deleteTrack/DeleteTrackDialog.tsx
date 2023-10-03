@@ -1,6 +1,4 @@
 import { toast } from '@/components/ui/use-toast';
-import { deleteMoodServerAction } from './deleteMoodServerAction';
-import { Mood } from '@/modules/mood/domain/mood';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,16 +10,18 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { Track } from '@/modules/track/domain/track';
+import { deleteTrackServerAction } from './deleteTrackServerAction';
 
 interface Props {
-  mood: Mood;
+  track: Track;
   children: React.ReactNode; // trigger
 }
 
-export const DeleteMoodDialog = ({ children, mood }: Props) => {
+export const DeleteTrackDialog = ({ children, track }: Props) => {
   const onSubmit = async () => {
     try {
-      const result = await deleteMoodServerAction({ id: mood.id });
+      const result = await deleteTrackServerAction({ id: track.id });
 
       if (!result.success) {
         return toast({
@@ -31,7 +31,7 @@ export const DeleteMoodDialog = ({ children, mood }: Props) => {
       }
       toast({
         variant: 'success',
-        title: `성공적으로 ${mood.tag}를 삭제했습니다.`,
+        title: `성공적으로 ${track.title}를 삭제했습니다.`,
       });
     } catch (e) {
       toast({
@@ -47,11 +47,10 @@ export const DeleteMoodDialog = ({ children, mood }: Props) => {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            &apos;{mood.tag}&apos; 을 정말 삭제하시겠습니까?
+            &apos;{track.title}&apos; 을 정말 삭제하시겠습니까?
           </AlertDialogTitle>
           <AlertDialogDescription>
-            이작업은 취소할 수 없습니다. 또한 기존에 사용중인 분위기 태그가 모두
-            삭제됩니다.
+            이작업은 취소할 수 없습니다. 또한 서버에서 해당 데이터가 제거됩니다.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

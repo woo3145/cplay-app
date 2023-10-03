@@ -1,12 +1,12 @@
+import { DataTable } from '@/components/dataTable/DataTable';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { getAllGenres } from '@/modules/genres/application/getAllGenres';
-import { MockTracks } from '@/modules/track/domain/track.mock';
+import { trackColumns } from '@/modules/admin/application/dataTableColumns/TrackColumns';
+import { getAllTracks } from '@/modules/admin/application/getAllTracks/getAllTracks';
 import Link from 'next/link';
 
 export default async function TracksPage() {
-  const genres = await getAllGenres();
-  const tracks = MockTracks;
+  const tracks = await getAllTracks();
   return (
     <div className="flex flex-col items-center justify-between">
       <div className="flex items-center justify-between w-full">
@@ -15,7 +15,7 @@ export default async function TracksPage() {
           <p className="text-sm text-muted-foreground">트랙 추가, 수정, 삭제</p>
         </div>
         <div className="ml-auto mr-4">
-          <Link href="/admin/tracks/create">
+          <Link href="/admin/tracks/add">
             <Button>Add Track</Button>
           </Link>
         </div>
@@ -23,7 +23,13 @@ export default async function TracksPage() {
       <Separator className="my-4" />
 
       <div className="relative w-full">
-        <div className=" mx-auto py-5"></div>
+        <div className=" mx-auto py-5">
+          <DataTable
+            columns={trackColumns}
+            data={tracks}
+            filterField={'title'}
+          />
+        </div>
       </div>
     </div>
   );

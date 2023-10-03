@@ -59,4 +59,14 @@ export class TrackPrismaRepository implements TrackRepository {
 
     return track;
   }
+  async delete(id: number) {
+    const exist = await prisma.track.findFirst({ where: { id } });
+    if (!exist) {
+      throw new Error('Track이 존재하지 않습니다.');
+    }
+
+    await prisma.track.delete({ where: { id } });
+
+    revalidateTag('allTracks');
+  }
 }
