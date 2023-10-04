@@ -1,15 +1,16 @@
 'use server';
 
-import { repository } from '@/modules/config/repository';
-import { UserRepository } from '../user.repository';
 import { unstable_cache } from 'next/cache';
 import { getServerSession } from 'next-auth';
+
+import { repository } from '@/modules/config/repository';
+import { UserRepository } from '../user.repository';
 import { authOptions } from '@/api/auth/[...nextauth]/route';
-import { SessionUser as DomainSessionUser } from '../user';
+import { SessionUser } from '../user';
 
 export const getSessionUserServerAction = async (
   subUserRepository: UserRepository | null = null
-): Promise<DomainSessionUser | null> => {
+): Promise<SessionUser | null> => {
   const session = await getServerSession(authOptions);
   if (!session || !session.user || !session.user.id) {
     return null;

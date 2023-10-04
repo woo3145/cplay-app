@@ -8,7 +8,6 @@ export const uploadFileToPresigendUrl = async (
     headers: { 'Content-Type': file.type },
     body: file,
   });
-
   if (!result.ok) throw new Error(`Failed to upload file`);
 
   const publicUrl = presignedUrl.split('?')[0];

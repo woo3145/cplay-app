@@ -1,22 +1,21 @@
 'use client';
-import * as z from 'zod';
+import { useState } from 'react';
 
 import { Input } from '@/components/ui/input';
 import { buttonVariants } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { User } from 'next-auth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import { SessionUser } from '@/modules/user/domain/user';
 
 interface Props {
   initialUrl?: string | null;
-  user: User;
+  user: SessionUser;
   onFileSelect: (file: File) => void;
 }
 
-export function AvatarUpload({ initialUrl, user, onFileSelect }: Props) {
+export function AvatarFileSelector({ initialUrl, user, onFileSelect }: Props) {
   const [previewUrl, setPreviewUrl] = useState(initialUrl);
 
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {

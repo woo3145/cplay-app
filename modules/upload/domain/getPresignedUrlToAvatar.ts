@@ -1,6 +1,6 @@
 'use server';
 
-import { FileRepository } from '../../upload/domain/file.repository';
+import { FileRepository } from './file.repository';
 import { repository } from '@/modules/config/repository';
 import { userGuard } from '@/lib/guard/userGuard';
 

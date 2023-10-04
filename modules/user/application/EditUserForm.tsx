@@ -16,22 +16,20 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { AvatarUpload } from '../../../app/(main)/account/general/AvatarUpload';
 import { useState } from 'react';
-import { getPresignedUrlToAvatar } from '@/modules/upload/application/getPresignedUrlToAvatar';
-import { getFileExtension } from '@/lib/utils';
-import { uploadFileToPresigendUrl } from '@/modules/upload/application/uploadFileToPresigendUrl';
 import { Loader2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { editUserServerAction } from '@/modules/user/domain/usecases/editUserServerAction';
-import { User } from '@/modules/user/domain/user';
 import {
   EditUserFormData,
   EditUserFormSchema,
 } from '../domain/validations/EditUserTypes';
+import { AvatarFileSelector } from '@/app/(main)/account/general/AvatarFileSelector';
+import { useUploadImage } from '@/modules/upload/application/useUploadImage';
+import { SessionUser } from '../domain/user';
 
 interface Props {
-  user: User;
+  user: SessionUser;
 }
 
 export function EditUserForm({ user }: Props) {
@@ -45,25 +43,22 @@ export function EditUserForm({ user }: Props) {
   const { update: sessionUpdate } = useSession();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const { selectedFile, setSelectedFile, uploadImage } = useUploadImage(
+    user.id
+  );
 
-  async function onSubmit(data: Omit<EditUserFormData, 'imageUrl'>) {
+  async function onSubmit(data: EditUserFormData) {
     setIsLoading(true);
     try {
       let imageUrl = user.image ?? '';
-      if (selectedFile) {
-        const extended = getFileExtension(selectedFile.name);
-        const presignedUrl = await getPresignedUrlToAvatar(
-          `${user.id}-profile.${extended}`,
-          selectedFile.type
-        );
 
-        imageUrl = await uploadFileToPresigendUrl(presignedUrl, selectedFile);
+      if (selectedFile) {
+        imageUrl = (await uploadImage()) ?? imageUrl;
       }
 
       const result = await editUserServerAction(user.id, {
         name: data.name,
-        imageUrl,
+        image: imageUrl,
       });
 
       if (!result.success) {
@@ -99,7 +94,7 @@ export function EditUserForm({ user }: Props) {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex gap-8 flex-col md:flex-row"
       >
-        <AvatarUpload
+        <AvatarFileSelector
           initialUrl={user.image}
           user={user}
           onFileSelect={(file) => setSelectedFile(file)}

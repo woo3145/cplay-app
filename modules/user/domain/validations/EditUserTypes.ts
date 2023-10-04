@@ -12,7 +12,7 @@ export type EditUserFormData = z.infer<typeof EditUserFormSchema>;
 
 // usecase
 export const UsecaseEditUserInputSchema = EditUserFormSchema.extend({
-  imageUrl: z.string().optional(),
+  image: z.string().optional(),
 });
 export type UsecaseEditUserInput = z.infer<typeof UsecaseEditUserInputSchema>;
 

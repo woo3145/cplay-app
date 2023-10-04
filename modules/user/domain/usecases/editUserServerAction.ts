@@ -1,9 +1,10 @@
 'use server';
 
+import { revalidateTag } from 'next/cache';
+
 import { repository } from '@/modules/config/repository';
 import { UserRepository } from '../user.repository';
 import { userGuard } from '@/lib/guard/userGuard';
-import { revalidateTag } from 'next/cache';
 import {
   UsecaseEditUserInput,
   UsecaseEditUserInputSchema,
@@ -15,7 +16,7 @@ export const editUserServerAction = userGuard(
     data: UsecaseEditUserInput,
     subUserRepository: UserRepository | null = null
   ) => {
-    const { name, imageUrl } = UsecaseEditUserInputSchema.parse(data);
+    const { name, image } = UsecaseEditUserInputSchema.parse(data);
     const repo = subUserRepository || repository.user;
 
     const exist = await repo.findUserById(id);
@@ -25,7 +26,7 @@ export const editUserServerAction = userGuard(
 
     const updatedField = {
       name: exist.name === name ? undefined : name,
-      imageUrl: exist.image === imageUrl ? undefined : imageUrl,
+      image: exist.image === image ? undefined : image,
     };
 
     // 모든 필드가 undefined라면 기존 user 반환
