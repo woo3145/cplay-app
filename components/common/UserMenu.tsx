@@ -15,10 +15,10 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { User as DomainUser } from '@/modules/user/domain/user';
+import { SessionUser } from '@/modules/user/domain/user';
 
 interface Props {
-  user: DomainUser | null;
+  user: SessionUser | null;
 }
 
 export function UserMenu({ user }: Props) {

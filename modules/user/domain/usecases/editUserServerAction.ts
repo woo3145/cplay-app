@@ -1,25 +1,24 @@
 'use server';
 
 import { repository } from '@/modules/config/repository';
-import {
-  EditUserFormData,
-  EditUserFormSchema,
-} from '../domain/user.validation';
-import { UserRepository } from '../domain/user.repository';
+import { UserRepository } from '../user.repository';
 import { userGuard } from '@/lib/guard/userGuard';
 import { revalidateTag } from 'next/cache';
+import {
+  UsecaseEditUserInput,
+  UsecaseEditUserInputSchema,
+} from '../validations/EditUserTypes';
 
 export const editUserServerAction = userGuard(
   async (
     id: string,
-    data: EditUserFormData,
+    data: UsecaseEditUserInput,
     subUserRepository: UserRepository | null = null
   ) => {
-    const { name, imageUrl } = EditUserFormSchema.parse(data);
+    const { name, imageUrl } = UsecaseEditUserInputSchema.parse(data);
     const repo = subUserRepository || repository.user;
 
-    const exist = await repo.findById(id);
-
+    const exist = await repo.findUserById(id);
     if (!exist) {
       return { success: false, message: 'User가 존재하지 않습니다.' };
     }
@@ -36,9 +35,10 @@ export const editUserServerAction = userGuard(
 
     try {
       const result = await repo.edit(id, updatedField);
-      revalidateTag(`userId-${id}`);
+      revalidateTag(`sessionUser-${id}`);
       return { success: true, user: result };
     } catch (e) {
+      console.error('Edit User Error: ', e);
       return { success: false, message: '서버에 문제가 발생하였습니다.' };
     }
   }

@@ -1,10 +1,10 @@
 import { Separator } from '@/components/ui/separator';
 import { redirect } from 'next/navigation';
-import { ChangePasswordForm } from './ChangePasswordForm';
-import { getSessionUser } from '@/modules/user/application/getSessionUser';
+import { ChangePasswordForm } from '../../../../modules/user/application/ChangePasswordForm';
+import { getSessionUserServerAction } from '@/modules/user/domain/usecases/getSessionUserServerAction';
 
 export default async function ChangePasswordPage() {
-  const user = await getSessionUser();
+  const user = await getSessionUserServerAction();
 
   if (!user) {
     redirect('/signin');

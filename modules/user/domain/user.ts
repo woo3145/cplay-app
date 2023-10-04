@@ -1,11 +1,16 @@
-import { Role } from '@prisma/client';
+export enum UserRole {
+  ADMIN = 'ADMIN',
+  USER = 'USER',
+}
 
 export interface User {
   id: string;
-  name?: string | null;
-  email?: string | null;
-  image?: string | null;
-  password?: string | null;
-  role?: Role; // 예외로 DB에 의존성을 만듬 (원래 규칙은 외부로 의존성 만들면 X)
-  isSocialLogin?: boolean;
+  name: string;
+  email: string;
+  image: string;
+}
+
+export interface SessionUser extends User {
+  role: UserRole;
+  isSocialLogin: boolean;
 }

@@ -2,12 +2,12 @@
 
 import * as bcrypt from 'bcrypt';
 import { repository } from '@/modules/config/repository';
+import { UserRepository } from '../user.repository';
+import { userGuard } from '@/lib/guard/userGuard';
 import {
   ChangePasswordFormData,
   ChangePasswordFormSchema,
-} from '../domain/user.validation';
-import { UserRepository } from '../domain/user.repository';
-import { userGuard } from '@/lib/guard/userGuard';
+} from '../validations/ChangePasswordTypes';
 
 export const changePasswordServerAction = userGuard(
   async (
@@ -18,14 +18,14 @@ export const changePasswordServerAction = userGuard(
     const { oldPassword, newPassword } = ChangePasswordFormSchema.parse(data);
     const repo = subUserRepository || repository.user;
 
-    const user = await repo.findByIdWithPassword(id);
+    const user = await repo.findUserByIdWithPassword(id);
 
     if (!user) {
       return { success: false, message: 'User가 존재하지 않습니다.' };
     }
 
     if (!user.password) {
-      return { success: false, message: '간편 로그인된 계정이 존재합니다.' };
+      return { success: false, message: '간편 로그인된 계정입니다.' };
     }
 
     const isValid = await bcrypt.compare(oldPassword, user.password);
@@ -36,7 +36,7 @@ export const changePasswordServerAction = userGuard(
       };
     }
 
-    await repo.changePassword(id, newPassword);
+    await repo.changePassword(id, { newPassword });
 
     return { success: true };
   }

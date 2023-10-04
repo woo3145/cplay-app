@@ -1,10 +1,10 @@
 import { Separator } from '@/components/ui/separator';
-import { ProfileForm } from './ProfileForm';
+import { EditUserForm } from '../../../../modules/user/application/EditUserForm';
 import { redirect } from 'next/navigation';
-import { getSessionUser } from '@/modules/user/application/getSessionUser';
+import { getSessionUserServerAction } from '@/modules/user/domain/usecases/getSessionUserServerAction';
 
 export default async function AccountGeneralPage() {
-  const user = await getSessionUser();
+  const user = await getSessionUserServerAction();
 
   if (!user) {
     redirect('/signin');
@@ -16,7 +16,7 @@ export default async function AccountGeneralPage() {
         <h3 className="text-3xl font-medium">프로필 수정</h3>
       </div>
       <Separator />
-      <ProfileForm user={user} />
+      <EditUserForm user={user} />
     </div>
   );
 }

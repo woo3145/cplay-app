@@ -1,3 +1,4 @@
+import { TrackState } from '@prisma/client';
 import { Track as DomainTrack } from './track';
 
 export const MockTracks: DomainTrack[] = [
@@ -8,7 +9,7 @@ export const MockTracks: DomainTrack[] = [
       'https://images.unsplash.com/photo-1695650911648-718c6ef64972?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
     length: 211,
     bpm: 90,
-    isPublish: false,
+    state: TrackState.PUBLISH,
     createdAt: new Date(),
     releaseDate: null,
 
@@ -37,7 +38,7 @@ export const MockTracks: DomainTrack[] = [
       'https://images.unsplash.com/photo-1696237918435-0d3c3f9c5785?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80',
     length: 140,
     bpm: 120,
-    isPublish: false,
+    state: TrackState.PUBLISH,
     createdAt: new Date(),
     releaseDate: null,
 

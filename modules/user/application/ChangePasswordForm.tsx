@@ -15,13 +15,12 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
+import { Loader2 } from 'lucide-react';
+import { changePasswordServerAction } from '@/modules/user/domain/usecases/changePasswordServerAction';
 import {
   ChangePasswordFormData,
   ChangePasswordFormSchema,
-  EditUserFormSchema,
-} from '@/modules/user/domain/user.validation';
-import { Loader2 } from 'lucide-react';
-import { changePasswordServerAction } from '@/modules/user/application/changePasswordServerAction';
+} from '../domain/validations/ChangePasswordTypes';
 
 interface Props {
   userId: string;

@@ -16,35 +16,36 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { User } from 'next-auth';
-import { AvatarUpload } from './AvatarUpload';
+import { AvatarUpload } from '../../../app/(main)/account/general/AvatarUpload';
 import { useState } from 'react';
-import {
-  EditUserFormData,
-  EditUserFormSchema,
-} from '@/modules/user/domain/user.validation';
 import { getPresignedUrlToAvatar } from '@/modules/upload/application/getPresignedUrlToAvatar';
 import { getFileExtension } from '@/lib/utils';
 import { uploadFileToPresigendUrl } from '@/modules/upload/application/uploadFileToPresigendUrl';
-import { editUserServerAction } from '@/modules/user/application/editUserServerAction';
 import { Loader2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
+import { editUserServerAction } from '@/modules/user/domain/usecases/editUserServerAction';
+import { User } from '@/modules/user/domain/user';
+import {
+  EditUserFormData,
+  EditUserFormSchema,
+} from '../domain/validations/EditUserTypes';
 
 interface Props {
   user: User;
 }
 
-export function ProfileForm({ user }: Props) {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const { update: sessionUpdate } = useSession();
-  const form = useForm<Omit<EditUserFormData, 'imageUrl'>>({
-    resolver: zodResolver(EditUserFormSchema.omit({ imageUrl: true })),
+export function EditUserForm({ user }: Props) {
+  const form = useForm<EditUserFormData>({
+    resolver: zodResolver(EditUserFormSchema),
     defaultValues: {
       name: user.name ?? '닉네임을 설정해주세요.',
     },
     mode: 'onChange',
   });
+  const { update: sessionUpdate } = useSession();
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   async function onSubmit(data: Omit<EditUserFormData, 'imageUrl'>) {
     setIsLoading(true);

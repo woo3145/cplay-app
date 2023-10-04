@@ -1,17 +1,21 @@
-import { User as DomainUser } from './user';
-import { EditUserFormData } from './user.validation';
+import { User as DomainUser, SessionUser as DomainSessionUser } from './user';
+import { RepositoryChangePasswordInput } from './validations/ChangePasswordTypes';
+import { RepositoryEditUserInput } from './validations/EditUserTypes';
 
 export interface UserRepository {
   toDomainModel: (record: any) => DomainUser;
+  toSessionModel: (record: any) => DomainSessionUser;
 
-  findByEmail: (email: string) => Promise<DomainUser | null>;
-  findByEmailWithPassword: (
+  findUserByEmail: (email: string) => Promise<DomainUser | null>;
+  findUserById: (id: string) => Promise<DomainUser | null>;
+  findUserByEmailWithPassword: (
     email: string
   ) => Promise<(DomainUser & { password?: string | null }) | null>;
 
-  findById: (id: string) => Promise<DomainUser | null>;
-  findByIdWithPassword: (
-    id: string
+  findSessionUserById: (id: string) => Promise<DomainSessionUser | null>;
+  findSessionUserByEmail: (email: string) => Promise<DomainSessionUser | null>;
+  findUserByIdWithPassword: (
+    email: string
   ) => Promise<(DomainUser & { password?: string | null }) | null>;
 
   create: (
@@ -20,7 +24,10 @@ export interface UserRepository {
     name: string
   ) => Promise<DomainUser>;
 
-  edit: (userId: string, data: EditUserFormData) => Promise<DomainUser>;
+  edit: (userId: string, data: RepositoryEditUserInput) => Promise<DomainUser>;
 
-  changePassword: (userId: string, newPassword: string) => Promise<void>;
+  changePassword: (
+    userId: string,
+    data: RepositoryChangePasswordInput
+  ) => Promise<void>;
 }
