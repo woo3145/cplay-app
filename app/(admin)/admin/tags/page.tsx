@@ -1,15 +1,15 @@
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { getAllGenres } from '@/modules/genres/application/getAllGenres';
 import { getAllMoods } from '@/modules/mood/application/getAllMoods';
-import { CreateGenresDialog } from '@/modules/admin/application/createGenres/CreateGenresDialog';
 import { CreateMoodDialog } from '@/modules/admin/application/createMood/CreateMoodDialog';
 import { DataTable } from '@/components/dataTable/DataTable';
 import { genresColumns } from '@/modules/admin/application/dataTableColumns/GenresColumns';
 import { moodColumns } from '@/modules/admin/application/dataTableColumns/MoodColumns';
+import { getAllGenresServerAction } from '@/modules/genre/domain/usecases/getAllGenresServerAction';
+import { CreateGenreDialog } from './CreateGenreDialog';
 
 export default async function TagsPage() {
-  const genres = await getAllGenres();
+  const genres = await getAllGenresServerAction();
   const moods = await getAllMoods();
 
   return (
@@ -37,7 +37,7 @@ export default async function TagsPage() {
               </p>
             </div>
             <div className="ml-auto mr-4">
-              <CreateGenresDialog />
+              <CreateGenreDialog />
             </div>
           </div>
           <Separator className="my-4" />

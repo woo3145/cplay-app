@@ -1,7 +1,6 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { Genres } from '@/modules/genres/domain/genres';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,10 +10,11 @@ import {
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import { DataTableColumnHeader } from '@/components/dataTable/DataTableColumnHeader';
-import { DeleteGenresDialog } from '@/modules/admin/application/deleteGenres/DeleteGenresDialog';
-import { EditGenresDialog } from '@/modules/admin/application/editGenres/EditGenresDialog';
+import { DeleteGenreDialog } from '@/app/(admin)/admin/tags/DeleteGenreDialog';
+import { Genre } from '@/modules/genre/domain/genre';
+import { EditGenreDialog } from '@/app/(admin)/admin/tags/EditGenreDialog';
 
-export const genresColumns: ColumnDef<Genres>[] = [
+export const genresColumns: ColumnDef<Genre>[] = [
   {
     accessorKey: 'id',
     header: ({ column }) => (
@@ -44,7 +44,7 @@ export const genresColumns: ColumnDef<Genres>[] = [
     id: 'actions',
     enableHiding: false,
     cell: ({ row }) => {
-      const genres = row.original;
+      const genre = row.original;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -54,17 +54,17 @@ export const genresColumns: ColumnDef<Genres>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-[160px]">
-            <EditGenresDialog genres={genres}>
+            <EditGenreDialog genre={genre}>
               <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                 Edit
               </DropdownMenuItem>
-            </EditGenresDialog>
+            </EditGenreDialog>
 
-            <DeleteGenresDialog genres={genres}>
+            <DeleteGenreDialog genre={genre}>
               <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                 Delete
               </DropdownMenuItem>
-            </DeleteGenresDialog>
+            </DeleteGenreDialog>
           </DropdownMenuContent>
         </DropdownMenu>
       );

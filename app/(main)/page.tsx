@@ -1,7 +1,7 @@
-import { getAllGenres } from '@/modules/genres/application/getAllGenres';
+import { getAllGenresServerAction } from '@/modules/genre/domain/usecases/getAllGenresServerAction';
 
 export default async function HomePage() {
-  const genres = await getAllGenres();
+  const genres = await getAllGenresServerAction();
 
   return (
     <div className="flex flex-col items-center justify-between">

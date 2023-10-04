@@ -1,10 +1,6 @@
 'use client';
 
 import { SubmitHandler, useForm } from 'react-hook-form';
-import {
-  CreateGenresFormData,
-  CreateGenresFormSchema,
-} from '../../domain/genres.validation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Form,
@@ -14,27 +10,31 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { createGenresServerAction } from './createGenresServerAction';
 import { toast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { createGenreServerAction } from '../domain/usecases/createGenreServerAction';
+import {
+  CreateGenreFormData,
+  CreateGenreFormSchema,
+} from '../domain/validations/CreateGenreTypes';
 
 interface Props {
   closeModal: () => void;
 }
 
-export const CreateGenresForm = ({ closeModal }: Props) => {
-  const form = useForm<CreateGenresFormData>({
-    resolver: zodResolver(CreateGenresFormSchema),
+export const CreateGenreForm = ({ closeModal }: Props) => {
+  const form = useForm<CreateGenreFormData>({
+    resolver: zodResolver(CreateGenreFormSchema),
     defaultValues: {
       tag: '',
       slug: '',
     },
   });
 
-  const onSubmit: SubmitHandler<CreateGenresFormData> = async (data) => {
+  const onSubmit: SubmitHandler<CreateGenreFormData> = async (data) => {
     try {
-      const result = await createGenresServerAction(data);
+      const result = await createGenreServerAction(data);
 
       if (!result.success) {
         toast({

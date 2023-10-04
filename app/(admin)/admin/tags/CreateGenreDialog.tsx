@@ -8,11 +8,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { CreateGenreForm } from '@/modules/genre/application/CreateGenreForm';
 import { PlusCircle } from 'lucide-react';
-import { CreateGenresForm } from './CreateGenresForm';
 import { useState } from 'react';
 
-export const CreateGenresDialog = () => {
+export const CreateGenreDialog = () => {
   const [open, setOpen] = useState(false);
 
   const closeModal = () => {
@@ -31,7 +31,7 @@ export const CreateGenresDialog = () => {
           <DialogTitle>Add Genres</DialogTitle>
         </DialogHeader>
 
-        <CreateGenresForm closeModal={closeModal} />
+        <CreateGenreForm closeModal={closeModal} />
       </DialogContent>
     </Dialog>
   );

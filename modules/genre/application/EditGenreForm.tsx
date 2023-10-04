@@ -13,30 +13,30 @@ import {
 import { toast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { editGenresServerAction } from './editGenresServerAction';
+import { Genre } from '../domain/genre';
 import {
-  EditGenresFormData,
-  EditGenresFormSchema,
-} from '../../domain/genres.validation';
-import { Genres } from '@/modules/genres/domain/genres';
+  EditGenreFormData,
+  EditGenreFormSchema,
+} from '../domain/validations/EditGenreTypes';
+import { editGenreServerAction } from '../domain/usecases/editGenreServerAction';
 
 interface Props {
-  genres: Genres;
+  genre: Genre;
   closeModal: () => void;
 }
 
-export const EditGenresForm = ({ closeModal, genres }: Props) => {
-  const form = useForm<EditGenresFormData>({
-    resolver: zodResolver(EditGenresFormSchema),
+export const EditGenreForm = ({ closeModal, genre }: Props) => {
+  const form = useForm<EditGenreFormData>({
+    resolver: zodResolver(EditGenreFormSchema),
     defaultValues: {
-      tag: genres.tag,
-      slug: genres.slug,
+      tag: genre.tag,
+      slug: genre.slug,
     },
   });
 
-  const onSubmit: SubmitHandler<EditGenresFormData> = async (data) => {
+  const onSubmit: SubmitHandler<EditGenreFormData> = async (data) => {
     try {
-      const result = await editGenresServerAction(genres.id, data);
+      const result = await editGenreServerAction(genre.id, data);
 
       if (!result.success) {
         toast({
@@ -49,7 +49,7 @@ export const EditGenresForm = ({ closeModal, genres }: Props) => {
 
       toast({
         variant: 'success',
-        title: '성공적으로 Genres를 수정했습니다.',
+        title: '성공적으로 장르를 수정했습니다.',
       });
 
       closeModal();

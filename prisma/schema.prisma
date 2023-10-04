@@ -62,7 +62,7 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model Genres {
+model Genre {
   id   Int    @id @default(autoincrement())
   tag  String @unique
   slug String @unique
@@ -92,8 +92,8 @@ model Track {
   stems Stem[] // 원곡을 이루는 개별트랙
 
   // Many to Many
-  genres Genres[]
-  moods  Mood[]
+  genre Genre[]
+  moods Mood[]
 }
 
 model Stem {
