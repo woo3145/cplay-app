@@ -38,7 +38,15 @@ export class GenrePrismaRepository implements GenreRepository {
     if (!exist) {
       throw new Error('Genres가 존재하지 않습니다.');
     }
-
+    // 연결 된 참조 끊기
+    await prisma.genre.update({
+      where: { id },
+      data: {
+        tracks: {
+          set: [],
+        },
+      },
+    });
     await prisma.genre.delete({ where: { id } });
   }
 

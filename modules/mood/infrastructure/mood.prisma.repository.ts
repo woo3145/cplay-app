@@ -1,7 +1,5 @@
 import prisma from '@/lib/db/prisma';
-import { revalidateTag, unstable_cache } from 'next/cache';
 import { MoodRepository } from '../domain/mood.repository';
-import { EditMoodFormData } from '@/modules/admin/domain/mood.validation';
 import { RepositoryEditMoodInput } from '../domain/validations/EditMoodTypes';
 import { RepositoryCreateMoodInput } from '../domain/validations/CreateMoodTypes';
 
@@ -40,7 +38,15 @@ export class MoodPrismaRepository implements MoodRepository {
     if (!exist) {
       throw new Error('Mood가 존재하지 않습니다.');
     }
-
+    // 연결 된 참조 끊기
+    await prisma.mood.update({
+      where: { id },
+      data: {
+        tracks: {
+          set: [],
+        },
+      },
+    });
     await prisma.mood.delete({ where: { id } });
   }
 
