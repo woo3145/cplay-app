@@ -7,59 +7,26 @@ import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Role } from '@prisma/client';
-import {
-  DoorOpen,
-  Heart,
-  LayoutGrid,
-  Library,
-  Monitor,
-  Music,
-  Users,
-} from 'lucide-react';
+import { DoorOpen } from 'lucide-react';
 
-const discoverNavigations = [
-  {
-    href: '/',
-    icon: <LayoutGrid className="mr-2 h-4 w-4" />,
-    name: '탐색',
-  },
-  {
-    href: '/sounds',
-    icon: <Music className="mr-2 h-4 w-4" />,
-    name: '트랙',
-  },
-  {
-    href: '/community',
-    icon: <Users className="mr-2 h-4 w-4" />,
-    name: '커뮤니티',
-  },
-];
-
-const userNavigations = (userId: string) => {
-  return [
-    {
-      href: `/studio/${userId}`,
-      icon: <Monitor className="mr-2 h-4 w-4" />,
-      name: '내 스튜디오',
-    },
-    {
-      href: '/my/library',
-      icon: <Library className="mr-2 h-4 w-4" />,
-      name: '라이브러리',
-    },
-    {
-      href: '/',
-      icon: <Heart className="mr-2 h-4 w-4" />,
-      name: '찜목록',
-    },
-  ];
-};
-
-interface SidebarProps {
-  className?: string;
+interface MainSideBarProps extends React.HTMLAttributes<HTMLElement> {
+  mainNavItems: {
+    href: string;
+    icon: React.ReactNode;
+    title: string;
+  }[];
+  userNavItems: {
+    href: string;
+    icon: React.ReactNode;
+    title: string;
+  }[];
 }
 
-export function SideBar({ className }: SidebarProps) {
+export function MainSideBar({
+  className,
+  mainNavItems,
+  userNavItems,
+}: MainSideBarProps) {
   const pathname = usePathname();
   const { data: session } = useSession();
   return (
@@ -86,10 +53,10 @@ export function SideBar({ className }: SidebarProps) {
           </h2>
 
           <div className="space-y-1">
-            {discoverNavigations.map((nav) => {
+            {mainNavItems.map((nav) => {
               const isActive = pathname === nav.href;
               return (
-                <Link key={nav.name} href={nav.href} prefetch={false}>
+                <Link key={nav.title} href={nav.href} prefetch={false}>
                   <Button
                     variant="ghost"
                     className={cn(
@@ -98,7 +65,7 @@ export function SideBar({ className }: SidebarProps) {
                     )}
                   >
                     {nav.icon}
-                    {nav.name}
+                    {nav.title}
                   </Button>
                 </Link>
               );
@@ -111,12 +78,12 @@ export function SideBar({ className }: SidebarProps) {
               User
             </h2>
             <div className="space-y-1">
-              {userNavigations(session.user.id).map((nav) => {
+              {userNavItems.map((nav) => {
                 return (
-                  <Link key={nav.name} href={nav.href} prefetch={false}>
+                  <Link key={nav.title} href={nav.href} prefetch={false}>
                     <Button variant="ghost" className="w-full justify-start">
                       {nav.icon}
-                      {nav.name}
+                      {nav.title}
                     </Button>
                   </Link>
                 );

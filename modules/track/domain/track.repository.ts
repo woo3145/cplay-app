@@ -1,19 +1,12 @@
-import { TrackState } from '@prisma/client';
 import { Track as DomainTrack } from './track';
-
-export interface CreateTrackInput {
-  title: string;
-  length: number;
-  bpm: number;
-  imageUrl: string;
-  state: TrackState;
-  moodIds: number[];
-  genresIds: number[];
-  creatorId: string;
-}
+import { RepositoryCreateTrackInput } from './validations/CreateTrackTypes';
+import { RepositoryEditTrackInput } from './validations/EditTrackTypes';
 
 export interface TrackRepository {
+  toDomainModel: (record: any) => DomainTrack;
+  findById: (id: number) => Promise<DomainTrack | null>;
   findAll: () => Promise<DomainTrack[]>;
-  create: (data: CreateTrackInput) => Promise<DomainTrack>;
+  create: (data: RepositoryCreateTrackInput) => Promise<DomainTrack>;
+  edit: (id: number, data: RepositoryEditTrackInput) => Promise<DomainTrack>;
   delete: (id: number) => Promise<void>;
 }

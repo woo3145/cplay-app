@@ -27,45 +27,86 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
-import {
-  CreateTrackFormData,
-  CreateTrackFormSchema,
-} from '@/modules/admin/domain/track.validation';
-import { Genres } from '@/modules/genres/domain/genres';
+import { Genre } from '@/modules/genre/domain/genre';
 import { Mood } from '@/modules/mood/domain/mood';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { TrackState } from '@prisma/client';
 import { Play } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import {
+  CreateTrackFormData,
+  CreateTrackFormSchema,
+} from '../domain/validations/CreateTrackTypes';
+import { toast } from '@/components/ui/use-toast';
+import { useSession } from 'next-auth/react';
+import { UserRole } from '@/modules/user/domain/user';
+import { useRouter } from 'next/navigation';
+import { Track, TrackStatus } from '../domain/track';
+import { EditTrackFormData } from '../domain/validations/EditTrackTypes';
+import { editTrackServerAction } from '../domain/usecases/editTrackServerAction';
 
 const SMAPLE_IMAGE =
   'https://images.unsplash.com/photo-1695852147874-86809c9d549a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80';
 
 interface Props {
-  genres: Genres[];
+  track: Track;
+  genres: Genre[];
   moods: Mood[];
 }
 
-export const AddTrackForm = ({ genres, moods }: Props) => {
+export const EditTrackForm = ({ track, genres, moods }: Props) => {
+  const { data: session } = useSession();
+  const router = useRouter();
+
   const form = useForm<CreateTrackFormData>({
     resolver: zodResolver(CreateTrackFormSchema),
     defaultValues: {
-      title: '',
-      imageUrl: SMAPLE_IMAGE,
-      length: 200,
-      bpm: 90,
-      isPublish: TrackState.HIDDEN,
+      title: track.title,
+      imageUrl: track.imageUrl,
+      length: track.length,
+      bpm: track.bpm,
+      status: track.status,
     },
   });
-  const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
-  const [selectedMoods, setSelectedMoods] = useState<number[]>([]);
+  const [selectedGenres, setSelectedGenres] = useState<number[]>(
+    track.genres.map((genre) => genre.id)
+  );
+  const [selectedMoods, setSelectedMoods] = useState<number[]>(
+    track.moods.map((mood) => mood.id)
+  );
 
-  const onSubmit = (data: CreateTrackFormData) => {
-    console.log(data);
-    console.log(selectedGenres);
-    console.log(selectedMoods);
+  const onSubmit = async (data: EditTrackFormData) => {
+    try {
+      if (!session?.user || session.user.role !== UserRole.ADMIN) {
+        return toast({
+          variant: 'destructive',
+          title: '권한이 없습니다.',
+        });
+      }
+      const result = await editTrackServerAction(track.id, {
+        ...data,
+        genreIds: selectedGenres,
+        moodIds: selectedMoods,
+        creatorId: session.user.id,
+      });
+
+      if (!result.success) {
+        toast({
+          variant: 'destructive',
+          title: result.message,
+        });
+        return;
+      }
+
+      toast({
+        variant: 'success',
+        title: '성공적으로 Track을 수정했습니다.',
+      });
+      router.push('/admin/tracks');
+    } catch (e) {
+      console.log('예상치 못한 에러가 발생하였습니다.', e);
+    }
   };
 
   return (
@@ -210,11 +251,11 @@ export const AddTrackForm = ({ genres, moods }: Props) => {
                 <CardContent className="grid gap-6">
                   <FormField
                     control={form.control}
-                    name="isPublish"
+                    name="status"
                     render={({ field }) => {
                       return (
                         <FormItem>
-                          <FormLabel>Publish</FormLabel>
+                          <FormLabel>status</FormLabel>
                           <FormControl>
                             <RadioGroup
                               onValueChange={field.onChange}
@@ -222,14 +263,14 @@ export const AddTrackForm = ({ genres, moods }: Props) => {
                             >
                               <div className="flex items-center space-x-2">
                                 <RadioGroupItem
-                                  value={TrackState.PUBLISH}
+                                  value={TrackStatus.PUBLISH}
                                   id="r1"
                                 />
                                 <Label htmlFor="r1">Published</Label>
                               </div>
                               <div className="flex items-center space-x-2">
                                 <RadioGroupItem
-                                  value={TrackState.HIDDEN}
+                                  value={TrackStatus.HIDDEN}
                                   id="r2"
                                 />
                                 <Label htmlFor="r2">Hidden</Label>
@@ -300,7 +341,16 @@ export const AddTrackForm = ({ genres, moods }: Props) => {
                 ))}
               </CardContent>
             </Card>
-            <Button type="submit">생성</Button>
+            <div className="grid grid-cols-2 gap-6">
+              <Button
+                onClick={() => router.push('/admin/tracks')}
+                type="button"
+                variant="outline"
+              >
+                취소
+              </Button>
+              <Button type="submit">저장</Button>
+            </div>
           </div>
         </div>
       </form>

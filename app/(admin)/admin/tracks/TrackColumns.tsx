@@ -10,14 +10,17 @@ import {
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import { DataTableColumnHeader } from '@/components/dataTable/DataTableColumnHeader';
-import { Track as DomainTrack } from '@/modules/track/domain/track';
+import {
+  Track as DomainTrack,
+  TrackStatus,
+} from '@/modules/track/domain/track';
 import Image from 'next/image';
-import { Genres } from '@/modules/genres/domain/genres';
 import { Badge } from '@/components/ui/badge';
 import { Mood } from '@/modules/mood/domain/mood';
 import { formatDateForTable } from '@/lib/dateFormat';
-import { DeleteTrackDialog } from '../deleteTrack/DeleteTrackDialog';
 import Link from 'next/link';
+import { Genre } from '@/modules/genre/domain/genre';
+import { DeleteTrackDialog } from '@/app/(admin)/admin/tracks/DeleteTrackDialog';
 
 export const trackColumns: ColumnDef<DomainTrack>[] = [
   {
@@ -66,7 +69,7 @@ export const trackColumns: ColumnDef<DomainTrack>[] = [
     ),
     cell: ({ row }) => (
       <div className="flex w-full gap-2 flex-wrap">
-        {(row.getValue('genres') as Genres[]).map((item) => (
+        {(row.getValue('genres') as Genre[]).map((item) => (
           <Badge key={item.tag}>{item.tag}</Badge>
         ))}
       </div>
@@ -88,13 +91,13 @@ export const trackColumns: ColumnDef<DomainTrack>[] = [
     ),
   },
   {
-    accessorKey: 'isPublish',
+    accessorKey: 'status',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="status" />
     ),
     cell: ({ row }) => (
       <div className="">
-        {row.getValue('isPublish') ? (
+        {row.getValue('status') === TrackStatus.PUBLISH ? (
           <Badge>publish</Badge>
         ) : (
           <Badge variant="secondary">draft</Badge>
@@ -140,7 +143,7 @@ export const trackColumns: ColumnDef<DomainTrack>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-[160px]">
-            <Link href="/admin/tracks/edit">
+            <Link href={`/admin/tracks/${track.id}/edit`}>
               <DropdownMenuItem>Edit</DropdownMenuItem>
             </Link>
 

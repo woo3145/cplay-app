@@ -14,7 +14,7 @@ import { DeleteGenreDialog } from '@/app/(admin)/admin/tags/DeleteGenreDialog';
 import { Genre } from '@/modules/genre/domain/genre';
 import { EditGenreDialog } from '@/app/(admin)/admin/tags/EditGenreDialog';
 
-export const genresColumns: ColumnDef<Genre>[] = [
+export const genreColumns: ColumnDef<Genre>[] = [
   {
     accessorKey: 'id',
     header: ({ column }) => (

@@ -36,6 +36,7 @@ export const editMoodServerAction = adminGuard(
     try {
       const result = await repo.edit(id, { tag });
       revalidateTag('allMoods');
+      revalidateTag('allTracks');
 
       return { success: true, mood: result };
     } catch (e) {

@@ -1,11 +1,11 @@
 import { Separator } from '@/components/ui/separator';
-import { getAllGenres } from '@/modules/genres/application/getAllGenres';
-import { AddTrackForm } from './AddTrackForm';
-import { getAllMoods } from '@/modules/mood/domain/usecases/getAllMoodsServerAction';
+import { getAllGenresServerAction } from '@/modules/genre/domain/usecases/getAllGenresServerAction';
+import { getAllMoodsServerAction } from '@/modules/mood/domain/usecases/getAllMoodsServerAction';
+import { CreateTrackForm } from '@/modules/track/application/CreateTrackForm';
 
-export default async function TracksPage() {
-  const genres = await getAllGenres();
-  const moods = await getAllMoods();
+export default async function AddTracksPage() {
+  const genres = await getAllGenresServerAction();
+  const moods = await getAllMoodsServerAction();
 
   return (
     <div className="flex flex-col items-center justify-between">
@@ -16,7 +16,7 @@ export default async function TracksPage() {
       </div>
       <Separator className="my-4" />
 
-      <AddTrackForm genres={genres} moods={moods} />
+      <CreateTrackForm genres={genres} moods={moods} />
     </div>
   );
 }

@@ -12,6 +12,7 @@ export const deleteGenreServerAction = adminGuard(
     try {
       await repo.delete(id);
       revalidateTag('allGenres');
+      revalidateTag('allTracks');
 
       return { success: true };
     } catch (e) {

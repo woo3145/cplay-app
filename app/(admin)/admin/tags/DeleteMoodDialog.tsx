@@ -21,7 +21,7 @@ interface Props {
 export const DeleteMoodDialog = ({ children, mood }: Props) => {
   const onSubmit = async () => {
     try {
-      const result = await deleteMoodServerAction({ id: mood.id });
+      const result = await deleteMoodServerAction(mood.id);
 
       if (!result.success) {
         return toast({

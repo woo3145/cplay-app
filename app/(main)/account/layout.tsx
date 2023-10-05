@@ -1,4 +1,4 @@
-import { AccountSideBar } from './components/AccountSideBar';
+import { AccountSideBar } from './AccountSideBar';
 
 const sidebarNavItems = [
   {

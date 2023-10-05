@@ -1,12 +1,12 @@
 import { DataTable } from '@/components/dataTable/DataTable';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { trackColumns } from '@/modules/admin/application/dataTableColumns/TrackColumns';
-import { getAllTracks } from '@/modules/admin/application/getAllTracks/getAllTracks';
+import { getAllTracksServerAction } from '@/modules/track/domain/usecases/getAllTracksServerAction';
 import Link from 'next/link';
+import { trackColumns } from './TrackColumns';
 
 export default async function TracksPage() {
-  const tracks = await getAllTracks();
+  const tracks = await getAllTracksServerAction();
   return (
     <div className="flex flex-col items-center justify-between">
       <div className="flex items-center justify-between w-full">

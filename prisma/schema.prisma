@@ -70,20 +70,20 @@ model Genre {
   tracks Track[]
 }
 
-enum TrackState {
+enum TrackStatus {
   HIDDEN
   PUBLISH
 }
 
 model Track {
-  id          Int        @id @default(autoincrement())
+  id          Int         @id @default(autoincrement())
   title       String
   createdAt   DateTime // 트랙 추가일
   imageUrl    String
   length      Int // 트랙 길이 (초)
   bpm         Int // 트랙 템포
   releaseDate DateTime? // 트랙 공개일
-  state       TrackState // 트랙 릴리즈 여부
+  status      TrackStatus // 트랙 릴리즈 여부
 
   // 1 to Many
   creator   User?   @relation(fields: [creatorId], references: [id], onDelete: SetNull)
@@ -92,8 +92,8 @@ model Track {
   stems Stem[] // 원곡을 이루는 개별트랙
 
   // Many to Many
-  genre Genre[]
-  moods Mood[]
+  genres Genre[]
+  moods  Mood[]
 }
 
 model Stem {
@@ -111,7 +111,7 @@ model Mood {
   tag String @unique
 
   // Many to Many
-  traks Track[]
+  tracks Track[]
 }
 
 // 결제 관련

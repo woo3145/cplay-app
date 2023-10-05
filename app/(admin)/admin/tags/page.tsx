@@ -2,11 +2,11 @@ import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CreateMoodDialog } from '@/app/(admin)/admin/tags/CreateMoodDialog';
 import { DataTable } from '@/components/dataTable/DataTable';
-import { genresColumns } from '@/modules/admin/application/dataTableColumns/GenresColumns';
-import { moodColumns } from '@/modules/admin/application/dataTableColumns/MoodColumns';
 import { getAllGenresServerAction } from '@/modules/genre/domain/usecases/getAllGenresServerAction';
 import { CreateGenreDialog } from './CreateGenreDialog';
 import { getAllMoodsServerAction } from '@/modules/mood/domain/usecases/getAllMoodsServerAction';
+import { genreColumns } from './GenreColumns';
+import { moodColumns } from './MoodColumns';
 
 export default async function TagsPage() {
   const genres = await getAllGenresServerAction();
@@ -45,7 +45,7 @@ export default async function TagsPage() {
           <div className="relative">
             <div className="container mx-auto py-5">
               <DataTable
-                columns={genresColumns}
+                columns={genreColumns}
                 data={genres}
                 filterField={'tag'}
               />

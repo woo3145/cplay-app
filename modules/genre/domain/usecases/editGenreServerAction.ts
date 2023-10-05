@@ -35,6 +35,7 @@ export const editGenreServerAction = adminGuard(
     try {
       const result = await repo.edit(id, { tag, slug });
       revalidateTag('allGenres');
+      revalidateTag('allTracks');
       return { success: true, genre: result };
     } catch (e) {
       console.error('editGenreServerAction Error', e);

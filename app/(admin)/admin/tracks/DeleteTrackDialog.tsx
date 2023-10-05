@@ -11,7 +11,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Track } from '@/modules/track/domain/track';
-import { deleteTrackServerAction } from './deleteTrackServerAction';
+import { deleteTrackServerAction } from '@/modules/track/domain/usecases/deleteTrackServerAction';
 
 interface Props {
   track: Track;
@@ -21,7 +21,7 @@ interface Props {
 export const DeleteTrackDialog = ({ children, track }: Props) => {
   const onSubmit = async () => {
     try {
-      const result = await deleteTrackServerAction({ id: track.id });
+      const result = await deleteTrackServerAction(track.id);
 
       if (!result.success) {
         return toast({
