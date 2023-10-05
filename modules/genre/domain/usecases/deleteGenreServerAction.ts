@@ -15,6 +15,7 @@ export const deleteGenreServerAction = adminGuard(
 
       return { success: true };
     } catch (e) {
+      console.error('deleteGenreServerAction Error', e);
       return { success: false, message: '서버에 문제가 발생하였습니다.' };
     }
   }

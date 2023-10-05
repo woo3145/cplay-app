@@ -14,28 +14,26 @@ import { toast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
-  EditMoodFormData,
-  EditMoodFormSchema,
-} from '@/modules/admin/domain/mood.validation';
-import { editMoodServerAction } from './editMoodServerAction';
-import { Mood } from '@/modules/mood/domain/mood';
+  CreateMoodFormData,
+  CreateMoodFormSchema,
+} from '../domain/validations/CreateMoodTypes';
+import { createMoodServerAction } from '../domain/usecases/createMoodServerAction';
 
 interface Props {
-  mood: Mood;
   closeModal: () => void;
 }
 
-export const EditMoodForm = ({ closeModal, mood }: Props) => {
-  const form = useForm<EditMoodFormData>({
-    resolver: zodResolver(EditMoodFormSchema),
+export const CreateMoodForm = ({ closeModal }: Props) => {
+  const form = useForm<CreateMoodFormData>({
+    resolver: zodResolver(CreateMoodFormSchema),
     defaultValues: {
-      tag: mood.tag,
+      tag: '',
     },
   });
 
-  const onSubmit: SubmitHandler<EditMoodFormData> = async (data) => {
+  const onSubmit: SubmitHandler<CreateMoodFormData> = async (data) => {
     try {
-      const result = await editMoodServerAction(mood.id, data);
+      const result = await createMoodServerAction(data);
 
       if (!result.success) {
         toast({
@@ -48,7 +46,7 @@ export const EditMoodForm = ({ closeModal, mood }: Props) => {
 
       toast({
         variant: 'success',
-        title: '성공적으로 Mood를 수정했습니다.',
+        title: '성공적으로 Mood를 생성했습니다.',
       });
 
       closeModal();
@@ -80,7 +78,7 @@ export const EditMoodForm = ({ closeModal, mood }: Props) => {
         />
 
         <Button type="submit" className="mt-2">
-          수정
+          생성
         </Button>
       </form>
     </Form>

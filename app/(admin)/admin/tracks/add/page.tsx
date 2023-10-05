@@ -1,7 +1,7 @@
 import { Separator } from '@/components/ui/separator';
 import { getAllGenres } from '@/modules/genres/application/getAllGenres';
 import { AddTrackForm } from './AddTrackForm';
-import { getAllMoods } from '@/modules/mood/application/getAllMoods';
+import { getAllMoods } from '@/modules/mood/domain/usecases/getAllMoodsServerAction';
 
 export default async function TracksPage() {
   const genres = await getAllGenres();

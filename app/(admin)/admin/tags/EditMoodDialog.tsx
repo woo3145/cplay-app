@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/dialog';
 import { useState } from 'react';
 import { Mood } from '@/modules/mood/domain/mood';
-import { EditMoodForm } from './EditMoodForm';
+import { EditMoodForm } from '@/modules/mood/application/EditMoodForm';
 
 interface Props {
   mood: Mood;

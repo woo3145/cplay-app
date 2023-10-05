@@ -11,8 +11,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import { DataTableColumnHeader } from '@/components/dataTable/DataTableColumnHeader';
-import { DeleteMoodDialog } from '@/modules/admin/application/deleteMood/DeleteMoodDialog';
-import { EditMoodDialog } from '@/modules/admin/application/editMood/EditMoodDialog';
+import { DeleteMoodDialog } from '@/app/(admin)/admin/tags/DeleteMoodDialog';
+import { EditMoodDialog } from '@/app/(admin)/admin/tags/EditMoodDialog';
 
 export const moodColumns: ColumnDef<Mood>[] = [
   {

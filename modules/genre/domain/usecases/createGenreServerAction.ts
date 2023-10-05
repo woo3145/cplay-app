@@ -24,6 +24,7 @@ export const createGenreServerAction = adminGuard(
 
       return { success: true, genres };
     } catch (e) {
+      console.error('createGenreServerAction Error', e);
       return { success: false, message: '서버에 문제가 발생하였습니다.' };
     }
   }

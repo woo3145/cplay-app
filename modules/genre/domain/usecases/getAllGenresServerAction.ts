@@ -21,7 +21,7 @@ export const getAllGenresServerAction = async (
     )();
     return genres;
   } catch (e) {
-    console.log('GetAllGenres Error: ', e);
+    console.error('getAllGenresServerAction Error', e);
     return [];
   }
 };

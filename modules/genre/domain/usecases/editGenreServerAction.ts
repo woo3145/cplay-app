@@ -37,6 +37,7 @@ export const editGenreServerAction = adminGuard(
       revalidateTag('allGenres');
       return { success: true, genre: result };
     } catch (e) {
+      console.error('editGenreServerAction Error', e);
       return { success: false, message: '서버에 문제가 발생하였습니다.' };
     }
   }

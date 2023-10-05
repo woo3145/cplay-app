@@ -15,7 +15,7 @@ export class GenrePrismaRepository implements GenreRepository {
   async findOne(id: number) {
     const genre = await prisma.genre.findFirst({ where: { id } });
     if (!genre) return null;
-    return genre;
+    return this.toDomainModel(genre);
   }
 
   async getAll() {

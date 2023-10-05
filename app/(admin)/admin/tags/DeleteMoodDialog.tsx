@@ -1,5 +1,5 @@
 import { toast } from '@/components/ui/use-toast';
-import { deleteMoodServerAction } from './deleteMoodServerAction';
+import { deleteMoodServerAction } from '../../../../modules/mood/domain/usecases/deleteMoodServerAction';
 import { Mood } from '@/modules/mood/domain/mood';
 import {
   AlertDialog,

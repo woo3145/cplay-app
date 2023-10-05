@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog';
 import { PlusCircle } from 'lucide-react';
 import { useState } from 'react';
-import { CreateMoodForm } from './CreateMoodForm';
+import { CreateMoodForm } from '../../../../modules/mood/application/CreateMoodForm';
 
 export const CreateMoodDialog = () => {
   const [open, setOpen] = useState(false);

@@ -2,31 +2,35 @@ import prisma from '@/lib/db/prisma';
 import { revalidateTag, unstable_cache } from 'next/cache';
 import { MoodRepository } from '../domain/mood.repository';
 import { EditMoodFormData } from '@/modules/admin/domain/mood.validation';
+import { RepositoryEditMoodInput } from '../domain/validations/EditMoodTypes';
+import { RepositoryCreateMoodInput } from '../domain/validations/CreateMoodTypes';
 
 export class MoodPrismaRepository implements MoodRepository {
-  async getAll() {
-    const moods = await unstable_cache(
-      async () => {
-        const data = await prisma.mood.findMany({ orderBy: { id: 'desc' } });
-        console.log('Prisma 호출 : Mood');
-        return data;
-      },
-      ['allMoods'],
-      { tags: ['allMoods'], revalidate: 3600 }
-    )();
-    if (!moods) return [];
+  toDomainModel(record: any) {
+    return {
+      id: record.id,
+      tag: record.tag,
+    };
+  }
 
+  async findOne(id: number) {
+    const mood = await prisma.mood.findFirst({ where: { id } });
+    if (!mood) return null;
+    return this.toDomainModel(mood);
+  }
+
+  async getAll() {
+    const moods = await prisma.mood.findMany({ orderBy: { id: 'desc' } });
+    if (!moods) return [];
     return moods;
   }
 
-  async create(tag: string) {
+  async create({ tag }: RepositoryCreateMoodInput) {
     const mood = await prisma.mood.create({
       data: {
         tag,
       },
     });
-    revalidateTag('allMoods');
-
     return mood;
   }
 
@@ -38,32 +42,13 @@ export class MoodPrismaRepository implements MoodRepository {
     }
 
     await prisma.mood.delete({ where: { id } });
-
-    revalidateTag('allMoods');
   }
 
-  async edit(id: number, { tag }: EditMoodFormData) {
-    const exist = await prisma.mood.findFirst({ where: { id } });
-    if (!exist) {
-      throw new Error('Mood가 존재하지 않습니다.');
-    }
-
-    // 기존과 동일한 필드는 undefined로 업데이트 막음
-    const updatedField = {
-      tag: exist.tag === tag ? undefined : tag,
-    };
-
-    // 모든 필드가 undefined라면 기존 mood 반환
-    if (Object.values(updatedField).every((val) => val === undefined)) {
-      return exist;
-    }
-
+  async edit(id: number, updatedField: RepositoryEditMoodInput) {
     const updatedMood = await prisma.mood.update({
       where: { id },
       data: updatedField,
     });
-
-    revalidateTag('allMoods');
 
     return updatedMood;
   }

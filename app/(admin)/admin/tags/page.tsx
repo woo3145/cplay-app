@@ -1,16 +1,16 @@
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { getAllMoods } from '@/modules/mood/application/getAllMoods';
-import { CreateMoodDialog } from '@/modules/admin/application/createMood/CreateMoodDialog';
+import { CreateMoodDialog } from '@/app/(admin)/admin/tags/CreateMoodDialog';
 import { DataTable } from '@/components/dataTable/DataTable';
 import { genresColumns } from '@/modules/admin/application/dataTableColumns/GenresColumns';
 import { moodColumns } from '@/modules/admin/application/dataTableColumns/MoodColumns';
 import { getAllGenresServerAction } from '@/modules/genre/domain/usecases/getAllGenresServerAction';
 import { CreateGenreDialog } from './CreateGenreDialog';
+import { getAllMoodsServerAction } from '@/modules/mood/domain/usecases/getAllMoodsServerAction';
 
 export default async function TagsPage() {
   const genres = await getAllGenresServerAction();
-  const moods = await getAllMoods();
+  const moods = await getAllMoodsServerAction();
 
   return (
     <div className="h-full px-4 py-6 lg:px-8">
