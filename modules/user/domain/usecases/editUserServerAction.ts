@@ -19,7 +19,7 @@ export const editUserServerAction = userGuard(
     const { name, image } = UsecaseEditUserInputSchema.parse(data);
     const repo = subUserRepository || repository.user;
 
-    const exist = await repo.findUserById(id);
+    const exist = await repo.findById(id, 'user');
     if (!exist) {
       return { success: false, message: 'User가 존재하지 않습니다.' };
     }

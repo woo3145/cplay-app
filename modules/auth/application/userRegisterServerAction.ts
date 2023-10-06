@@ -17,7 +17,7 @@ export const registerUserServerAction = async (
   const { email, password } = result;
 
   const repo = subUserRepository || repository.user;
-  const exist = await repo.findByEmail(email);
+  const exist = await repo.findByEmail(email, 'user');
 
   if (exist) {
     return { success: false, message: '이미 사용중인 이메일입니다.' };

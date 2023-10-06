@@ -1,4 +1,8 @@
-import { UserRepository } from '@/modules/user/domain/user.repository';
+import {
+  UserRepository,
+  UserType,
+  isSessionType,
+} from '@/modules/user/domain/user.repository';
 import prisma from '@/lib/db/prisma';
 import bcrypt from 'bcrypt';
 import {
@@ -29,42 +33,52 @@ export class UserPrismaRepository implements UserRepository {
   }
 
   // User
-  async findUserByEmail(email: string) {
+  async findByEmail<T extends UserType>(
+    email: string,
+    type: T
+  ): Promise<(T extends 'session' ? DomainSessionUser : DomainUser) | null> {
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) return null;
-    return this.toDomainModel(user);
+
+    // 동적 타입 check
+    return (
+      isSessionType(type) ? this.toSessionModel(user) : this.toDomainModel(user)
+    ) as T extends 'session' ? DomainSessionUser : DomainUser;
   }
-  async findUserById(id: string) {
+  async findById<T extends UserType>(id: string, type: T) {
     const user = await prisma.user.findUnique({ where: { id } });
     if (!user) return null;
-    return this.toDomainModel(user);
+
+    // 동적 타입 check
+    return (
+      isSessionType(type) ? this.toSessionModel(user) : this.toDomainModel(user)
+    ) as T extends 'session' ? DomainSessionUser : DomainUser;
   }
-  async findUserByEmailWithPassword(email: string) {
+  async findByEmailWithPassword<T extends UserType>(email: string, type: T) {
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) return null;
+
     return {
-      ...this.toDomainModel(user),
+      ...(isSessionType(type)
+        ? this.toSessionModel(user)
+        : this.toDomainModel(user)),
       password: user.password,
-    };
+    } as T extends 'session'
+      ? DomainSessionUser & { password?: string | null }
+      : DomainUser & { password?: string | null };
   }
-  // SessionUser
-  async findSessionUserByEmail(email: string) {
-    const user = await prisma.user.findUnique({ where: { email } });
-    if (!user) return null;
-    return this.toSessionModel(user);
-  }
-  async findSessionUserById(id: string) {
+  async findByIdWithPassword<T extends UserType>(id: string, type: T) {
     const user = await prisma.user.findUnique({ where: { id } });
     if (!user) return null;
-    return this.toSessionModel(user);
-  }
-  async findUserByIdWithPassword(id: string) {
-    const user = await prisma.user.findUnique({ where: { id } });
-    if (!user) return null;
+
     return {
-      ...this.toDomainModel(user),
+      ...(isSessionType(type)
+        ? this.toSessionModel(user)
+        : this.toDomainModel(user)),
       password: user.password,
-    };
+    } as T extends 'session'
+      ? DomainSessionUser & { password?: string | null }
+      : DomainUser & { password?: string | null };
   }
 
   async create(email: string, hashedPassword: string, name: string) {

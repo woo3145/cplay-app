@@ -18,7 +18,7 @@ export const changePasswordServerAction = userGuard(
     const { oldPassword, newPassword } = ChangePasswordFormSchema.parse(data);
     const repo = subUserRepository || repository.user;
 
-    const user = await repo.findUserByIdWithPassword(id);
+    const user = await repo.findByIdWithPassword(id, 'user');
 
     if (!user) {
       return { success: false, message: 'User가 존재하지 않습니다.' };

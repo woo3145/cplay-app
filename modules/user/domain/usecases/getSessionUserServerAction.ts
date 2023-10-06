@@ -19,7 +19,7 @@ export const getSessionUserServerAction = async (
   try {
     const user = unstable_cache(
       async () => {
-        const data = await repo.findSessionUserById(session.user.id);
+        const data = await repo.findById(session.user.id, 'session');
         console.log(`Prisma 호출 : sessionUser-${session.user.id}`);
         return data;
       },
