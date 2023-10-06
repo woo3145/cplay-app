@@ -1,9 +1,13 @@
-import { AccountSideBar } from '@/app/(main)/account/AccountSideBar';
+import { MusicNavTabs } from './MusicNavTabs';
 
 const sidebarNavItems = [
   {
     title: '트랙 관리',
-    href: '/admin/tracks',
+    href: '/admin/music/tracks',
+  },
+  {
+    title: '번들 관리',
+    href: '/admin/music/bundles',
   },
 ];
 
@@ -15,7 +19,7 @@ export default async function MainLayout({
   return (
     <div className="h-full px-4 py-6 lg:px-8 space-y-6">
       <div className="space-between flex items-center">
-        <AccountSideBar items={sidebarNavItems} />
+        <MusicNavTabs items={sidebarNavItems} />
       </div>
       {children}
     </div>

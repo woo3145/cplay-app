@@ -5,24 +5,24 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
 
-interface AccountSideBarProps extends React.HTMLAttributes<HTMLElement> {
+interface AccountNavTabsProps extends React.HTMLAttributes<HTMLElement> {
   items: {
     href: string;
     title: string;
   }[];
 }
 
-export function AccountSideBar({
+export function AccountNavTabs({
   className,
   items,
   ...props
-}: AccountSideBarProps) {
+}: AccountNavTabsProps) {
   const pathname = usePathname();
 
   return (
     <nav className={cn('flex space-x-2', className)} {...props}>
       {items.map((item) => {
-        const isSelected = pathname.startsWith('/admin/tracks');
+        const isSelected = pathname === item.href;
         return (
           <Link
             key={item.href}

@@ -15,7 +15,7 @@ export default async function TracksPage() {
           <p className="text-sm text-muted-foreground">트랙 추가, 수정, 삭제</p>
         </div>
         <div className="ml-auto mr-4">
-          <Link href="/admin/tracks/add">
+          <Link href="/admin/music/tracks/add">
             <Button>Add Track</Button>
           </Link>
         </div>

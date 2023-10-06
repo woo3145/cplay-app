@@ -1,4 +1,4 @@
-import { AccountSideBar } from './AccountSideBar';
+import { AccountNavTabs } from './AccountNavTabs';
 
 const sidebarNavItems = [
   {
@@ -24,7 +24,7 @@ export default async function MainLayout({
     <div className="space-y-6 p-10 pb-16">
       <div className="flex flex-col space-y-8 w-full lg:max-w-5xl mx-auto">
         <aside>
-          <AccountSideBar items={sidebarNavItems} />
+          <AccountNavTabs items={sidebarNavItems} />
         </aside>
         <div className="flex-1">{children}</div>
       </div>

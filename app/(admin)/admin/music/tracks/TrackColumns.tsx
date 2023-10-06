@@ -20,7 +20,7 @@ import { Mood } from '@/modules/mood/domain/mood';
 import { formatDateForTable } from '@/lib/dateFormat';
 import Link from 'next/link';
 import { Genre } from '@/modules/genre/domain/genre';
-import { DeleteTrackDialog } from '@/app/(admin)/admin/tracks/DeleteTrackDialog';
+import { DeleteTrackDialog } from './DeleteTrackDialog';
 
 export const trackColumns: ColumnDef<DomainTrack>[] = [
   {
@@ -143,7 +143,7 @@ export const trackColumns: ColumnDef<DomainTrack>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-[160px]">
-            <Link href={`/admin/tracks/${track.id}/edit`}>
+            <Link href={`/admin/music/tracks/${track.id}/edit`}>
               <DropdownMenuItem>Edit</DropdownMenuItem>
             </Link>
 

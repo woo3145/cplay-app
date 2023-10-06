@@ -44,6 +44,7 @@ export function AdminSideBar({
           <div className="space-y-1">
             {items.map((nav) => {
               const isActive = pathname === nav.href;
+
               return (
                 <Link key={nav.title} href={nav.href} prefetch={false}>
                   <Button
