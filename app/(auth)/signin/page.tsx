@@ -1,10 +1,10 @@
 import { getProviders } from 'next-auth/react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { BrandLogo } from '@/app/_components/atoms/BrandLogo';
-import { SocialSignInList } from '@/app/_components/SocialSignInList';
-import { Separater } from '@/app/_components/atoms/Separator';
+import { SocialSignInList } from '@/app/(auth)/SocialSignInList';
 import { LoginForm } from '@/modules/auth/application/LoginForm';
+import { BrandLogo } from '@/components/common/BrandLogo';
+import { Separator } from '@/components/ui/separator';
 
 export const metadata = {
   title: 'JAZZiT | Login',
@@ -35,7 +35,7 @@ export default async function LoginPage() {
 
           <SocialSignInList providers={providers} />
 
-          <Separater text="OR CONTINUE WITH" />
+          <Separator className="my-4" />
 
           <LoginForm />
         </div>

@@ -25,7 +25,6 @@ export const formatDateForTable = (date: Date | null | undefined) => {
     const formatter = new Intl.DateTimeFormat('ko-KR', options);
     return formatter.format(date);
   } catch (e) {
-    console.log(date);
     return '';
   }
 };

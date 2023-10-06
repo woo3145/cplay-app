@@ -6,7 +6,7 @@ import { getTrackServerAction } from '@/modules/track/domain/usecases/getTrackSe
 import { notFound } from 'next/navigation';
 import z from 'zod';
 
-export default async function EditTracksPage({
+export default async function EditTrackPage({
   params,
 }: {
   params: { trackId: string };

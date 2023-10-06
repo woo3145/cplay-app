@@ -3,7 +3,7 @@ import { getAllGenresServerAction } from '@/modules/genre/domain/usecases/getAll
 import { getAllMoodsServerAction } from '@/modules/mood/domain/usecases/getAllMoodsServerAction';
 import { CreateTrackForm } from '@/modules/track/application/CreateTrackForm';
 
-export default async function AddTracksPage() {
+export default async function AddTrackPage() {
   const genres = await getAllGenresServerAction();
   const moods = await getAllMoodsServerAction();
 

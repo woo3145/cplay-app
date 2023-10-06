@@ -1,6 +1,6 @@
-import { SocialSignInList } from '@/app/_components/SocialSignInList';
-import { Separater } from '@/app/_components/atoms/Separator';
+import { SocialSignInList } from '@/app/(auth)/SocialSignInList';
 import { BrandLogo } from '@/components/common/BrandLogo';
+import { Separator } from '@/components/ui/separator';
 import { RegisterForm } from '@/modules/auth/application/RegisterForm';
 import { getProviders } from 'next-auth/react';
 import Image from 'next/image';
@@ -35,7 +35,7 @@ export default async function RegisterPage() {
 
           <SocialSignInList providers={providers} />
 
-          <Separater text="OR CONTINUE WITH" />
+          <Separator className="my-4" />
 
           <RegisterForm />
         </div>
