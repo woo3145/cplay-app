@@ -30,8 +30,7 @@ import { cn } from '@/lib/utils';
 import { Genre } from '@/modules/genre/domain/genre';
 import { Mood } from '@/modules/mood/domain/mood';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Play } from 'lucide-react';
-import Image from 'next/image';
+import { Loader2, Play } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -44,6 +43,8 @@ import { useSession } from 'next-auth/react';
 import { UserRole } from '@/modules/user/domain/user';
 import { useRouter } from 'next/navigation';
 import { TrackStatus } from '../domain/track';
+import { CoverImageFileSelector } from '@/app/(admin)/admin/music/tracks/CoverImageFileSelector';
+import { useUploadImage } from '@/modules/upload/application/useUploadImage';
 
 const SMAPLE_IMAGE =
   'https://images.unsplash.com/photo-1695852147874-86809c9d549a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80';
@@ -61,17 +62,19 @@ export const CreateTrackForm = ({ genres, moods }: Props) => {
     resolver: zodResolver(CreateTrackFormSchema),
     defaultValues: {
       title: '',
-      imageUrl: SMAPLE_IMAGE,
       length: 200,
       bpm: 90,
       key: '',
       status: TrackStatus.HIDDEN,
     },
   });
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
   const [selectedMoods, setSelectedMoods] = useState<number[]>([]);
+  const { selectedFile, setSelectedFile, uploadImage } = useUploadImage();
 
   const onSubmit = async (data: CreateTrackFormData) => {
+    setIsLoading(true);
     try {
       if (!session?.user || session.user.role !== UserRole.ADMIN) {
         return toast({
@@ -79,8 +82,15 @@ export const CreateTrackForm = ({ genres, moods }: Props) => {
           title: '권한이 없습니다.',
         });
       }
+      let imageUrl = '';
+
+      if (selectedFile) {
+        imageUrl = (await uploadImage()) ?? imageUrl;
+      }
+
       const result = await createTrackServerAction({
         ...data,
+        imageUrl: imageUrl,
         genreIds: selectedGenres,
         moodIds: selectedMoods,
         creatorId: session.user.id,
@@ -102,6 +112,8 @@ export const CreateTrackForm = ({ genres, moods }: Props) => {
       router.push('/admin/music/tracks');
     } catch (e) {
       console.log('예상치 못한 에러가 발생하였습니다.', e);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -230,19 +242,10 @@ export const CreateTrackForm = ({ genres, moods }: Props) => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="grid gap-6">
-                  <div className="grid gap-2">
-                    <Label htmlFor="file">File</Label>
-                    <Input type="file" id="file" accept="audio/mp3" />
-                  </div>
-
-                  <div className="relative w-full max-w-[320px] mx-auto aspect-square border rounded-md">
-                    <Image
-                      src={SMAPLE_IMAGE}
-                      alt="coverImage"
-                      fill
-                      objectFit="cover"
-                    />
-                  </div>
+                  <CoverImageFileSelector
+                    initialUrl={''}
+                    onFileSelect={setSelectedFile}
+                  />
                 </CardContent>
               </Card>
             </div>
@@ -348,7 +351,12 @@ export const CreateTrackForm = ({ genres, moods }: Props) => {
                 ))}
               </CardContent>
             </Card>
-            <Button type="submit">생성</Button>
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : null}
+              생성
+            </Button>
           </div>
         </div>
       </form>

@@ -30,7 +30,7 @@ import { cn } from '@/lib/utils';
 import { Genre } from '@/modules/genre/domain/genre';
 import { Mood } from '@/modules/mood/domain/mood';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Play } from 'lucide-react';
+import { Loader2, Play } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -45,6 +45,8 @@ import { useRouter } from 'next/navigation';
 import { Track, TrackStatus } from '../domain/track';
 import { EditTrackFormData } from '../domain/validations/EditTrackTypes';
 import { editTrackServerAction } from '../domain/usecases/editTrackServerAction';
+import { useUploadImage } from '@/modules/upload/application/useUploadImage';
+import { CoverImageFileSelector } from '@/app/(admin)/admin/music/tracks/CoverImageFileSelector';
 
 const SMAPLE_IMAGE =
   'https://images.unsplash.com/photo-1695852147874-86809c9d549a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80';
@@ -63,21 +65,25 @@ export const EditTrackForm = ({ track, genres, moods }: Props) => {
     resolver: zodResolver(CreateTrackFormSchema),
     defaultValues: {
       title: track.title,
-      imageUrl: track.imageUrl,
       length: track.length,
       bpm: track.bpm,
       key: track.key,
       status: track.status,
     },
   });
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedGenres, setSelectedGenres] = useState<number[]>(
     track.genres.map((genre) => genre.id)
   );
   const [selectedMoods, setSelectedMoods] = useState<number[]>(
     track.moods.map((mood) => mood.id)
   );
+  const { selectedFile, setSelectedFile, uploadImage } = useUploadImage(
+    track.imageUrl
+  );
 
   const onSubmit = async (data: EditTrackFormData) => {
+    setIsLoading(true);
     try {
       if (!session?.user || session.user.role !== UserRole.ADMIN) {
         return toast({
@@ -85,8 +91,14 @@ export const EditTrackForm = ({ track, genres, moods }: Props) => {
           title: '권한이 없습니다.',
         });
       }
+      let imageUrl = track.imageUrl;
+
+      if (selectedFile) {
+        imageUrl = (await uploadImage()) ?? imageUrl;
+      }
       const result = await editTrackServerAction(track.id, {
         ...data,
+        imageUrl: imageUrl,
         genreIds: selectedGenres,
         moodIds: selectedMoods,
         creatorId: session.user.id,
@@ -107,6 +119,8 @@ export const EditTrackForm = ({ track, genres, moods }: Props) => {
       router.push('/admin/music/tracks');
     } catch (e) {
       console.log('예상치 못한 에러가 발생하였습니다.', e);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -235,19 +249,10 @@ export const EditTrackForm = ({ track, genres, moods }: Props) => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="grid gap-6">
-                  <div className="grid gap-2">
-                    <Label htmlFor="file">File</Label>
-                    <Input type="file" id="file" accept="audio/mp3" />
-                  </div>
-
-                  <div className="relative w-full max-w-[320px] mx-auto aspect-square border rounded-md">
-                    <Image
-                      src={SMAPLE_IMAGE}
-                      alt="coverImage"
-                      fill
-                      objectFit="cover"
-                    />
-                  </div>
+                  <CoverImageFileSelector
+                    initialUrl={track.imageUrl}
+                    onFileSelect={setSelectedFile}
+                  />
                 </CardContent>
               </Card>
             </div>
@@ -361,7 +366,12 @@ export const EditTrackForm = ({ track, genres, moods }: Props) => {
               >
                 취소
               </Button>
-              <Button type="submit">저장</Button>
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : null}
+                저장
+              </Button>
             </div>
           </div>
         </div>

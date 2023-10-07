@@ -4,7 +4,6 @@ import { z } from 'zod';
 // client (react-hook-form)
 export const CreateTrackFormSchema = z.object({
   title: z.string().min(2, 'title는 필수 입력 사항입니다.'),
-  imageUrl: z.string(),
   length: z.coerce.number(), // https://zod.dev/?id=coercion-for-primitives
   bpm: z.coerce.number(),
   key: z.string(),
@@ -14,6 +13,7 @@ export type CreateTrackFormData = z.infer<typeof CreateTrackFormSchema>;
 
 // usecase
 export const UsecaseCreateTrackInputSchema = CreateTrackFormSchema.extend({
+  imageUrl: z.string(),
   moodIds: z.number().array(),
   genreIds: z.number().array(),
   creatorId: z.string(),

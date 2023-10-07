@@ -35,11 +35,21 @@ export const trackColumns: ColumnDef<DomainTrack>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="coverImage" />
     ),
-    cell: ({ row }) => (
-      <div className="w-14 h-14 relative">
-        <Image src={row.getValue('imageUrl')} alt="coverIamge" fill />
-      </div>
-    ),
+    cell: ({ row }) => {
+      const imageUrl = row.getValue('imageUrl') as string;
+      return imageUrl ? (
+        <div className="w-14 h-14 relative">
+          <Image
+            src={imageUrl}
+            alt="coverIamge"
+            fill
+            className="rounded-md bg-foreground/10"
+          />
+        </div>
+      ) : (
+        <div className="w-14 h-14 bg-foreground/10 rounded-md">null</div>
+      );
+    },
   },
   {
     accessorKey: 'title',

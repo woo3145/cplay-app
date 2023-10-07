@@ -44,7 +44,7 @@ export function EditUserForm({ user }: Props) {
 
   const [isLoading, setIsLoading] = useState(false);
   const { selectedFile, setSelectedFile, uploadImage } = useUploadImage(
-    user.id
+    `${user.id}-avatar`
   );
 
   async function onSubmit(data: EditUserFormData) {

@@ -21,6 +21,7 @@ export const editTrackServerAction = adminGuard(
       imageUrl,
       length,
       bpm,
+      key,
       status,
       creatorId,
       moodIds,
@@ -38,6 +39,7 @@ export const editTrackServerAction = adminGuard(
       imageUrl: exist.imageUrl === imageUrl ? undefined : imageUrl,
       length: exist.length === length ? undefined : length,
       bpm: exist.bpm === bpm ? undefined : bpm,
+      key: exist.key === key ? undefined : key,
       status: exist.status === status ? undefined : status,
       creatorId: exist.creator?.id === creatorId ? undefined : creatorId,
       moodIds: arraysEqual(

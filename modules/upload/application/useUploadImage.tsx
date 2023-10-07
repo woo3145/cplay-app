@@ -3,7 +3,7 @@ import { getPresignedUrlToAvatar } from '../domain/getPresignedUrlToAvatar';
 import { getFileExtension } from '@/lib/utils';
 import { uploadFileToPresigendUrl } from '../infrastructure/uploadFileToPresigendUrl';
 
-export const useUploadImage = (userId: string) => {
+export const useUploadImage = (fileName?: string) => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -14,7 +14,7 @@ export const useUploadImage = (userId: string) => {
     try {
       const extended = getFileExtension(selectedFile.name);
       const presignedUrl = await getPresignedUrlToAvatar(
-        `${userId}-profile.${extended}`,
+        fileName ? `${fileName}.${extended}` : selectedFile.name,
         selectedFile.type
       );
 

@@ -7,15 +7,13 @@ import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import { SessionUser } from '@/modules/user/domain/user';
 
 interface Props {
   initialUrl?: string | null;
-  user: SessionUser;
   onFileSelect: (file: File) => void;
 }
 
-export function AvatarFileSelector({ initialUrl, user, onFileSelect }: Props) {
+export function CoverImageFileSelector({ initialUrl, onFileSelect }: Props) {
   const [previewUrl, setPreviewUrl] = useState(initialUrl);
 
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -28,18 +26,20 @@ export function AvatarFileSelector({ initialUrl, user, onFileSelect }: Props) {
 
   return (
     <div className="space-y-4 flex flex-col items-center">
-      <Avatar className="w-48 h-48">
-        <AvatarImage asChild src={previewUrl ?? ''}>
+      {previewUrl ? (
+        <div className="relative w-48 h-48">
           <Image
             src={previewUrl ?? ''}
-            alt="userAvatar"
-            width={192}
-            height={192}
+            alt="coverIamge"
+            fill
             objectFit="cover"
           />
-        </AvatarImage>
-        <AvatarFallback>{user.name}</AvatarFallback>
-      </Avatar>
+        </div>
+      ) : (
+        <div className="flex items-center justify-center w-48 h-48">
+          이미지를 선택해주세요.
+        </div>
+      )}
       <Input
         onChange={handleFileChange}
         id="avatarFile"
