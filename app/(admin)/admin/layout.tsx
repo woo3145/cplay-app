@@ -24,7 +24,7 @@ const sidebarNavItems = [
     title: '유저 관리',
   },
   {
-    href: '/admin/music/tracks',
+    href: '/admin/sounds/tracks',
     icon: <ListMusic className="mr-2 h-4 w-4" />,
     title: '트랙 관리',
   },

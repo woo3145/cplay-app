@@ -160,7 +160,7 @@ export const trackColumns: ColumnDef<DomainTrack>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-[160px]">
-            <Link href={`/admin/music/tracks/${track.id}/edit`}>
+            <Link href={`/admin/sounds/tracks/${track.id}/edit`}>
               <DropdownMenuItem>Edit</DropdownMenuItem>
             </Link>
 

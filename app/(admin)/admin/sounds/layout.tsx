@@ -3,11 +3,11 @@ import { MusicNavTabs } from './MusicNavTabs';
 const sidebarNavItems = [
   {
     title: '트랙 관리',
-    href: '/admin/music/tracks',
+    href: '/admin/sounds/tracks',
   },
   {
     title: '번들 관리',
-    href: '/admin/music/bundles',
+    href: '/admin/sounds/bundles',
   },
 ];
 

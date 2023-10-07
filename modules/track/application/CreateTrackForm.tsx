@@ -43,8 +43,8 @@ import { useSession } from 'next-auth/react';
 import { UserRole } from '@/modules/user/domain/user';
 import { useRouter } from 'next/navigation';
 import { TrackStatus } from '../domain/track';
-import { CoverImageFileSelector } from '@/app/(admin)/admin/music/tracks/CoverImageFileSelector';
 import { useUploadImage } from '@/modules/upload/application/useUploadImage';
+import { CoverImageFileSelector } from '@/app/(admin)/admin/sounds/tracks/CoverImageFileSelector';
 
 const SMAPLE_IMAGE =
   'https://images.unsplash.com/photo-1695852147874-86809c9d549a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80';
@@ -109,7 +109,7 @@ export const CreateTrackForm = ({ genres, moods }: Props) => {
         variant: 'success',
         title: '성공적으로 Track을 생성했습니다.',
       });
-      router.push('/admin/music/tracks');
+      router.push('/admin/sounds/tracks');
     } catch (e) {
       console.log('예상치 못한 에러가 발생하였습니다.', e);
     } finally {
@@ -351,12 +351,21 @@ export const CreateTrackForm = ({ genres, moods }: Props) => {
                 ))}
               </CardContent>
             </Card>
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : null}
-              생성
-            </Button>
+            <div className="grid grid-cols-2 gap-6">
+              <Button
+                onClick={() => router.push('/admin/sounds/tracks')}
+                type="button"
+                variant="outline"
+              >
+                취소
+              </Button>
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : null}
+                생성
+              </Button>
+            </div>
           </div>
         </div>
       </form>

@@ -31,7 +31,6 @@ import { Genre } from '@/modules/genre/domain/genre';
 import { Mood } from '@/modules/mood/domain/mood';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2, Play } from 'lucide-react';
-import Image from 'next/image';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -46,7 +45,7 @@ import { Track, TrackStatus } from '../domain/track';
 import { EditTrackFormData } from '../domain/validations/EditTrackTypes';
 import { editTrackServerAction } from '../domain/usecases/editTrackServerAction';
 import { useUploadImage } from '@/modules/upload/application/useUploadImage';
-import { CoverImageFileSelector } from '@/app/(admin)/admin/music/tracks/CoverImageFileSelector';
+import { CoverImageFileSelector } from '@/app/(admin)/admin/sounds/tracks/CoverImageFileSelector';
 
 const SMAPLE_IMAGE =
   'https://images.unsplash.com/photo-1695852147874-86809c9d549a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80';
@@ -116,7 +115,7 @@ export const EditTrackForm = ({ track, genres, moods }: Props) => {
         variant: 'success',
         title: '성공적으로 Track을 수정했습니다.',
       });
-      router.push('/admin/music/tracks');
+      router.push('/admin/sounds/tracks');
     } catch (e) {
       console.log('예상치 못한 에러가 발생하였습니다.', e);
     } finally {
@@ -360,7 +359,7 @@ export const EditTrackForm = ({ track, genres, moods }: Props) => {
             </Card>
             <div className="grid grid-cols-2 gap-6">
               <Button
-                onClick={() => router.push('/admin/music/tracks')}
+                onClick={() => router.push('/admin/sounds/tracks')}
                 type="button"
                 variant="outline"
               >
