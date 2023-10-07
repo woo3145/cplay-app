@@ -7,6 +7,7 @@ export const EditTrackFormSchema = z.object({
   imageUrl: z.string(),
   length: z.coerce.number(), // https://zod.dev/?id=coercion-for-primitives
   bpm: z.coerce.number(),
+  key: z.string(),
   status: z.nativeEnum(TrackStatus),
 });
 export type EditTrackFormData = z.infer<typeof EditTrackFormSchema>;

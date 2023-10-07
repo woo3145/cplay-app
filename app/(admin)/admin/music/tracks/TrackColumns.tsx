@@ -63,6 +63,13 @@ export const trackColumns: ColumnDef<DomainTrack>[] = [
     cell: ({ row }) => <div className="">{row.getValue('bpm')}</div>,
   },
   {
+    accessorKey: 'key',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="key" />
+    ),
+    cell: ({ row }) => <div className="">{row.getValue('key')}</div>,
+  },
+  {
     accessorKey: 'genres',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="genres" />

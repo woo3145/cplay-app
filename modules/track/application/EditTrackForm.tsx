@@ -66,6 +66,7 @@ export const EditTrackForm = ({ track, genres, moods }: Props) => {
       imageUrl: track.imageUrl,
       length: track.length,
       bpm: track.bpm,
+      key: track.key,
       status: track.status,
     },
   });
@@ -103,7 +104,7 @@ export const EditTrackForm = ({ track, genres, moods }: Props) => {
         variant: 'success',
         title: '성공적으로 Track을 수정했습니다.',
       });
-      router.push('/admin/tracks');
+      router.push('/admin/music/tracks');
     } catch (e) {
       console.log('예상치 못한 에러가 발생하였습니다.', e);
     }
@@ -169,10 +170,21 @@ export const EditTrackForm = ({ track, genres, moods }: Props) => {
                     );
                   }}
                 />
-                <div className="grid gap-2">
-                  <Label htmlFor="key">Key</Label>
-                  <Input id="key" placeholder="Bm" />
-                </div>
+                <FormField
+                  control={form.control}
+                  name="key"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel>key</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
               </div>
             </CardContent>
           </Card>
@@ -343,7 +355,7 @@ export const EditTrackForm = ({ track, genres, moods }: Props) => {
             </Card>
             <div className="grid grid-cols-2 gap-6">
               <Button
-                onClick={() => router.push('/admin/tracks')}
+                onClick={() => router.push('/admin/music/tracks')}
                 type="button"
                 variant="outline"
               >

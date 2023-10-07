@@ -82,6 +82,7 @@ model Track {
   imageUrl    String
   length      Int // 트랙 길이 (초)
   bpm         Int // 트랙 템포
+  key         String // 트랙 키
   releaseDate DateTime? // 트랙 공개일
   status      TrackStatus // 트랙 릴리즈 여부
 

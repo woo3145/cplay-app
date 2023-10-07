@@ -20,6 +20,7 @@ export class TrackPrismaRepository implements TrackRepository {
       imageUrl: record.imageUrl,
       length: record.length, // 트랙 길이 (초)
       bpm: record.bpm, // 트랙 템포
+      key: record.key,
       status: record.status as TrackStatus, // 트랙 릴리즈 여부
       createdAt: record.createdAt, // 트랙 추가일
       releaseDate: record.releaseDate, // 트랙 공개일
