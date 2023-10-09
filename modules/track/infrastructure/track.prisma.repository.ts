@@ -4,6 +4,7 @@ import { Genre, Mood, Track as PrismaTrack, Stem, User } from '@prisma/client';
 import { RepositoryCreateTrackInput } from '../domain/validations/CreateTrackTypes';
 import { TrackStatus } from '../domain/track';
 import { RepositoryEditTrackInput } from '../domain/validations/EditTrackTypes';
+import { RepositoryGetTracksQuery } from '../domain/validations/GetTrackTypes';
 
 export class TrackPrismaRepository implements TrackRepository {
   toDomainModel(
@@ -71,6 +72,45 @@ export class TrackPrismaRepository implements TrackRepository {
     return tracks.map((track) => this.toDomainModel(track));
   }
 
+  async findAllWithQuery(query: RepositoryGetTracksQuery) {
+    const { page = 1, count = 10, genre, mood } = query;
+    const offset = (page - 1) * 10;
+
+    let whereCondition: any = {};
+
+    if (genre) {
+      whereCondition.genres = {
+        some: {
+          slug: genre,
+        },
+      };
+    }
+
+    if (mood) {
+      whereCondition.moods = {
+        some: {
+          tag: mood,
+        },
+      };
+    }
+    const tracks = await prisma.track.findMany({
+      where: {
+        ...whereCondition,
+        status: 'PUBLISH',
+      },
+      include: {
+        creator: true,
+        moods: true,
+        genres: true,
+        stems: true,
+      },
+      skip: offset,
+      take: count,
+    });
+
+    return tracks.map((track) => this.toDomainModel(track));
+  }
+
   async create(data: RepositoryCreateTrackInput) {
     const { creatorId, moodIds, genreIds, ...rest } = data;
     const track = await prisma.track.create({
@@ -125,11 +165,20 @@ export class TrackPrismaRepository implements TrackRepository {
   }
 
   async delete(id: number) {
-    const exist = await prisma.track.findFirst({ where: { id } });
+    const exist = await prisma.track.findFirst({
+      where: { id },
+      include: {
+        genres: true,
+        moods: true,
+        creator: true,
+        stems: true,
+      },
+    });
     if (!exist) {
       throw new Error('Track이 존재하지 않습니다.');
     }
 
     await prisma.track.delete({ where: { id } });
+    return this.toDomainModel(exist);
   }
 }

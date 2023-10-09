@@ -9,6 +9,7 @@ import {
 } from '../validations/EditTrackTypes';
 import { TrackRepository } from '../track.repository';
 import { arraysEqual } from '@/lib/utils';
+import { TrackStatus } from '../track';
 
 export const editTrackServerAction = adminGuard(
   async (
@@ -63,7 +64,13 @@ export const editTrackServerAction = adminGuard(
     try {
       const result = await repo.edit(id, updatedField);
       revalidateTag('allTracks');
-      revalidateTag(`track-${id}`);
+      if (result.status === TrackStatus.PUBLISH) {
+        revalidateTag(`track-${id}`);
+        revalidateTag(`releasedTracks-all`);
+        result.genres.forEach((genre) => {
+          revalidateTag(`releasedTracks-${genre.slug}`);
+        });
+      }
       return { success: true, track: result };
     } catch (e) {
       console.error('editTrackServerAction Error', e);

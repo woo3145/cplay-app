@@ -4,14 +4,22 @@ import { repository } from '@/modules/config/repository';
 import { adminGuard } from '@/lib/guard/adminGuard';
 import { TrackRepository } from '@/modules/track/domain/track.repository';
 import { revalidateTag } from 'next/cache';
+import { TrackStatus } from '../track';
 
 export const deleteTrackServerAction = adminGuard(
   async (id: number, subTrackRepository: TrackRepository | null = null) => {
     const repo = subTrackRepository || repository.track;
 
     try {
-      await repo.delete(id);
+      const deletedTrack = await repo.delete(id);
       revalidateTag('allTracks');
+      if (deletedTrack.status === TrackStatus.PUBLISH) {
+        revalidateTag(`track-${id}`);
+        revalidateTag(`releasedTracks-all`);
+        deletedTrack.genres.forEach((genre) => {
+          revalidateTag(`releasedTracks-${genre.slug}`);
+        });
+      }
 
       return { success: true };
     } catch (e) {
