@@ -20,8 +20,8 @@ FL Studio 의 Harmor를 통해 제작된 음원에 워터마킹
 참여자 뮤지션의 정보 & youtube 또는 인스타 제공
 
 구독 서비스 (Basic, Pro)
-Basic - 모든 잼트랙 제공
-Pro - 모든 잼트랙의 개별 stem 제공 (개별 트랙 조작 가능)
+Basic - 무료 잼트랙 및 Pro 컨텐츠의 Sample 제공
+Pro - 모든 잼트랙 stem 제공
 
 ### todos
 
@@ -55,6 +55,12 @@ Pro - 모든 잼트랙의 개별 stem 제공 (개별 트랙 조작 가능)
     - [ ] 결제 관련
     - [ ] 패스워드 변경
   - [ ] 구독 페이지
+
+  - [ ] 오디오 재생
+    - [ ] 글로벌 오디오 플레이어 생성 (main)
+    - [ ] 트랙 - stems의 stemType(sample, mr, solo, full 등)으로 컨텐츠에 맞게 플레이어 재생
+    - [ ] 앨범 - 호버 시 트랙 리스트 보이기
+    - [ ] 각 트랙 및 앨범 Detail 사이트 (Stem 리스트 및 아티스트 정보)
 
 - 곡 업로드(어드민)
   - 트랙 생성 (isPublish: false, releaseData: null)

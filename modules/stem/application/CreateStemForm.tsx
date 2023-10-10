@@ -19,6 +19,7 @@ import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { AlertDialogCancel } from '@/components/ui/alert-dialog';
 import { Track } from '@/modules/track/domain/track';
+import { Label } from '@/components/ui/label';
 
 interface Props {
   closeModal: () => void;
@@ -82,7 +83,7 @@ export const CreateStemForm = ({ closeModal, track }: Props) => {
     <div className="flex flex-col gap-4">
       <AudioFileSelector onFileSelect={setSelectedFile} />
 
-      <SelectLabel>Tag</SelectLabel>
+      <Label>Stem Type</Label>
       <Select
         onValueChange={(value) => setStemType(value as StemType)}
         defaultValue={stemType}
