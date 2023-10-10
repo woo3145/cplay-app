@@ -97,9 +97,13 @@ model Track {
   moods  Mood[]
 }
 
+enum StemType {
+  FULL
+}
+
 model Stem {
-  id       Int    @id @default(autoincrement())
-  stemType String // full, drum, bass, guitar 등등
+  id       Int      @id @default(autoincrement())
+  stemType StemType // full, drum, bass, guitar 등등
   src      String // 오디오 소스 url
 
   // 1 to Many

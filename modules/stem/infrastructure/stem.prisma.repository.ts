@@ -1,9 +1,18 @@
 import prisma from '@/lib/db/prisma';
 import { StemRepository } from '../domain/stem.repository';
-import { CreateStemFormData } from '@/modules/admin/domain/stem.validation';
+import { RepositoryCreateStemInput } from '../domain/validations/CreateStemTypes';
+import { Stem } from '../domain/stem';
 
 export class StemPrismaRepository implements StemRepository {
-  async create(data: CreateStemFormData) {
+  toDomainModel(record: any) {
+    return {
+      id: record.id,
+      stemType: record.stemType,
+      src: record.src,
+    } as Stem;
+  }
+
+  async create(data: RepositoryCreateStemInput) {
     const { trackId, stemType, src } = data;
     const stem = await prisma.stem.create({
       data: {
@@ -15,6 +24,6 @@ export class StemPrismaRepository implements StemRepository {
       },
     });
 
-    return stem;
+    return this.toDomainModel(stem);
   }
 }

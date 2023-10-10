@@ -19,18 +19,11 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import { Genre } from '@/modules/genre/domain/genre';
 import { Mood } from '@/modules/mood/domain/mood';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2, Play } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -46,9 +39,8 @@ import { EditTrackFormData } from '../domain/validations/EditTrackTypes';
 import { editTrackServerAction } from '../domain/usecases/editTrackServerAction';
 import { useUploadImage } from '@/modules/upload/application/useUploadImage';
 import { CoverImageFileSelector } from '@/app/(admin)/admin/sounds/tracks/CoverImageFileSelector';
-
-const SMAPLE_IMAGE =
-  'https://images.unsplash.com/photo-1695852147874-86809c9d549a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80';
+import { CreateStemDialog } from '@/app/(admin)/admin/sounds/tracks/CreateStemDialog';
+import { StemList } from '@/app/(admin)/admin/sounds/tracks/StemList';
 
 interface Props {
   track: Track;
@@ -77,9 +69,12 @@ export const EditTrackForm = ({ track, genres, moods }: Props) => {
   const [selectedMoods, setSelectedMoods] = useState<number[]>(
     track.moods.map((mood) => mood.id)
   );
-  const { selectedFile, setSelectedFile, uploadImage } = useUploadImage(
-    track.imageUrl
-  );
+
+  const {
+    selectedFile: selectedImageFile,
+    setSelectedFile: setSelectedImageFile,
+    upload: uploadImage,
+  } = useUploadImage(track.imageUrl);
 
   const onSubmit = async (data: EditTrackFormData) => {
     setIsLoading(true);
@@ -92,7 +87,7 @@ export const EditTrackForm = ({ track, genres, moods }: Props) => {
       }
       let imageUrl = track.imageUrl;
 
-      if (selectedFile) {
+      if (selectedImageFile) {
         imageUrl = (await uploadImage()) ?? imageUrl;
       }
       const result = await editTrackServerAction(track.id, {
@@ -210,31 +205,8 @@ export const EditTrackForm = ({ track, genres, moods }: Props) => {
                   <CardTitle>사운드 트랙</CardTitle>
                 </CardHeader>
                 <CardContent className="grid gap-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="file">File</Label>
-                    <Input type="file" id="file" accept="audio/mp3" />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="fileName">FileName</Label>
-                    <Input id="fileName" placeholder="filename" />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4 items-end">
-                    <div className="grid gap-2">
-                      <Label htmlFor="stemType">Type</Label>
-                      <Select defaultValue="full">
-                        <SelectTrigger id="stemType">
-                          <SelectValue placeholder="full" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="full">Full</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <Button className="flex gap-2" disabled>
-                      <Play className="w-4" />
-                      미리듣기
-                    </Button>
-                  </div>
+                  <CreateStemDialog track={track} />
+                  <StemList stems={track.stems} />
                 </CardContent>
               </Card>
             </div>
@@ -250,7 +222,7 @@ export const EditTrackForm = ({ track, genres, moods }: Props) => {
                 <CardContent className="grid gap-6">
                   <CoverImageFileSelector
                     initialUrl={track.imageUrl}
-                    onFileSelect={setSelectedFile}
+                    onFileSelect={setSelectedImageFile}
                   />
                 </CardContent>
               </Card>

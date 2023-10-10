@@ -19,18 +19,11 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import { Genre } from '@/modules/genre/domain/genre';
 import { Mood } from '@/modules/mood/domain/mood';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2, Play } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -45,9 +38,8 @@ import { useRouter } from 'next/navigation';
 import { TrackStatus } from '../domain/track';
 import { useUploadImage } from '@/modules/upload/application/useUploadImage';
 import { CoverImageFileSelector } from '@/app/(admin)/admin/sounds/tracks/CoverImageFileSelector';
-
-const SMAPLE_IMAGE =
-  'https://images.unsplash.com/photo-1695852147874-86809c9d549a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80';
+import { Stem } from '@/modules/stem/domain/stem';
+import { CreateStemDialog } from '@/app/(admin)/admin/sounds/tracks/CreateStemDialog';
 
 interface Props {
   genres: Genre[];
@@ -71,7 +63,11 @@ export const CreateTrackForm = ({ genres, moods }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
   const [selectedMoods, setSelectedMoods] = useState<number[]>([]);
-  const { selectedFile, setSelectedFile, uploadImage } = useUploadImage();
+  const {
+    selectedFile: selectedImageFile,
+    setSelectedFile: setSelectedImageFile,
+    upload: uploadImage,
+  } = useUploadImage();
 
   const onSubmit = async (data: CreateTrackFormData) => {
     setIsLoading(true);
@@ -84,7 +80,7 @@ export const CreateTrackForm = ({ genres, moods }: Props) => {
       }
       let imageUrl = '';
 
-      if (selectedFile) {
+      if (selectedImageFile) {
         imageUrl = (await uploadImage()) ?? imageUrl;
       }
 
@@ -198,37 +194,12 @@ export const CreateTrackForm = ({ genres, moods }: Props) => {
 
           <div className="grid xl:grid-cols-2 gap-6">
             <div>
-              {/* 사운드 트랙 */}
               <Card className="">
                 <CardHeader>
                   <CardTitle>사운드 트랙</CardTitle>
                 </CardHeader>
                 <CardContent className="grid gap-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="file">File</Label>
-                    <Input type="file" id="file" accept="audio/mp3" />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="fileName">FileName</Label>
-                    <Input id="fileName" placeholder="filename" />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4 items-end">
-                    <div className="grid gap-2">
-                      <Label htmlFor="stemType">Type</Label>
-                      <Select defaultValue="full">
-                        <SelectTrigger id="stemType">
-                          <SelectValue placeholder="full" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="full">Full</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <Button className="flex gap-2" disabled>
-                      <Play className="w-4" />
-                      미리듣기
-                    </Button>
-                  </div>
+                  수정 페이지에서 업로드해주세요.
                 </CardContent>
               </Card>
             </div>
@@ -244,7 +215,7 @@ export const CreateTrackForm = ({ genres, moods }: Props) => {
                 <CardContent className="grid gap-6">
                   <CoverImageFileSelector
                     initialUrl={''}
-                    onFileSelect={setSelectedFile}
+                    onFileSelect={setSelectedImageFile}
                   />
                 </CardContent>
               </Card>
@@ -275,6 +246,7 @@ export const CreateTrackForm = ({ genres, moods }: Props) => {
                                 <RadioGroupItem
                                   value={TrackStatus.PUBLISH}
                                   id="r1"
+                                  disabled
                                 />
                                 <Label htmlFor="r1">Published</Label>
                               </div>

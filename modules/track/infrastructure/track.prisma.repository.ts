@@ -5,6 +5,7 @@ import { RepositoryCreateTrackInput } from '../domain/validations/CreateTrackTyp
 import { TrackStatus } from '../domain/track';
 import { RepositoryEditTrackInput } from '../domain/validations/EditTrackTypes';
 import { RepositoryGetTracksQuery } from '../domain/validations/GetTrackTypes';
+import { StemType } from '@/modules/stem/domain/stem';
 
 export class TrackPrismaRepository implements TrackRepository {
   toDomainModel(
@@ -33,7 +34,11 @@ export class TrackPrismaRepository implements TrackRepository {
         return { id: item.id, tag: item.tag };
       }),
       stems: record.stems.map((item) => {
-        return { id: item.id, stemType: item.stemType, src: item.src };
+        return {
+          id: item.id,
+          stemType: item.stemType as StemType,
+          src: item.src,
+        };
       }),
       creator: record.creator
         ? {

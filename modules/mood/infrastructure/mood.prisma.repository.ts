@@ -2,13 +2,14 @@ import prisma from '@/lib/db/prisma';
 import { MoodRepository } from '../domain/mood.repository';
 import { RepositoryEditMoodInput } from '../domain/validations/EditMoodTypes';
 import { RepositoryCreateMoodInput } from '../domain/validations/CreateMoodTypes';
+import { Mood } from '../domain/mood';
 
 export class MoodPrismaRepository implements MoodRepository {
   toDomainModel(record: any) {
     return {
       id: record.id,
       tag: record.tag,
-    };
+    } as Mood;
   }
 
   async findOne(id: number) {

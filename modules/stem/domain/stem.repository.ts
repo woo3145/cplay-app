@@ -1,6 +1,7 @@
-import { CreateStemFormData } from '@/modules/admin/domain/stem.validation';
 import { Stem as DomainStem } from './stem';
+import { RepositoryCreateStemInput } from './validations/CreateStemTypes';
 
 export interface StemRepository {
-  create: (data: CreateStemFormData) => Promise<DomainStem>;
+  toDomainModel: (record: any) => DomainStem;
+  create: (data: RepositoryCreateStemInput) => Promise<DomainStem>;
 }
