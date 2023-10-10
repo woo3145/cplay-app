@@ -7,7 +7,7 @@ interface Props {
   genre: Genre | 'all';
 }
 
-export const TrackList = async ({ genre }: Props) => {
+export const RelasedTrackList = async ({ genre }: Props) => {
   const tracks = await getReleasedTracksServerAction({
     genre: genre === 'all' ? 'all' : genre.slug,
   });
