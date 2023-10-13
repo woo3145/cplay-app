@@ -13,8 +13,11 @@ export const useUploadImage = (fileName?: string) => {
     setIsLoading(true);
     try {
       const extended = getFileExtension(selectedFile.name);
+      const currentTime = new Date().toISOString().replace(/[-:.]/g, '');
       const presignedUrl = await getPresignedUrlToAvatar(
-        fileName ? `${fileName}.${extended}` : selectedFile.name,
+        fileName
+          ? `${currentTime}_${fileName}.${extended}`
+          : `${currentTime}_${selectedFile.name}`,
         selectedFile.type
       );
 
