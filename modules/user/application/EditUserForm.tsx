@@ -40,7 +40,6 @@ export function EditUserForm({ user }: Props) {
     },
     mode: 'onChange',
   });
-  const { update: sessionUpdate } = useSession();
 
   const [isLoading, setIsLoading] = useState(false);
   const {
@@ -71,10 +70,6 @@ export function EditUserForm({ user }: Props) {
         return;
       }
       if (result.user) {
-        await sessionUpdate({
-          name: result.user.name,
-          picture: result.user.image,
-        });
         toast({
           variant: 'success',
           title: '성공적으로 프로필을 수정했습니다.',

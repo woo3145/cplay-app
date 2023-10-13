@@ -1,7 +1,7 @@
 'use server';
 
 import bcrypt from 'bcrypt';
-import { User as SessionUser } from '@/modules/user/domain/user';
+import { SessionUser } from '@/modules/user/domain/user';
 import { UserRepository } from '../../user/domain/user.repository';
 import { repository } from '@/modules/config/repository';
 import {

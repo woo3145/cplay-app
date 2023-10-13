@@ -44,20 +44,16 @@ export const authOptions: AuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user, trigger, session }) {
+    async jwt({ token, user }) {
       if (user) {
         token.role = user.role ?? Role.USER;
       }
-      if (trigger === 'update' && session.name) token.name = session.name;
-      if (trigger === 'update' && session.picture)
-        token.picture = session.picture;
 
       return token;
     },
     async session({ session, token, trigger, newSession }) {
       session.user.id = token.sub as string;
       session.user.role = token.role as Role;
-
       return session;
     },
   },
