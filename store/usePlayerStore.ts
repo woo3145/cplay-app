@@ -8,7 +8,8 @@ interface PlayerStoreState {
   isPlaying: boolean;
   volume: number;
   currentTime: number;
-
+}
+interface PlayerStoreActions {
   setIsPlaying: (status: boolean) => void;
   setTrack: (track: Track, stemType?: StemType) => void;
   setStemType: (StemType: StemType) => void;
@@ -16,36 +17,38 @@ interface PlayerStoreState {
   setVolume: (volume: number) => void;
 }
 
-export const usePlayerStore = create<PlayerStoreState>((set) => ({
-  currentTrack: null,
-  stemType: null,
-  isPlaying: false,
-  volume: 1,
-  currentTime: 0,
-  setTrack: (track: Track, stemType: StemType = StemType.FULL) => {
-    set({
-      currentTrack: track,
-      currentTime: 0,
-    });
-    usePlayerStore.getState().setStemType(stemType);
-    if (!usePlayerStore.getState().isPlaying) {
-      usePlayerStore.getState().setIsPlaying(true);
-    }
-  },
-  setStemType: (stemType: StemType) => {
-    set({
-      stemType: stemType,
-    });
-  },
-  setIsPlaying: (status: boolean) => {
-    set({
-      isPlaying: status,
-    });
-  },
-  setCurrentTime: (time: number) => {
-    set({ currentTime: time });
-  },
-  setVolume: (volume: number) => {
-    set({ volume: volume });
-  },
-}));
+export const usePlayerStore = create<PlayerStoreState & PlayerStoreActions>(
+  (set) => ({
+    currentTrack: null,
+    stemType: null,
+    isPlaying: false,
+    volume: 1,
+    currentTime: 0,
+    setTrack: (track: Track, stemType: StemType = StemType.FULL) => {
+      set({
+        currentTrack: track,
+        currentTime: 0,
+      });
+      usePlayerStore.getState().setStemType(stemType);
+      if (!usePlayerStore.getState().isPlaying) {
+        usePlayerStore.getState().setIsPlaying(true);
+      }
+    },
+    setStemType: (stemType: StemType) => {
+      set({
+        stemType: stemType,
+      });
+    },
+    setIsPlaying: (status: boolean) => {
+      set({
+        isPlaying: status,
+      });
+    },
+    setCurrentTime: (time: number) => {
+      set({ currentTime: time });
+    },
+    setVolume: (volume: number) => {
+      set({ volume: volume });
+    },
+  })
+);
