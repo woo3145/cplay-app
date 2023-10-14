@@ -7,6 +7,7 @@ import { authOptions } from './api/auth/[...nextauth]/route';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import SessionProvider from '@/components/SessionProvider';
 import { Toaster } from '@/components/ui/toaster';
+import { Player } from '@/components/player/Player';
 
 // Next의 런타임 참고
 // https://nextjs.org/docs/app/building-your-application/rendering/edge-and-nodejs-runtimes#edge-runtime
@@ -42,6 +43,7 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             {children}
+            <Player />
           </ThemeProvider>
         </SessionProvider>
         <Toaster />
