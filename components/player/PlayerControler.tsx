@@ -7,6 +7,7 @@ import { Button } from '../ui/button';
 import { Slider } from '../ui/slider';
 import { cn } from '@/lib/utils';
 import { Pause, Play, SkipBack, SkipForward } from 'lucide-react';
+import { formatSeconds } from '@/lib/dateFormat';
 
 interface Props {
   track: Track;
@@ -103,14 +104,14 @@ export const PlayerController = ({ track }: Props) => {
           </Button>
         </div>
         <div className="flex items-center w-full text-sm gap-2">
-          <span>{Math.floor(currentTime)}</span>
+          <span>{formatSeconds(currentTime)}</span>
           <Slider
             max={duration}
             value={[currentTime]}
             onValueChange={currentTimeChangeHandler}
             className={cn('w-full cursor-pointer')}
           />
-          <span>{track.length}</span>
+          <span>{formatSeconds(track.length)}</span>
         </div>
       </div>
       {track && trackSrc && (

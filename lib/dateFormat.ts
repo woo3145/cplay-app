@@ -28,3 +28,11 @@ export const formatDateForTable = (date: Date | null | undefined) => {
     return '';
   }
 };
+
+export const formatSeconds = (totalSeconds: number) => {
+  const seconds = Math.ceil(totalSeconds);
+  const minutes = Math.floor(seconds / 60);
+  const _seconds = seconds % 60;
+
+  return `${minutes}:${_seconds < 10 ? '0' : ''}${_seconds}`;
+};
