@@ -24,3 +24,11 @@ export const arraysEqual = (a: any[], b: any[]): boolean => {
 
   return true;
 };
+
+export const capitalizeFirstLetter = (text: string) => {
+  if (text.length === 0) {
+    return '';
+  }
+
+  return text.charAt(0).toUpperCase();
+};

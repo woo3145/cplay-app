@@ -16,6 +16,7 @@ import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { SessionUser } from '@/modules/user/domain/user';
+import { capitalizeFirstLetter } from '@/lib/utils';
 
 interface Props {
   user: SessionUser | null;
@@ -31,7 +32,7 @@ export function UserMenu({ user }: Props) {
       <DropdownMenuTrigger asChild className="cursor-pointer">
         <Avatar>
           <AvatarImage src={user.image ?? ''} alt="user avatar" />
-          <AvatarFallback>{user.name}</AvatarFallback>
+          <AvatarFallback>{capitalizeFirstLetter(user.name)}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 mr-4">

@@ -22,6 +22,10 @@ export const TrackItem = ({ track, onClick }: Props) => {
           src={track.imageUrl}
           alt={track.title}
           fill
+          sizes="(max-width: 768px) 100vw,
+          (max-width: 1200px) 50vw,
+          33vw"
+          priority
           className={cn(
             'h-auto w-auto object-cover transition-all hover:scale-105 aspect-square'
           )}

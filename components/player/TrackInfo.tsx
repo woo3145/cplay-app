@@ -13,6 +13,7 @@ export const TrackInfo = ({ track }: Props) => {
           src={track.imageUrl}
           width={50}
           height={50}
+          sizes="100vw"
           loading="lazy"
           className="aspect-square object-cover rounded-md"
           alt={'coverImage'}

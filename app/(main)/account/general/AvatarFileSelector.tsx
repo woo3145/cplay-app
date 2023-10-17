@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { buttonVariants } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { cn } from '@/lib/utils';
+import { capitalizeFirstLetter, cn } from '@/lib/utils';
 import Image from 'next/image';
 import { SessionUser } from '@/modules/user/domain/user';
 
@@ -35,10 +35,11 @@ export function AvatarFileSelector({ initialUrl, user, onFileSelect }: Props) {
             alt="userAvatar"
             width={192}
             height={192}
-            objectFit="cover"
+            priority
+            className="object-cover"
           />
         </AvatarImage>
-        <AvatarFallback>{user.name}</AvatarFallback>
+        <AvatarFallback>{capitalizeFirstLetter(user.name)}</AvatarFallback>
       </Avatar>
       <Input
         onChange={handleFileChange}
