@@ -43,7 +43,10 @@ export const trackColumns: ColumnDef<DomainTrack>[] = [
             src={imageUrl}
             alt="coverIamge"
             fill
-            className="rounded-md bg-foreground/10"
+            sizes="(max-width: 768px) 100vw,
+          (max-width: 1200px) 50vw,
+          33vw"
+            className="rounded-md bg-foreground/10 object-cover"
           />
         </div>
       ) : (

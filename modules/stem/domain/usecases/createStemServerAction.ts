@@ -19,7 +19,10 @@ export const createStemServerAction = adminGuard(
 
     try {
       const stem = await repo.create({ trackId, src, stemType });
+
       revalidateTag(`track-${trackId}`);
+      revalidateTag(`releasedTracks`);
+
       return { success: true, stem };
     } catch (e) {
       console.error('createStemServerAction Error', e);

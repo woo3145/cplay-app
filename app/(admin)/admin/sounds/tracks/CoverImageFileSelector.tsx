@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Input } from '@/components/ui/input';
 import { buttonVariants } from '@/components/ui/button';
@@ -31,7 +31,11 @@ export function CoverImageFileSelector({ initialUrl, onFileSelect }: Props) {
             src={previewUrl ?? ''}
             alt="coverIamge"
             fill
-            objectFit="cover"
+            priority
+            sizes="(max-width: 768px) 100vw,
+            (max-width: 1200px) 50vw,
+            33vw"
+            className="object-cover"
           />
         </div>
       ) : (

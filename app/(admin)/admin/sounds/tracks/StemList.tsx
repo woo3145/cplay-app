@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Stem } from '@/modules/stem/domain/stem';
+import { DeleteStemDialog } from './[trackId]/edit/DeleteStemDialog';
 
 interface Props {
   stems: Stem[];
@@ -18,9 +19,11 @@ export const StemList = ({ stems }: Props) => {
                 Your browser does not support the audio element.
               </audio>
             )}
-            <Button type="button" variant="ghost" className="shrink-0">
-              X
-            </Button>
+            <DeleteStemDialog stem={stem}>
+              <Button type="button" variant="ghost" className="shrink-0">
+                X
+              </Button>
+            </DeleteStemDialog>
           </li>
         );
       })}

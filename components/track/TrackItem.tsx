@@ -14,7 +14,7 @@ export const TrackItem = ({ track, onClick }: Props) => {
   return (
     <div
       key={track.title}
-      className={cn('space-y-3 cursor-pointer')}
+      className={cn('space-y-3 cursor-pointer w-48')}
       onClick={onTrackClick}
     >
       <div className="relative overflow-hidden rounded-md w-48 h-48">

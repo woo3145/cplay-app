@@ -71,6 +71,9 @@ export class TrackPrismaRepository implements TrackRepository {
         genres: true,
         stems: true,
       },
+      orderBy: {
+        id: 'desc',
+      },
     });
     if (!tracks) return [];
 

@@ -26,4 +26,16 @@ export class StemPrismaRepository implements StemRepository {
 
     return this.toDomainModel(stem);
   }
+
+  async delete(id: number) {
+    const exist = await prisma.stem.findFirst({ where: { id } });
+
+    if (!exist) {
+      throw new Error('Mood가 존재하지 않습니다.');
+    }
+
+    await prisma.stem.delete({ where: { id } });
+
+    return exist.trackId;
+  }
 }

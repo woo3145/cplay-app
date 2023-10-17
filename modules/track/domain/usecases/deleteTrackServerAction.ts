@@ -13,13 +13,11 @@ export const deleteTrackServerAction = adminGuard(
     try {
       const deletedTrack = await repo.delete(id);
       revalidateTag('allTracks');
-      if (deletedTrack.status === TrackStatus.PUBLISH) {
-        revalidateTag(`track-${id}`);
-        revalidateTag(`releasedTracks-all`);
-        deletedTrack.genres.forEach((genre) => {
-          revalidateTag(`releasedTracks-${genre.slug}`);
-        });
-      }
+      revalidateTag(`track-${id}`);
+      revalidateTag(`releasedTracks-all`);
+      deletedTrack.genres.forEach((genre) => {
+        revalidateTag(`releasedTracks-${genre.slug}`);
+      });
 
       return { success: true };
     } catch (e) {

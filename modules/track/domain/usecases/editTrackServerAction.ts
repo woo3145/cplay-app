@@ -63,14 +63,12 @@ export const editTrackServerAction = adminGuard(
 
     try {
       const result = await repo.edit(id, updatedField);
+      revalidateTag(`track-${id}`);
       revalidateTag('allTracks');
-      if (result.status === TrackStatus.PUBLISH) {
-        revalidateTag(`track-${id}`);
-        revalidateTag(`releasedTracks-all`);
-        result.genres.forEach((genre) => {
-          revalidateTag(`releasedTracks-${genre.slug}`);
-        });
-      }
+      revalidateTag(`releasedTracks-all`);
+      result.genres.forEach((genre) => {
+        revalidateTag(`releasedTracks-${genre.slug}`);
+      });
       return { success: true, track: result };
     } catch (e) {
       console.error('editTrackServerAction Error', e);

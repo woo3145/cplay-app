@@ -21,7 +21,6 @@ export default async function EditTrackPage({
   const genres = await getAllGenresServerAction();
   const moods = await getAllMoodsServerAction();
   const track = await getTrackServerAction(parsedParams.data.trackId);
-
   if (!track) {
     notFound();
   }
