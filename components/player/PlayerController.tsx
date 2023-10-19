@@ -2,7 +2,7 @@
 
 import { Track } from '@/modules/track/domain/track';
 import { usePlayerStore } from '@/store/usePlayerStore';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { RefObject, useEffect, useMemo, useRef, useState } from 'react';
 import { Button } from '../ui/button';
 import { Slider } from '../ui/slider';
 import { cn } from '@/lib/utils';
@@ -11,8 +11,9 @@ import { formatSeconds } from '@/lib/dateFormat';
 
 interface Props {
   track: Track;
+  videoRef: RefObject<HTMLAudioElement>;
 }
-export const PlayerController = ({ track }: Props) => {
+export const PlayerController = ({ track, videoRef }: Props) => {
   const {
     currentTime,
     volume,
@@ -29,52 +30,52 @@ export const PlayerController = ({ track }: Props) => {
     setCurrentTime: state.setCurrentTime,
   }));
   const [duration, setDuration] = useState<number>();
-  const ref = useRef<HTMLAudioElement>(null);
   const trackSrc = useMemo(() => {
     if (!track.stems.length) return null;
     const curStem = track.stems.filter((stem) => stem.stemType === stemType);
-
     return curStem.length ? curStem[0].src : null;
   }, [stemType, track]);
 
   const currentTimeUpdateHandler = () => {
-    if (!ref.current) return;
-    setCurrentTime(ref.current.currentTime);
+    if (!videoRef.current) return;
+    setCurrentTime(videoRef.current.currentTime);
   };
 
   const playClickHandler = () => {
-    if (!ref.current) return;
+    if (!videoRef.current) return;
     setIsPlaying(!isPlaying);
   };
 
   const metadataLoadHandler = () => {
-    if (!ref.current) return;
-    setDuration(ref.current.duration);
+    if (!videoRef.current) return;
+    setDuration(videoRef.current.duration);
   };
 
   const currentTimeChangeHandler = (time: number[]) => {
-    if (!ref.current) return;
-    ref.current.currentTime = time[0];
+    if (!videoRef.current) return;
+    videoRef.current.currentTime = time[0];
   };
 
   useEffect(() => {
-    if (!ref.current || !trackSrc) return;
-    ref.current.src = trackSrc;
-    ref.current.volume = volume;
-    ref.current.currentTime = currentTime;
+    if (!videoRef.current || !trackSrc) return;
+    videoRef.current.src = trackSrc;
+    videoRef.current.volume = volume;
+    videoRef.current.currentTime = currentTime;
     if (!isPlaying) {
-      ref.current.pause();
+      videoRef.current.pause();
     } else {
-      const playPromise = ref.current.play();
+      const playPromise = videoRef.current.play();
       if (playPromise !== undefined) {
         playPromise.then((_) => {}).catch((error) => {});
       }
     }
     // eslint-disable-next-line
   }, [trackSrc, isPlaying]);
+
   return (
-    <div className="flex justify-center w-full">
-      <div className="flex flex-col items-center w-full max-w-xl">
+    <div className="flex justify-center w-full max-w-xl mx-auto">
+      <div className="flex flex-col items-center w-full">
+        {/* 이전곡, 재생, 다음곡 */}
         <div className="flex gap-4">
           <Button
             shape="circle"
@@ -103,6 +104,7 @@ export const PlayerController = ({ track }: Props) => {
             <SkipForward />
           </Button>
         </div>
+        {/* 재생바 */}
         <div className="flex items-center w-full text-sm gap-2">
           <span>{formatSeconds(currentTime)}</span>
           <Slider
@@ -116,7 +118,7 @@ export const PlayerController = ({ track }: Props) => {
       </div>
       {track && trackSrc && (
         <audio
-          ref={ref}
+          ref={videoRef}
           onTimeUpdate={currentTimeUpdateHandler}
           onLoadedMetadata={metadataLoadHandler}
         >

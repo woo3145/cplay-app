@@ -6,11 +6,13 @@ interface PlayerStoreState {
   currentTrack: Track | null;
   stemType: StemType | null;
   isPlaying: boolean;
+  isMuted: boolean;
   volume: number;
   currentTime: number;
 }
 interface PlayerStoreActions {
   setIsPlaying: (status: boolean) => void;
+  setIsMuted: (status: boolean) => void;
   setTrack: (track: Track, stemType?: StemType) => void;
   setStemType: (StemType: StemType) => void;
   setCurrentTime: (time: number) => void;
@@ -22,6 +24,7 @@ export const usePlayerStore = create<PlayerStoreState & PlayerStoreActions>(
     currentTrack: null,
     stemType: null,
     isPlaying: false,
+    isMuted: false,
     volume: 1,
     currentTime: 0,
     setTrack: (track: Track, stemType: StemType = StemType.FULL) => {
@@ -42,6 +45,11 @@ export const usePlayerStore = create<PlayerStoreState & PlayerStoreActions>(
     setIsPlaying: (status: boolean) => {
       set({
         isPlaying: status,
+      });
+    },
+    setIsMuted: (status: boolean) => {
+      set({
+        isMuted: status,
       });
     },
     setCurrentTime: (time: number) => {

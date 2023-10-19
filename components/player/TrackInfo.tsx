@@ -7,8 +7,8 @@ interface Props {
 
 export const TrackInfo = ({ track }: Props) => {
   return (
-    <div className="hidden md:flex shrink-0 w-1/5 gap-2">
-      <div>
+    <div className="hidden lg:flex shrink-0 w-1/4 gap-2">
+      <div className="shrink-0">
         <Image
           src={track.imageUrl}
           width={50}
@@ -20,7 +20,7 @@ export const TrackInfo = ({ track }: Props) => {
         />
       </div>
       <div>
-        <p className="">{track.title}</p>
+        <p className="line-clamp-1 break-all">{track.title}</p>
         <p className="text-sm">{track.creator?.name}</p>
       </div>
     </div>
