@@ -14,23 +14,18 @@ export const TrackItem = ({ track, onClick }: Props) => {
   return (
     <div
       key={track.title}
-      className={cn('space-y-3 cursor-pointer w-48')}
+      className={cn('space-y-3 cursor-pointer w-48 shrink-0')}
       onClick={onTrackClick}
     >
-      <div className="relative overflow-hidden rounded-md w-48 h-48">
-        <Image
-          src={track.imageUrl}
-          alt={track.title}
-          fill
-          sizes="(max-width: 768px) 100vw,
-          (max-width: 1200px) 50vw,
-          33vw"
-          priority
-          className={cn(
-            'h-auto w-auto object-cover transition-all hover:scale-105 aspect-square'
-          )}
-        />
-      </div>
+      <Image
+        src={track.imageUrl}
+        alt={track.title}
+        width={192}
+        height={192}
+        className={cn(
+          'w-48 h-48 object-cover transition-all hover:scale-105 aspect-square rounded-md'
+        )}
+      />
       <div className="space-y-1 text-sm">
         <h3 className="font-medium leading-none">{track.title}</h3>
         <p className="text-xs text-muted-foreground">{track.creator?.name}</p>

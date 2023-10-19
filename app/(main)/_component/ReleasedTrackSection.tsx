@@ -22,8 +22,12 @@ export const ReleasedTrackSection = ({ genres }: Props) => {
         </div>
       </div>
 
-      <Tabs defaultValue="all" className="w-full space-y-4">
-        <TabsList className="bg-background gap-2 p-0">
+      <Tabs defaultValue="all" className="w-full space-y-0">
+        <TabsList
+          className={cn(
+            'flex flex-wrap justify-start h-auto bg-background gap-2 p-0'
+          )}
+        >
           <TabsTrigger
             key={'all'}
             value={'all'}

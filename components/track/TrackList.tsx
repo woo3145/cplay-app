@@ -15,7 +15,7 @@ export const TrackList = ({ tracks }: Props) => {
     setTrack(track);
   };
   return (
-    <div className="flex items-center gap-4 overflow-x-auto py-4">
+    <div className="flex gap-4 overflow-x-auto py-4">
       {tracks.map((track) => {
         return (
           <TrackItem key={track.id} track={track} onClick={onTrackClick} />
