@@ -1,7 +1,7 @@
 'use server';
 
 import { adminGuard } from '@/lib/guard/adminGuard';
-import { FileRepository } from '../../upload/domain/file.repository';
+import { FileRepository } from './file.repository';
 import { repository } from '@/modules/config/repository';
 
 export const getPresignedUrlToStem = adminGuard(

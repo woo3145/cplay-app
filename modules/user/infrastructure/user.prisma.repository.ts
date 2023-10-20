@@ -8,30 +8,15 @@ import bcrypt from 'bcrypt';
 import {
   User as DomainUser,
   SessionUser as DomainSessionUser,
-  UserRole,
 } from '../domain/user';
-import { User as PrismaUser } from '@prisma/client';
 import { RepositoryEditUserInput } from '../domain/validations/EditUserTypes';
 import { RepositoryChangePasswordInput } from '../domain/validations/ChangePasswordTypes';
+import {
+  toSessionUserDomainModel,
+  toUserDomainModel,
+} from './user.prisma.mapper';
 
 export class UserPrismaRepository implements UserRepository {
-  toDomainModel(record: PrismaUser): DomainUser {
-    return {
-      id: record.id,
-      name: record.name ?? '',
-      email: record.email ?? '',
-      image: record.image ?? '',
-    };
-  }
-
-  toSessionModel(record: PrismaUser): DomainSessionUser {
-    return {
-      ...this.toDomainModel(record),
-      role: record.role as UserRole,
-      isSocialLogin: !record.password,
-    };
-  }
-
   // User
   async findByEmail<T extends UserType>(
     email: string,
@@ -42,7 +27,9 @@ export class UserPrismaRepository implements UserRepository {
 
     // 동적 타입 check
     return (
-      isSessionType(type) ? this.toSessionModel(user) : this.toDomainModel(user)
+      isSessionType(type)
+        ? toSessionUserDomainModel(user)
+        : toUserDomainModel(user)
     ) as T extends 'session' ? DomainSessionUser : DomainUser;
   }
   async findById<T extends UserType>(id: string, type: T) {
@@ -51,7 +38,9 @@ export class UserPrismaRepository implements UserRepository {
 
     // 동적 타입 check
     return (
-      isSessionType(type) ? this.toSessionModel(user) : this.toDomainModel(user)
+      isSessionType(type)
+        ? toSessionUserDomainModel(user)
+        : toUserDomainModel(user)
     ) as T extends 'session' ? DomainSessionUser : DomainUser;
   }
   async findByEmailWithPassword<T extends UserType>(email: string, type: T) {
@@ -60,8 +49,8 @@ export class UserPrismaRepository implements UserRepository {
 
     return {
       ...(isSessionType(type)
-        ? this.toSessionModel(user)
-        : this.toDomainModel(user)),
+        ? toSessionUserDomainModel(user)
+        : toUserDomainModel(user)),
       password: user.password,
     } as T extends 'session'
       ? DomainSessionUser & { password?: string | null }
@@ -73,8 +62,8 @@ export class UserPrismaRepository implements UserRepository {
 
     return {
       ...(isSessionType(type)
-        ? this.toSessionModel(user)
-        : this.toDomainModel(user)),
+        ? toSessionUserDomainModel(user)
+        : toUserDomainModel(user)),
       password: user.password,
     } as T extends 'session'
       ? DomainSessionUser & { password?: string | null }
@@ -90,7 +79,7 @@ export class UserPrismaRepository implements UserRepository {
       },
     });
 
-    return this.toDomainModel(user);
+    return toUserDomainModel(user);
   }
 
   async edit(userId: string, data: RepositoryEditUserInput) {
@@ -99,7 +88,7 @@ export class UserPrismaRepository implements UserRepository {
       data,
     });
 
-    return this.toDomainModel(updatedUser);
+    return toUserDomainModel(updatedUser);
   }
 
   async changePassword(

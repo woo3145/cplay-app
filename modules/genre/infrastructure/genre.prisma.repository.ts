@@ -2,26 +2,19 @@ import prisma from '@/lib/db/prisma';
 import { GenreRepository } from '../domain/genre.repository';
 import { RepositoryCreateGenreInput } from '../domain/validations/CreateGenreTypes';
 import { RepositoryEditGenreInput } from '../domain/validations/EditGenreTypes';
+import { toGenreDomainModel } from './genre.prisma.mapper';
 
 export class GenrePrismaRepository implements GenreRepository {
-  toDomainModel(record: any) {
-    return {
-      id: record.id,
-      tag: record.tag,
-      slug: record.slug,
-    };
-  }
-
   async findOne(id: number) {
     const genre = await prisma.genre.findFirst({ where: { id } });
     if (!genre) return null;
-    return this.toDomainModel(genre);
+    return toGenreDomainModel(genre);
   }
 
   async getAll() {
     const genres = await prisma.genre.findMany({ orderBy: { id: 'desc' } });
     if (!genres) return [];
-    return genres.map((genre) => this.toDomainModel(genre));
+    return genres.map((genre) => toGenreDomainModel(genre));
   }
 
   async create(data: RepositoryCreateGenreInput) {
@@ -29,7 +22,7 @@ export class GenrePrismaRepository implements GenreRepository {
       data: { ...data },
     });
 
-    return this.toDomainModel(genre);
+    return toGenreDomainModel(genre);
   }
 
   async delete(id: number) {
@@ -58,6 +51,6 @@ export class GenrePrismaRepository implements GenreRepository {
       },
     });
 
-    return this.toDomainModel(updatedGenre);
+    return toGenreDomainModel(updatedGenre);
   }
 }

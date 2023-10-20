@@ -56,11 +56,11 @@ Pro - 모든 잼트랙 stem 제공
     - [ ] 패스워드 변경
   - [ ] 구독 페이지
 
-  - [ ] 오디오 재생
-    - [ ] 글로벌 오디오 플레이어 생성 (main)
+  - [x] 오디오 재생
+    - [x] 글로벌 오디오 플레이어 생성 (main)
     - [ ] 트랙 - stems의 stemType(sample, mr, solo, full 등)으로 컨텐츠에 맞게 플레이어 재생
     - [ ] 앨범 - 호버 시 트랙 리스트 보이기
-    - [ ] 각 트랙 및 앨범 Detail 사이트 (Stem 리스트 및 아티스트 정보)
+    - [ ] 각 트랙 및 앨범 Detail 페이지 (Stem 리스트 및 아티스트 정보)
 
 - 곡 업로드(어드민)
   - 트랙 생성 (isPublish: false, releaseData: null)

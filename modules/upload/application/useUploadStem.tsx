@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { getFileExtension } from '@/lib/utils';
 import { uploadFileToPresigendUrl } from '../infrastructure/uploadFileToPresigendUrl';
-import { getPresignedUrlToStem } from '@/modules/admin/application/getPresignedUrlToStem';
+import { getPresignedUrlToStem } from '@/modules/upload/domain/getPresignedUrlToStem';
 
 export const useUploadStem = (fileName?: string) => {
   const [isLoading, setIsLoading] = useState(false);

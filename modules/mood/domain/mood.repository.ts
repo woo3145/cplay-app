@@ -3,7 +3,6 @@ import { RepositoryCreateMoodInput } from './validations/CreateMoodTypes';
 import { RepositoryEditMoodInput } from './validations/EditMoodTypes';
 
 export interface MoodRepository {
-  toDomainModel: (record: any) => DomainMood;
   findOne: (id: number) => Promise<DomainMood | null>;
   getAll: () => Promise<DomainMood[]>;
   create: (data: RepositoryCreateMoodInput) => Promise<DomainMood>;

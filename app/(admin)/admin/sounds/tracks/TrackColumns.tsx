@@ -17,7 +17,7 @@ import {
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { Mood } from '@/modules/mood/domain/mood';
-import { formatDateForTable } from '@/lib/dateFormat';
+import { formatDateForTable, formatSeconds } from '@/lib/dateFormat';
 import Link from 'next/link';
 import { Genre } from '@/modules/genre/domain/genre';
 import { DeleteTrackDialog } from './DeleteTrackDialog';
@@ -59,14 +59,18 @@ export const trackColumns: ColumnDef<DomainTrack>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="title" />
     ),
-    cell: ({ row }) => <div className="">{row.getValue('title')}</div>,
+    cell: ({ row }) => (
+      <div className="min-w-[15rem]">{row.getValue('title')}</div>
+    ),
   },
   {
     accessorKey: 'length',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="length" />
     ),
-    cell: ({ row }) => <div className="">{row.getValue('length')}</div>,
+    cell: ({ row }) => (
+      <div className="">{formatSeconds(row.getValue('length'))}</div>
+    ),
   },
   {
     accessorKey: 'bpm',

@@ -9,9 +9,6 @@ export const isSessionType = (type: UserType): type is 'session' => {
 };
 
 export interface UserRepository {
-  toDomainModel: (record: any) => DomainUser;
-  toSessionModel: (record: any) => DomainSessionUser;
-
   findByEmail: <T extends UserType>(
     email: string,
     type: T

@@ -3,19 +3,13 @@ import { MoodRepository } from '../domain/mood.repository';
 import { RepositoryEditMoodInput } from '../domain/validations/EditMoodTypes';
 import { RepositoryCreateMoodInput } from '../domain/validations/CreateMoodTypes';
 import { Mood } from '../domain/mood';
+import { toMoodDomainModel } from './mood.prisma.mapper';
 
 export class MoodPrismaRepository implements MoodRepository {
-  toDomainModel(record: any) {
-    return {
-      id: record.id,
-      tag: record.tag,
-    } as Mood;
-  }
-
   async findOne(id: number) {
     const mood = await prisma.mood.findFirst({ where: { id } });
     if (!mood) return null;
-    return this.toDomainModel(mood);
+    return toMoodDomainModel(mood);
   }
 
   async getAll() {
@@ -30,7 +24,7 @@ export class MoodPrismaRepository implements MoodRepository {
         tag,
       },
     });
-    return mood;
+    return toMoodDomainModel(mood);
   }
 
   async delete(id: number) {
@@ -57,6 +51,6 @@ export class MoodPrismaRepository implements MoodRepository {
       data: updatedField,
     });
 
-    return updatedMood;
+    return toMoodDomainModel(updatedMood);
   }
 }

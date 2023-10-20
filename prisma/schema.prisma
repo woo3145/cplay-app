@@ -93,8 +93,9 @@ model Track {
   stems Stem[] // 원곡을 이루는 개별트랙
 
   // Many to Many
-  genres Genre[]
-  moods  Mood[]
+  genres  Genre[]
+  moods   Mood[]
+  bundles BundleTrack[]
 }
 
 enum StemType {
@@ -119,4 +120,28 @@ model Mood {
   tracks Track[]
 }
 
-// 결제 관련
+model Bundle {
+  id        Int      @id @default(autoincrement())
+  name      String // 번들 이름
+  imageUrl  String
+  createdAt DateTime @default(now()) // 생성 시간
+
+  tracks BundleTrack[]
+  types  BundleType[]
+}
+
+model BundleType {
+  id      Int      @id @default(autoincrement())
+  name    String // 타입 이름
+  bundles Bundle[]
+}
+
+model BundleTrack {
+  bundleId Int
+  trackId  Int
+
+  bundle Bundle @relation(fields: [bundleId], references: [id])
+  track  Track  @relation(fields: [trackId], references: [id])
+
+  @@id([bundleId, trackId])
+}
