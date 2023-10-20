@@ -7,6 +7,7 @@ import { repository } from '@/modules/config/repository';
 import { UserRepository } from '../user.repository';
 import { authOptions } from '@/api/auth/[...nextauth]/route';
 import { SessionUser } from '../user';
+import { toSessionUserDomainModel } from '../../infrastructure/user.prisma.mapper';
 
 export const getSessionUserServerAction = async (
   subUserRepository: UserRepository | null = null
@@ -19,7 +20,10 @@ export const getSessionUserServerAction = async (
   try {
     const user = unstable_cache(
       async () => {
-        const data = await repo.findById(session.user.id, 'session');
+        const data = await repo.findById(
+          session.user.id,
+          toSessionUserDomainModel
+        );
         console.log(`Prisma 호출 : sessionUser-${session.user.id}`);
         return data;
       },

@@ -1,40 +1,22 @@
-import { User as DomainUser, SessionUser as DomainSessionUser } from './user';
+import { User as DomainUser } from './user';
 import { RepositoryChangePasswordInput } from './validations/ChangePasswordTypes';
 import { RepositoryEditUserInput } from './validations/EditUserTypes';
 
-export type UserType = 'user' | 'session';
-
-export const isSessionType = (type: UserType): type is 'session' => {
-  return type === 'session';
-};
-
 export interface UserRepository {
-  findByEmail: <T extends UserType>(
+  findByEmail: <T>(
     email: string,
-    type: T
-  ) => Promise<(T extends 'session' ? DomainSessionUser : DomainUser) | null>;
-  findById: <T extends UserType>(
-    id: string,
-    type: T
-  ) => Promise<(T extends 'session' ? DomainSessionUser : DomainUser) | null>;
-  findByEmailWithPassword: <T extends UserType>(
+    mapper: (user: any) => T
+  ) => Promise<T | null>;
+  findById: <T>(id: string, mapper: (user: any) => T) => Promise<T | null>;
+  findByEmailWithPassword: <T>(
     email: string,
-    type: T
-  ) => Promise<
-    | (T extends 'session'
-        ? DomainSessionUser & { password?: string | null }
-        : DomainUser & { password?: string | null })
-    | null
-  >;
-  findByIdWithPassword: <T extends UserType>(
+    mapper: (user: any) => T
+  ) => Promise<(T & { password?: string | null }) | null>;
+  findByIdWithPassword: <T>(
     email: string,
-    type: T
-  ) => Promise<
-    | (T extends 'session'
-        ? DomainSessionUser & { password?: string | null }
-        : DomainUser & { password?: string | null })
-    | null
-  >;
+    mapper: (user: any) => T
+  ) => Promise<(T & { password?: string | null }) | null>;
+
   create: (
     email: string,
     password: string,

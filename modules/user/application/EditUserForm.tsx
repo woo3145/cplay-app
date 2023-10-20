@@ -18,7 +18,6 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
-import { useSession } from 'next-auth/react';
 import { editUserServerAction } from '@/modules/user/domain/usecases/editUserServerAction';
 import {
   EditUserFormData,

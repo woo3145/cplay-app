@@ -9,6 +9,7 @@ import {
   UsecaseEditUserInput,
   UsecaseEditUserInputSchema,
 } from '../validations/EditUserTypes';
+import { toUserDomainModel } from '../../infrastructure/user.prisma.mapper';
 
 export const editUserServerAction = userGuard(
   async (
@@ -19,7 +20,7 @@ export const editUserServerAction = userGuard(
     const { name, image } = UsecaseEditUserInputSchema.parse(data);
     const repo = subUserRepository || repository.user;
 
-    const exist = await repo.findById(id, 'user');
+    const exist = await repo.findById(id, toUserDomainModel);
     if (!exist) {
       return { success: false, message: 'User가 존재하지 않습니다.' };
     }

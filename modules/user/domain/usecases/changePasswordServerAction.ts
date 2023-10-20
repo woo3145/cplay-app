@@ -8,6 +8,7 @@ import {
   ChangePasswordFormData,
   ChangePasswordFormSchema,
 } from '../validations/ChangePasswordTypes';
+import { toUserDomainModel } from '../../infrastructure/user.prisma.mapper';
 
 export const changePasswordServerAction = userGuard(
   async (
@@ -18,7 +19,7 @@ export const changePasswordServerAction = userGuard(
     const { oldPassword, newPassword } = ChangePasswordFormSchema.parse(data);
     const repo = subUserRepository || repository.user;
 
-    const user = await repo.findByIdWithPassword(id, 'user');
+    const user = await repo.findByIdWithPassword(id, toUserDomainModel);
 
     if (!user) {
       return { success: false, message: 'User가 존재하지 않습니다.' };
