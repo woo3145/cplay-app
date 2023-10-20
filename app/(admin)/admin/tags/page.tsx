@@ -7,10 +7,14 @@ import { CreateGenreDialog } from './CreateGenreDialog';
 import { getAllMoodsServerAction } from '@/modules/mood/domain/usecases/getAllMoodsServerAction';
 import { genreColumns } from './GenreColumns';
 import { moodColumns } from './MoodColumns';
+import { CreateBundleTypeDialog } from './CreateBundleTypeDialog';
+import { bundleTypeColumns } from './BundleTypeColumns';
+import { getAllBundleTypesServerAction } from '@/modules/bundle/domain/usecases/getAllBundleTypesServerAction';
 
 export default async function TagsPage() {
   const genres = await getAllGenresServerAction();
   const moods = await getAllMoodsServerAction();
+  const bundleTypes = await getAllBundleTypesServerAction();
 
   return (
     <div className="h-full px-4 py-6 lg:px-8">
@@ -21,6 +25,7 @@ export default async function TagsPage() {
               장르
             </TabsTrigger>
             <TabsTrigger value="mood">분위기</TabsTrigger>
+            <TabsTrigger value="bundle">번들</TabsTrigger>
             <TabsTrigger value="category" disabled>
               커뮤니티
             </TabsTrigger>
@@ -76,6 +81,34 @@ export default async function TagsPage() {
                 columns={moodColumns}
                 data={moods}
                 filterField={'tag'}
+              />
+            </div>
+          </div>
+        </TabsContent>
+        <TabsContent
+          value="bundle"
+          className="h-full flex-col border-none p-0 data-[state=active]:flex"
+        >
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <h2 className="text-2xl font-semibold tracking-tight">
+                Bundle Type List
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                번들 태그 추가, 수정, 삭제
+              </p>
+            </div>
+            <div className="ml-auto mr-4">
+              <CreateBundleTypeDialog />
+            </div>
+          </div>
+          <Separator className="my-4" />
+          <div className="relative">
+            <div className="container mx-auto py-5">
+              <DataTable
+                columns={bundleTypeColumns}
+                data={bundleTypes}
+                filterField={'name'}
               />
             </div>
           </div>

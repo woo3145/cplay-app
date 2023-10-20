@@ -8,11 +8,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { CreateMoodForm } from '@/modules/mood/application/CreateMoodForm';
+import { CreateBundleTypeForm } from '@/modules/bundle/application/CreateBundleTypeForm';
 import { PlusCircle } from 'lucide-react';
 import { useState } from 'react';
 
-export const CreateMoodDialog = () => {
+export const CreateBundleTypeDialog = () => {
   const [open, setOpen] = useState(false);
 
   const closeModal = () => {
@@ -23,15 +23,15 @@ export const CreateMoodDialog = () => {
       <DialogTrigger className="w-full" asChild>
         <Button>
           <PlusCircle className="mr-2 h-4 w-4" />
-          Add Mood
+          Add Bundle Type
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add Mood</DialogTitle>
+          <DialogTitle>Add Bundle Type</DialogTitle>
         </DialogHeader>
 
-        <CreateMoodForm closeModal={closeModal} />
+        <CreateBundleTypeForm closeModal={closeModal} />
       </DialogContent>
     </Dialog>
   );
