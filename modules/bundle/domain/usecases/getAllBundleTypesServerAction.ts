@@ -10,7 +10,7 @@ export const getAllBundleTypesServerAction = async (
   const repo = subBundleTypeRepository || repository.bundleType;
 
   try {
-    const moods = unstable_cache(
+    const bundleTypes = unstable_cache(
       async () => {
         const data = await repo.getAll();
         console.log(`Prisma 호출 : allBundleTypes`);
@@ -19,7 +19,7 @@ export const getAllBundleTypesServerAction = async (
       [`allBundleTypes`],
       { tags: [`allBundleTypes`], revalidate: 3600 }
     )();
-    return moods;
+    return bundleTypes;
   } catch (e) {
     console.error('getAllBundleTypesServerAction Error: ', e);
     return [];

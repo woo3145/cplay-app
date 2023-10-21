@@ -6,7 +6,7 @@ import { revalidateTag } from 'next/cache';
 import {
   UsecaseEditBundleTypeInput,
   UsecaseEditBundleTypeInputSchema,
-} from '../validations/EditBundleTypes';
+} from '../validations/EditBundleTypeTypes';
 import { BundleTypeRepository } from '../bundle.repository';
 
 export const editBundleTypeServerAction = adminGuard(

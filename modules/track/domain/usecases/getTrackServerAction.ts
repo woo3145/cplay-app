@@ -18,8 +18,8 @@ export const getTrackServerAction = async (
         console.log(`Prisma 호출 : track-${id}`);
         return data;
       },
-      [`track-${id}`],
-      { tags: [`track-${id}`], revalidate: 3600 }
+      [`track-${id}`, 'allTracks'],
+      { tags: [`track-${id}`, 'allTracks'], revalidate: 3600 }
     )();
     return track;
   } catch (e) {

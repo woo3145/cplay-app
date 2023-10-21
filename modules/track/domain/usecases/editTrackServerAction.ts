@@ -9,7 +9,6 @@ import {
 } from '../validations/EditTrackTypes';
 import { TrackRepository } from '../track.repository';
 import { arraysEqual } from '@/lib/utils';
-import { TrackStatus } from '../track';
 
 export const editTrackServerAction = adminGuard(
   async (
@@ -32,7 +31,7 @@ export const editTrackServerAction = adminGuard(
 
     const exist = await repo.findById(id);
     if (!exist) {
-      return { success: false, message: '장르가 존재하지 않습니다.' };
+      return { success: false, message: '트랙이 존재하지 않습니다.' };
     }
 
     const updatedField = {

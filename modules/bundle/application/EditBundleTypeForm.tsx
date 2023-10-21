@@ -17,7 +17,7 @@ import { BundleType } from '../domain/bundle';
 import {
   EditBundleTypeFormData,
   EditBundleTypeFormSchema,
-} from '../domain/validations/EditBundleTypes';
+} from '../domain/validations/EditBundleTypeTypes';
 import { editBundleTypeServerAction } from '../domain/usecases/editBundleTypeServerAction';
 
 interface Props {

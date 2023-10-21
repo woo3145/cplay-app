@@ -16,7 +16,7 @@ import { Button } from '@/components/ui/button';
 import {
   CreateBundleTypeFormData,
   CreateBundleTypeFormSchema,
-} from '../domain/validations/CreateBundleTypes';
+} from '../domain/validations/CreateBundleTypeTypes';
 import { createBundleTypeServerAction } from '../domain/usecases/createBundleTypeServerAction';
 
 interface Props {

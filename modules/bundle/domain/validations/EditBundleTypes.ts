@@ -1,21 +1,25 @@
 import { z } from 'zod';
 
 // client (react-hook-form)
-export const EditBundleTypeFormSchema = z.object({
-  name: z
-    .string({
-      required_error: 'name는 필수 입력 사항입니다.',
-    })
-    .min(2, 'name는 2 ~ 10글자 사이입니다.')
-    .max(10, 'name는 2 ~ 10글자 사이입니다.'),
+export const EditBundleFormSchema = z.object({
+  name: z.string().min(2, 'name은 필수 입력 사항입니다.'),
 });
-export type EditBundleTypeFormData = z.infer<typeof EditBundleTypeFormSchema>;
+export type EditBundleFormData = z.infer<typeof EditBundleFormSchema>;
 
 // usecase
-export const UsecaseEditBundleTypeInputSchema = EditBundleTypeFormSchema;
-export type UsecaseEditBundleTypeInput = EditBundleTypeFormData;
+export const UsecaseEditBundleInputSchema = EditBundleFormSchema.extend({
+  imageUrl: z.string(),
+  typeIds: z.number().array(),
+  trackIds: z.number().array(),
+});
+export type UsecaseEditBundleInput = z.infer<
+  typeof UsecaseEditBundleInputSchema
+>;
 
 // repository
-export type RepositoryEditBundleTypeInput = {
-  name: string;
+export type RepositoryEditBundleInput = {
+  name: string | undefined;
+  imageUrl: string | undefined;
+  typeIds: number[] | undefined;
+  trackIds: number[] | undefined;
 };

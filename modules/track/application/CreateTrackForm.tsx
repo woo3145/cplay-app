@@ -38,8 +38,6 @@ import { useRouter } from 'next/navigation';
 import { TrackStatus } from '../domain/track';
 import { useUploadImage } from '@/modules/upload/application/useUploadImage';
 import { CoverImageFileSelector } from '@/app/(admin)/admin/sounds/tracks/CoverImageFileSelector';
-import { Stem } from '@/modules/stem/domain/stem';
-import { CreateStemDialog } from '@/app/(admin)/admin/sounds/tracks/CreateStemDialog';
 
 interface Props {
   genres: Genre[];

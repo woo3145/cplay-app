@@ -26,7 +26,12 @@ export class GenrePrismaRepository implements GenreRepository {
   }
 
   async delete(id: number) {
-    const exist = await prisma.genre.findFirst({ where: { id } });
+    const exist = await prisma.genre.findFirst({
+      where: { id },
+      include: {
+        tracks: true,
+      },
+    });
 
     if (!exist) {
       throw new Error('Genres가 존재하지 않습니다.');
@@ -40,6 +45,7 @@ export class GenrePrismaRepository implements GenreRepository {
         },
       },
     });
+
     await prisma.genre.delete({ where: { id } });
   }
 

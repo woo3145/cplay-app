@@ -6,7 +6,7 @@ import { BundleTypeRepository } from '../bundle.repository';
 import {
   UsecaseCreateBundleTypeInput,
   UsecaseCreateBundleTypeInputSchema,
-} from '../validations/CreateBundleTypes';
+} from '../validations/CreateBundleTypeTypes';
 import { revalidateTag } from 'next/cache';
 
 export const createBundleTypeServerAction = adminGuard(

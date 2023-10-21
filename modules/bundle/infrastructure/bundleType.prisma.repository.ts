@@ -1,8 +1,8 @@
 import prisma from '@/lib/db/prisma';
 import { BundleTypeRepository } from '../domain/bundle.repository';
 import { toBundleTypeDomainModel } from './bundle.prisma.mapper';
-import { RepositoryCreateBundleTypeInput } from '../domain/validations/CreateBundleTypes';
-import { RepositoryEditBundleTypeInput } from '../domain/validations/EditBundleTypes';
+import { RepositoryCreateBundleTypeInput } from '../domain/validations/CreateBundleTypeTypes';
+import { RepositoryEditBundleTypeInput } from '../domain/validations/EditBundleTypeTypes';
 
 export class BundleTypePrismaRepository implements BundleTypeRepository {
   async findOne(id: number) {

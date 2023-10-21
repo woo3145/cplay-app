@@ -1,23 +1,20 @@
 import { z } from 'zod';
 
 // client (react-hook-form)
-export const CreateBundleTypeFormSchema = z.object({
-  name: z
-    .string({
-      required_error: 'name는 필수 입력 사항입니다.',
-    })
-    .min(2, 'name는 2 ~ 10글자 사이입니다.')
-    .max(10, 'name는 2 ~ 10글자 사이입니다.'),
+export const CreateBundleFormSchema = z.object({
+  name: z.string().min(2, 'name은 필수 입력 사항입니다.'),
 });
-export type CreateBundleTypeFormData = z.infer<
-  typeof CreateBundleTypeFormSchema
->;
+export type CreateBundleFormData = z.infer<typeof CreateBundleFormSchema>;
 
 // usecase
-export const UsecaseCreateBundleTypeInputSchema = CreateBundleTypeFormSchema;
-export type UsecaseCreateBundleTypeInput = CreateBundleTypeFormData;
+export const UsecaseCreateBundleInputSchema = CreateBundleFormSchema.extend({
+  imageUrl: z.string(),
+  typeIds: z.number().array(),
+  trackIds: z.number().array(),
+});
+export type UsecaseCreateBundleInput = z.infer<
+  typeof UsecaseCreateBundleInputSchema
+>;
 
 // repository
-export type RepositoryCreateBundleTypeInput = {
-  name: string;
-};
+export type RepositoryCreateBundleInput = UsecaseCreateBundleInput;
