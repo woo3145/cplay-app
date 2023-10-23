@@ -9,9 +9,24 @@ interface Props {
 }
 
 export const TrackList = ({ tracks }: Props) => {
-  const setTrack = usePlayerStore((state) => state.setTrack);
+  const { setTrack, setPlaylist, playlist, playlistId } = usePlayerStore(
+    (state) => ({
+      setTrack: state.setTrack,
+      playlist: state.playlist,
+      playlistId: state.playlistId,
+      setPlaylist: state.setPlaylist,
+    })
+  );
 
   const onTrackClick = (track: Track) => {
+    if (playlistId === null || playlist.length === 0) {
+      setPlaylist(0, [track]);
+    } else {
+      setPlaylist(playlistId, [
+        ...playlist.filter((item) => item.id !== track.id),
+        track,
+      ]);
+    }
     setTrack(track);
   };
   return (

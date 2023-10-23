@@ -98,10 +98,9 @@ export const usePlayerStore = create<PlayerStoreState & PlayerStoreActions>(
         if (playlistLength === currentTrackIdx) currentTrackIdx = 0;
       } else {
         --currentTrackIdx;
-        if (playlistLength === -1) currentTrackIdx = playlistLength - 1;
+        if (currentTrackIdx === -1) currentTrackIdx = playlistLength - 1;
       }
       const nextTrack = playlist[currentTrackIdx];
-
       set({
         currentTime: 0,
         currentTrack: nextTrack,

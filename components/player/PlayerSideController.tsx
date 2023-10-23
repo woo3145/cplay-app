@@ -1,9 +1,10 @@
 import { Track } from '@/modules/track/domain/track';
 import { RefObject, useEffect } from 'react';
 import { Button } from '../ui/button';
-import { Volume, Volume1, Volume2, VolumeX } from 'lucide-react';
+import { ListMusic, Volume, Volume1, Volume2, VolumeX } from 'lucide-react';
 import { Slider } from '../ui/slider';
 import { usePlayerStore } from '@/store/usePlayerStore';
+import { PlaylistDialog } from '../playlist/PlaylistDialog';
 
 interface Props {
   track: Track;
@@ -33,6 +34,7 @@ export const PlayerSideController = ({ track, videoRef }: Props) => {
     if (!videoRef.current) return;
     videoRef.current.muted = isMuted;
   }, [videoRef, isMuted]);
+
   return (
     <div className="hidden lg:flex w-1/4 shrink-0 justify-end">
       <div className="group flex gap-2">
@@ -54,6 +56,7 @@ export const PlayerSideController = ({ track, videoRef }: Props) => {
           {!isMuted && 0.6 <= volume ? <Volume2 /> : null}
         </Button>
       </div>
+      <PlaylistDialog />
     </div>
   );
 };
