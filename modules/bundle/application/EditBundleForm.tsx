@@ -30,20 +30,23 @@ import { UserRole } from '@/modules/user/domain/user';
 import { useRouter } from 'next/navigation';
 import { useUploadImage } from '@/modules/upload/application/useUploadImage';
 import { CoverImageFileSelector } from '@/app/(admin)/admin/sounds/tracks/CoverImageFileSelector';
-import { createBundleServerAction } from '../domain/usecases/createBundleServerAction';
 import { Bundle, BundleStatus, BundleType } from '../domain/bundle';
 import {
   EditBundleFormData,
   EditBundleFormSchema,
 } from '../domain/validations/EditBundleTypes';
 import { editBundleServerAction } from '../domain/usecases/editBundleServerAction';
+import { SelectedTrackList } from '@/app/(admin)/admin/sounds/bundles/SelectedTrackList';
+import { Track } from '@/modules/track/domain/track';
+import { SelectTrackDialog } from '@/app/(admin)/admin/sounds/bundles/SelectTrackDialog';
 
 interface Props {
   bundle: Bundle;
+  tracks: Track[];
   bundleTypes: BundleType[];
 }
 
-export const EditBundleForm = ({ bundleTypes, bundle }: Props) => {
+export const EditBundleForm = ({ bundleTypes, bundle, tracks }: Props) => {
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -58,9 +61,7 @@ export const EditBundleForm = ({ bundleTypes, bundle }: Props) => {
   const [selectedTypes, setSelectedTypes] = useState<number[]>(
     bundle.types.map((item) => item.id)
   );
-  const [selectedTracks, setSelectedTracks] = useState<number[]>(
-    bundle.tracks.map((item) => item.id)
-  );
+  const [selectedTracks, setSelectedTracks] = useState<Track[]>(bundle.tracks);
   const {
     selectedFile: selectedImageFile,
     setSelectedFile: setSelectedImageFile,
@@ -86,7 +87,7 @@ export const EditBundleForm = ({ bundleTypes, bundle }: Props) => {
         ...data,
         imageUrl: imageUrl,
         typeIds: selectedTypes,
-        trackIds: selectedTracks,
+        trackIds: selectedTracks.map((item) => item.id),
       });
 
       if (!result.success) {
@@ -147,7 +148,12 @@ export const EditBundleForm = ({ bundleTypes, bundle }: Props) => {
                   <CardTitle>사운드 트랙</CardTitle>
                 </CardHeader>
                 <CardContent className="grid gap-4">
-                  수정 페이지에서 업로드해주세요.
+                  <SelectTrackDialog
+                    tracks={tracks}
+                    selectedTracks={selectedTracks}
+                    setSelectedTrack={setSelectedTracks}
+                  />
+                  <SelectedTrackList tracks={selectedTracks} />
                 </CardContent>
               </Card>
             </div>

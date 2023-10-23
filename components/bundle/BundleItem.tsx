@@ -9,14 +9,14 @@ interface Props {
 }
 
 export const BundleItem = ({ bundle, onClick }: Props) => {
-  //   const onTrackClick = () => {
-  //     onClick(bundle);
-  //   };
+  const onTrackClick = () => {
+    onClick(bundle.tracks[0]);
+  };
   return (
     <div
       key={bundle.name}
       className={cn('space-y-3 cursor-pointer w-48 shrink-0')}
-      // onClick={onTrackClick}
+      onClick={onTrackClick}
     >
       <Image
         src={bundle.imageUrl}
