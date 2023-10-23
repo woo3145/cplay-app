@@ -1,16 +1,15 @@
 import { cn } from '@/lib/utils';
 import { Bundle } from '@/modules/bundle/domain/bundle';
-import { Track } from '@/modules/track/domain/track';
 import Image from 'next/image';
 
 interface Props {
   bundle: Bundle;
-  onClick: (track: Track) => void;
+  onClick: (track: Bundle) => void;
 }
 
 export const BundleItem = ({ bundle, onClick }: Props) => {
   const onTrackClick = () => {
-    onClick(bundle.tracks[0]);
+    onClick(bundle);
   };
   return (
     <div

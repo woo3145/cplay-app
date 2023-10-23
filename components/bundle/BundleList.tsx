@@ -10,10 +10,14 @@ interface Props {
 }
 
 export const BundleList = ({ bundles }: Props) => {
-  const setTrack = usePlayerStore((state) => state.setTrack);
+  const [setTrack, setPlaylist] = usePlayerStore((state) => [
+    state.setTrack,
+    state.setPlaylist,
+  ]);
 
-  const onTrackClick = (track: Track) => {
-    setTrack(track);
+  const onTrackClick = (bundle: Bundle) => {
+    setPlaylist(bundle.id, bundle.tracks);
+    setTrack(0 < bundle.tracks.length ? bundle.tracks[0] : null);
   };
   return (
     <div className="flex gap-4 overflow-x-auto py-4">

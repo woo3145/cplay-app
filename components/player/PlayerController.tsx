@@ -21,6 +21,7 @@ export const PlayerController = ({ track, videoRef }: Props) => {
     isPlaying,
     setIsPlaying,
     setCurrentTime,
+    changeMusic,
   } = usePlayerStore((state) => ({
     currentTime: state.currentTime,
     volume: state.volume,
@@ -28,6 +29,7 @@ export const PlayerController = ({ track, videoRef }: Props) => {
     isPlaying: state.isPlaying,
     setIsPlaying: state.setIsPlaying,
     setCurrentTime: state.setCurrentTime,
+    changeMusic: state.changeMusic,
   }));
   const [duration, setDuration] = useState<number>();
   const trackSrc = useMemo(() => {
@@ -81,6 +83,7 @@ export const PlayerController = ({ track, videoRef }: Props) => {
             shape="circle"
             type="button"
             variant="ghost"
+            onClick={() => changeMusic('prev')}
             className="shrink-0 w-10 h-10 p-3"
           >
             <SkipBack />
@@ -100,6 +103,7 @@ export const PlayerController = ({ track, videoRef }: Props) => {
             type="button"
             variant="ghost"
             className="shrink-0 w-10 h-10 p-3"
+            onClick={() => changeMusic('next')}
           >
             <SkipForward />
           </Button>

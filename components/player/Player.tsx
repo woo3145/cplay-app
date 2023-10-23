@@ -9,6 +9,7 @@ export const Player = () => {
   const { track } = usePlayerStore((state) => ({
     track: state.currentTrack,
   }));
+
   const videoRef = useRef<HTMLAudioElement>(null);
 
   if (!track) {
