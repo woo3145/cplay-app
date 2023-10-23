@@ -1,23 +1,23 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { RelasedTrackList } from './ReleasedTrackList';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
 import { Suspense } from 'react';
-import { Disc3 } from 'lucide-react';
-import { Genre } from '@/modules/genre/domain/genre';
+import { Library } from 'lucide-react';
+import { BundleType } from '@/modules/bundle/domain/bundle';
+import { RelasedBundleList } from './ReleasedBundleList';
 
 interface Props {
-  genres: Genre[];
+  bundleTypes: BundleType[];
 }
 
-export const ReleasedTrackSection = ({ genres }: Props) => {
+export const ReleasedBunldeSection = ({ bundleTypes }: Props) => {
   return (
     <div className="w-full space-y-4">
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <h2 className="flex items-center gap-2 text-2xl font-semibold tracking-tight">
-            <Disc3 />
-            새로운 트랙
+            <Library />
+            새로운 번들
           </h2>
         </div>
       </div>
@@ -41,11 +41,11 @@ export const ReleasedTrackSection = ({ genres }: Props) => {
           >
             all
           </TabsTrigger>
-          {genres.map((genre) => {
+          {bundleTypes.map((bundleType) => {
             return (
               <TabsTrigger
-                key={genre.tag}
-                value={genre.tag}
+                key={bundleType.name}
+                value={bundleType.name}
                 className={cn(
                   buttonVariants({
                     variant: 'outline',
@@ -54,21 +54,21 @@ export const ReleasedTrackSection = ({ genres }: Props) => {
                   'data-[state=active]:bg-primary data-[state=active]:text-white'
                 )}
               >
-                {genre.tag}
+                {bundleType.name}
               </TabsTrigger>
             );
           })}
         </TabsList>
         <TabsContent key={'all'} value={'all'}>
           <Suspense fallback={<div>Loading...</div>}>
-            <RelasedTrackList genre={'all'} />
+            <RelasedBundleList bundleType={'all'} />
           </Suspense>
         </TabsContent>
-        {genres.map((genre) => {
+        {bundleTypes.map((bundleType) => {
           return (
-            <TabsContent key={genre.tag} value={genre.tag}>
+            <TabsContent key={bundleType.name} value={bundleType.name}>
               <Suspense fallback={<div>Loading...</div>}>
-                <RelasedTrackList genre={genre} />
+                <RelasedBundleList bundleType={bundleType} />
               </Suspense>
             </TabsContent>
           );

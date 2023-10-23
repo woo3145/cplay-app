@@ -4,6 +4,7 @@ import { toBundleDomainModel } from './bundle.prisma.mapper';
 import { trackIncludes } from '@/modules/track/infrastructure/track.prisma.repository';
 import { RepositoryCreateBundleInput } from '../domain/validations/CreateBundleTypes';
 import { RepositoryEditBundleInput } from '../domain/validations/EditBundleTypes';
+import { RepositoryGetBundlesQuery } from '../domain/validations/GetBundlesTypes';
 
 export const bundleIncludes = {
   tracks: {
@@ -33,6 +34,33 @@ export class BundlePrismaRepository implements BundleRepository {
     });
     if (!bundles) return [];
     return bundles.map((item) => toBundleDomainModel(item));
+  }
+
+  async findAllWithQuery(query: RepositoryGetBundlesQuery) {
+    const { page = 1, count = 10, type } = query;
+    const offset = (page - 1) * 10;
+
+    let whereCondition: any = {};
+
+    if (type) {
+      whereCondition.types = {
+        some: {
+          name: type,
+        },
+      };
+    }
+
+    const bundles = await prisma.bundle.findMany({
+      where: {
+        ...whereCondition,
+        status: 'PUBLISH',
+      },
+      include: bundleIncludes,
+      skip: offset,
+      take: count,
+    });
+
+    return bundles.map((bundle) => toBundleDomainModel(bundle));
   }
 
   async create(data: RepositoryCreateBundleInput) {

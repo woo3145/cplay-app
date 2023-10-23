@@ -23,9 +23,9 @@ export const getReleasedTracksServerAction = async (
         console.log(`Prisma 호출 : releasedTracks-${query.genre}`);
         return data;
       },
-      [`releasedTracks-${query.genre}`, 'releasedTracks'],
+      [`releasedTracks-${query.genre}`, 'releasedTracks', 'allTracks'],
       {
-        tags: [`releasedTracks-${query.genre}`, 'releasedTracks'],
+        tags: [`releasedTracks-${query.genre}`, 'releasedTracks', 'allTracks'],
         revalidate: 3600,
       }
     )();
