@@ -62,9 +62,36 @@ export class BundlePrismaRepository implements BundleRepository {
   }
 
   async edit(id: number, updatedField: RepositoryEditBundleInput) {
+    const { typeIds, trackIds, ...rest } = updatedField;
+
+    if (trackIds) {
+      await prisma.bundle.update({
+        where: { id },
+        data: {
+          tracks: {
+            set: [],
+          },
+        },
+      });
+    }
+
     const updatedBundle = await prisma.bundle.update({
       where: { id },
-      data: updatedField,
+      data: {
+        ...rest,
+        types: typeIds ? { set: typeIds.map((id) => ({ id })) } : undefined,
+        tracks: trackIds
+          ? {
+              create: trackIds.map((id) => {
+                return {
+                  track: {
+                    connect: { id: id },
+                  },
+                };
+              }),
+            }
+          : undefined,
+      },
       include: bundleIncludes,
     });
 
@@ -89,6 +116,6 @@ export class BundlePrismaRepository implements BundleRepository {
         },
       },
     });
-    await prisma.bundleType.delete({ where: { id } });
+    await prisma.bundle.delete({ where: { id } });
   }
 }

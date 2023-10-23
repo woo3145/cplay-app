@@ -1,9 +1,7 @@
 import { DataTable } from '@/components/dataTable/DataTable';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { getAllTracksServerAction } from '@/modules/track/domain/usecases/getAllTracksServerAction';
 import Link from 'next/link';
-import { trackColumns } from '../tracks/TrackColumns';
 import { getAllBundlesServerAction } from '@/modules/bundle/domain/usecases/getAllBundleServerAction';
 import { bundleColumns } from './BundleColumns';
 
@@ -17,7 +15,7 @@ export default async function TracksPage() {
           <p className="text-sm text-muted-foreground">번들 추가, 수정, 삭제</p>
         </div>
         <div className="ml-auto mr-4">
-          <Link href="/admin/music/tracks/add">
+          <Link href="/admin/sounds/bundles/add">
             <Button>Add Bundle</Button>
           </Link>
         </div>

@@ -16,7 +16,7 @@ export const editBundleServerAction = adminGuard(
     data: UsecaseEditBundleInput,
     subBundleRepository: BundleRepository | null = null
   ) => {
-    const { name, imageUrl, typeIds, trackIds } =
+    const { name, status, imageUrl, typeIds, trackIds } =
       UsecaseEditBundleInputSchema.parse(data);
     const repo = subBundleRepository || repository.bundle;
 
@@ -28,6 +28,7 @@ export const editBundleServerAction = adminGuard(
     const updatedField = {
       name: exist.name === name ? undefined : name,
       imageUrl: exist.imageUrl === imageUrl ? undefined : imageUrl,
+      status: exist.status === status ? undefined : status,
       typeIds: arraysEqual(
         exist.types.map((type) => type.id),
         typeIds

@@ -14,7 +14,13 @@ import { Track as DomainTrack } from '@/modules/track/domain/track';
 import Image from 'next/image';
 import { formatDateForTable } from '@/lib/dateFormat';
 import Link from 'next/link';
-import { Bundle as DomainBundle } from '@/modules/bundle/domain/bundle';
+import {
+  BundleStatus,
+  BundleType,
+  Bundle as DomainBundle,
+} from '@/modules/bundle/domain/bundle';
+import { DeleteBundleDialog } from './DeleteBundleDialog';
+import { Badge } from '@/components/ui/badge';
 
 export const bundleColumns: ColumnDef<DomainBundle>[] = [
   {
@@ -69,6 +75,36 @@ export const bundleColumns: ColumnDef<DomainBundle>[] = [
       </div>
     ),
   },
+  {
+    accessorKey: 'types',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="types" />
+    ),
+    cell: ({ row }) => (
+      <div className="flex max-w-[100px] gap-2 flex-wrap">
+        {(row.getValue('types') as BundleType[]).map((item) => (
+          <Badge variant="outline" key={item.name}>
+            {item.name}
+          </Badge>
+        ))}
+      </div>
+    ),
+  },
+  {
+    accessorKey: 'status',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="status" />
+    ),
+    cell: ({ row }) => (
+      <div className="">
+        {row.getValue('status') === BundleStatus.PUBLISH ? (
+          <Badge>publish</Badge>
+        ) : (
+          <Badge variant="secondary">draft</Badge>
+        )}
+      </div>
+    ),
+  },
 
   {
     accessorKey: 'createdAt',
@@ -86,7 +122,7 @@ export const bundleColumns: ColumnDef<DomainBundle>[] = [
     id: 'actions',
     enableHiding: false,
     cell: ({ row }) => {
-      const track = row.original;
+      const bundle = row.original;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -96,15 +132,15 @@ export const bundleColumns: ColumnDef<DomainBundle>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-[160px]">
-            <Link href={`/admin/sounds/tracks/${track.id}/edit`}>
+            <Link href={`/admin/sounds/bundles/${bundle.id}/edit`}>
               <DropdownMenuItem>Edit</DropdownMenuItem>
             </Link>
 
-            {/* <DeleteTrackDialog track={track}>
+            <DeleteBundleDialog bundle={bundle}>
               <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                 Delete
               </DropdownMenuItem>
-            </DeleteTrackDialog> */}
+            </DeleteBundleDialog>
           </DropdownMenuContent>
         </DropdownMenu>
       );

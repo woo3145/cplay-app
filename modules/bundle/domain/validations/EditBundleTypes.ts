@@ -1,8 +1,10 @@
 import { z } from 'zod';
+import { BundleStatus } from '../bundle';
 
 // client (react-hook-form)
 export const EditBundleFormSchema = z.object({
   name: z.string().min(2, 'name은 필수 입력 사항입니다.'),
+  status: z.nativeEnum(BundleStatus),
 });
 export type EditBundleFormData = z.infer<typeof EditBundleFormSchema>;
 
