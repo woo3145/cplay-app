@@ -7,6 +7,7 @@ import {
   RegisterUserFormData,
   RegisterUserFormSchema,
 } from '@/modules/auth/domain/user.auth.validation';
+import { toUserDomainModel } from '@/modules/user/infrastructure/user.prisma.mapper';
 
 export const registerUserServerAction = async (
   data: RegisterUserFormData,
@@ -17,7 +18,7 @@ export const registerUserServerAction = async (
   const { email, password } = result;
 
   const repo = subUserRepository || repository.user;
-  const exist = await repo.findByEmail(email, 'user');
+  const exist = await repo.findByEmail(email, toUserDomainModel);
 
   if (exist) {
     return { success: false, message: '이미 사용중인 이메일입니다.' };

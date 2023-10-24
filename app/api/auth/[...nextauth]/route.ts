@@ -33,12 +33,12 @@ export const authOptions: AuthOptions = {
           placeholder: 'Password',
         },
       },
+
       async authorize(credentials, req) {
         const user = await userAuthorize({
           email: credentials?.email ?? '',
           password: credentials?.password ?? '',
         });
-
         return user;
       },
     }),

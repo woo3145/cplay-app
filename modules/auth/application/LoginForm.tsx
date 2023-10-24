@@ -19,10 +19,8 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { toast } from '@/components/ui/use-toast';
-import { useRouter } from 'next/navigation';
 
 export const LoginForm = () => {
-  const router = useRouter();
   const form = useForm<RegisterUserFormData>({
     resolver: zodResolver(RegisterUserFormSchema),
     defaultValues: {
@@ -38,7 +36,6 @@ export const LoginForm = () => {
         password: data.password,
         redirect: false,
       });
-
       if (result?.error) {
         toast({
           variant: 'destructive',
@@ -47,8 +44,7 @@ export const LoginForm = () => {
         form.resetField('password');
         return;
       }
-
-      router.replace('/');
+      window.location.href = '/';
     } catch (e) {
       console.log('예상치 못한 에러: ', e);
     }

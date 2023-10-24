@@ -8,6 +8,7 @@ import {
   AuthorizeUserFormData,
   AuthorizeUserFormSchema,
 } from '@/modules/auth/domain/user.auth.validation';
+import { toSessionUserDomainModel } from '@/modules/user/infrastructure/user.prisma.mapper';
 
 export const userAuthorize = async (
   data: AuthorizeUserFormData,
@@ -16,7 +17,10 @@ export const userAuthorize = async (
   const { email, password } = AuthorizeUserFormSchema.parse(data);
 
   const repo = subUserRepository || repository.user;
-  const user = await repo.findByEmailWithPassword(email, 'session');
+  const user = await repo.findByEmailWithPassword(
+    email,
+    toSessionUserDomainModel
+  );
 
   if (!user) throw new Error('이메일 또는 패스워드가 잘못되었습니다.');
 
