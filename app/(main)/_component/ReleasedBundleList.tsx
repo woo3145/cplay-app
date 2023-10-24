@@ -1,4 +1,4 @@
-import { BundleList } from '@/components/bundle/BundleList';
+import { BundleCarousel } from '@/components/bundle/BundleCarousel';
 import { getReleasedBundlesServerAction } from '@/modules/bundle/application/getReleasedBundlesServerAction';
 import { BundleType } from '@/modules/bundle/domain/bundle';
 
@@ -11,5 +11,5 @@ export const RelasedBundleList = async ({ bundleType }: Props) => {
     type: bundleType === 'all' ? 'all' : bundleType.name,
   });
 
-  return <BundleList bundles={bundles} />;
+  return <BundleCarousel bundles={bundles} />;
 };

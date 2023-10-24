@@ -42,7 +42,6 @@ export const editBundleServerAction = adminGuard(
         ? undefined
         : trackIds,
     };
-    console.log(updatedField);
     if (Object.values(updatedField).every((val) => val === undefined)) {
       return { success: false, message: '변경 된 내용이 없습니다.' };
     }

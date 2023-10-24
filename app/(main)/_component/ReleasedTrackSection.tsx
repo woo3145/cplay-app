@@ -1,10 +1,10 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { RelasedTrackList } from './ReleasedTrackList';
 import { cn } from '@/lib/utils';
-import { buttonVariants } from '@/components/ui/button';
 import { Suspense } from 'react';
 import { Disc3 } from 'lucide-react';
 import { Genre } from '@/modules/genre/domain/genre';
+import { RenderTabsTrigger } from '@/components/tabs/RenderTabsTrigger';
 
 interface Props {
   genres: Genre[];
@@ -28,34 +28,14 @@ export const ReleasedTrackSection = ({ genres }: Props) => {
             'flex flex-wrap justify-start h-auto bg-background gap-2 p-0'
           )}
         >
-          <TabsTrigger
-            key={'all'}
-            value={'all'}
-            className={cn(
-              buttonVariants({
-                variant: 'outline',
-                shape: 'circle',
-              }),
-              'data-[state=active]:bg-primary data-[state=active]:text-white'
-            )}
-          >
-            all
-          </TabsTrigger>
+          <RenderTabsTrigger key={'all'} value={'all'} name={'all'} />
           {genres.map((genre) => {
             return (
-              <TabsTrigger
+              <RenderTabsTrigger
                 key={genre.tag}
                 value={genre.tag}
-                className={cn(
-                  buttonVariants({
-                    variant: 'outline',
-                    shape: 'circle',
-                  }),
-                  'data-[state=active]:bg-primary data-[state=active]:text-white'
-                )}
-              >
-                {genre.tag}
-              </TabsTrigger>
+                name={genre.tag}
+              />
             );
           })}
         </TabsList>

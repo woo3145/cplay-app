@@ -3,14 +3,15 @@ import { Navigation, Pagination, FreeMode } from 'swiper/modules';
 
 import { Swiper } from 'swiper/react';
 
+import { useEffect, useState } from 'react';
+import { Skeleton } from '../ui/skeleton';
+
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
-import { useEffect, useState } from 'react';
-import { Skeleton } from '../ui/skeleton';
 
-export const TrackCardCarousel = ({
+export const SoundCardCarousel = ({
   children,
 }: {
   children: React.ReactNode;

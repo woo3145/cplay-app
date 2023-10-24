@@ -1,10 +1,10 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
-import { buttonVariants } from '@/components/ui/button';
 import { Suspense } from 'react';
 import { Library } from 'lucide-react';
 import { BundleType } from '@/modules/bundle/domain/bundle';
 import { RelasedBundleList } from './ReleasedBundleList';
+import { RenderTabsTrigger } from '@/components/tabs/RenderTabsTrigger';
 
 interface Props {
   bundleTypes: BundleType[];
@@ -28,34 +28,14 @@ export const ReleasedBunldeSection = ({ bundleTypes }: Props) => {
             'flex flex-wrap justify-start h-auto bg-background gap-2 p-0'
           )}
         >
-          <TabsTrigger
-            key={'all'}
-            value={'all'}
-            className={cn(
-              buttonVariants({
-                variant: 'outline',
-                shape: 'circle',
-              }),
-              'data-[state=active]:bg-primary data-[state=active]:text-white'
-            )}
-          >
-            all
-          </TabsTrigger>
+          <RenderTabsTrigger key={'all'} value={'all'} name={'all'} />
           {bundleTypes.map((bundleType) => {
             return (
-              <TabsTrigger
+              <RenderTabsTrigger
                 key={bundleType.name}
                 value={bundleType.name}
-                className={cn(
-                  buttonVariants({
-                    variant: 'outline',
-                    shape: 'circle',
-                  }),
-                  'data-[state=active]:bg-primary data-[state=active]:text-white'
-                )}
-              >
-                {bundleType.name}
-              </TabsTrigger>
+                name={bundleType.name}
+              />
             );
           })}
         </TabsList>

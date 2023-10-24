@@ -3,14 +3,14 @@
 import { Track } from '@/modules/track/domain/track';
 import { TrackItem } from './TrackItem';
 import { usePlayerStore } from '@/store/usePlayerStore';
-import { TrackCardCarousel } from '../carousel/TrackCardCarousel';
+import { SoundCardCarousel } from '../carousel/SoundCardCarousel';
 import { SwiperSlide } from 'swiper/react';
 
 interface Props {
   tracks: Track[];
 }
 
-export const TrackList = ({ tracks }: Props) => {
+export const TrackCarousel = ({ tracks }: Props) => {
   const { setTrack, setPlaylist, playlist, playlistId } = usePlayerStore(
     (state) => ({
       setTrack: state.setTrack,
@@ -34,7 +34,7 @@ export const TrackList = ({ tracks }: Props) => {
 
   return (
     <div className="py-4">
-      <TrackCardCarousel>
+      <SoundCardCarousel>
         {tracks.map((track) => {
           return (
             <SwiperSlide key={track.id}>
@@ -42,7 +42,7 @@ export const TrackList = ({ tracks }: Props) => {
             </SwiperSlide>
           );
         })}
-      </TrackCardCarousel>
+      </SoundCardCarousel>
     </div>
   );
 };

@@ -4,13 +4,13 @@ import { usePlayerStore } from '@/store/usePlayerStore';
 import { Bundle } from '@/modules/bundle/domain/bundle';
 import { BundleItem } from './BundleItem';
 import { SwiperSlide } from 'swiper/react';
-import { TrackCardCarousel } from '../carousel/TrackCardCarousel';
+import { SoundCardCarousel } from '../carousel/SoundCardCarousel';
 
 interface Props {
   bundles: Bundle[];
 }
 
-export const BundleList = ({ bundles }: Props) => {
+export const BundleCarousel = ({ bundles }: Props) => {
   const [setTrack, setPlaylist] = usePlayerStore((state) => [
     state.setTrack,
     state.setPlaylist,
@@ -22,7 +22,7 @@ export const BundleList = ({ bundles }: Props) => {
   };
   return (
     <div className="py-4">
-      <TrackCardCarousel>
+      <SoundCardCarousel>
         {bundles.map((bundle) => {
           return (
             <SwiperSlide key={bundle.id}>
@@ -30,7 +30,7 @@ export const BundleList = ({ bundles }: Props) => {
             </SwiperSlide>
           );
         })}
-      </TrackCardCarousel>
+      </SoundCardCarousel>
     </div>
   );
 };

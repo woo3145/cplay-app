@@ -1,4 +1,4 @@
-import { TrackList } from '@/components/track/TrackList';
+import { TrackCarousel } from '@/components/track/TrackCarousel';
 import { Genre } from '@/modules/genre/domain/genre';
 import { getReleasedTracksServerAction } from '@/modules/track/domain/usecases/getReleasedTracksServerAction';
 
@@ -11,5 +11,5 @@ export const RelasedTrackList = async ({ genre }: Props) => {
     genre: genre === 'all' ? 'all' : genre.slug,
   });
 
-  return <TrackList tracks={tracks} />;
+  return <TrackCarousel tracks={tracks} />;
 };
