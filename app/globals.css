@@ -71,3 +71,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  @apply text-primary;
+}
