@@ -14,16 +14,16 @@ export const TrackItem = ({ track, onClick }: Props) => {
   return (
     <div
       key={track.title}
-      className={cn('space-y-3 cursor-pointer w-48 shrink-0')}
+      className={cn('space-y-3 cursor-pointer w-full shrink-0')}
       onClick={onTrackClick}
     >
       <Image
         src={track.imageUrl}
         alt={track.title}
-        width={192}
-        height={192}
+        width={256}
+        height={256}
         className={cn(
-          'w-48 h-48 object-cover transition-all hover:scale-105 aspect-square rounded-md'
+          'w-full object-cover transition-all hover:scale-105 aspect-square rounded-md'
         )}
       />
       <div className="space-y-1 text-sm">

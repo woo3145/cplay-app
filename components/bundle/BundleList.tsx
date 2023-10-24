@@ -1,9 +1,10 @@
 'use client';
 
-import { Track } from '@/modules/track/domain/track';
 import { usePlayerStore } from '@/store/usePlayerStore';
 import { Bundle } from '@/modules/bundle/domain/bundle';
 import { BundleItem } from './BundleItem';
+import { SwiperSlide } from 'swiper/react';
+import { TrackCardCarousel } from '../carousel/TrackCardCarousel';
 
 interface Props {
   bundles: Bundle[];
@@ -20,12 +21,16 @@ export const BundleList = ({ bundles }: Props) => {
     setTrack(0 < bundle.tracks.length ? bundle.tracks[0] : null);
   };
   return (
-    <div className="flex gap-4 overflow-x-auto py-4">
-      {bundles.map((bundle) => {
-        return (
-          <BundleItem key={bundle.id} bundle={bundle} onClick={onTrackClick} />
-        );
-      })}
+    <div className="py-4">
+      <TrackCardCarousel>
+        {bundles.map((bundle) => {
+          return (
+            <SwiperSlide key={bundle.id}>
+              <BundleItem bundle={bundle} onClick={onTrackClick} />
+            </SwiperSlide>
+          );
+        })}
+      </TrackCardCarousel>
     </div>
   );
 };

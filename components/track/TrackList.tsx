@@ -3,6 +3,8 @@
 import { Track } from '@/modules/track/domain/track';
 import { TrackItem } from './TrackItem';
 import { usePlayerStore } from '@/store/usePlayerStore';
+import { TrackCardCarousel } from '../carousel/TrackCardCarousel';
+import { SwiperSlide } from 'swiper/react';
 
 interface Props {
   tracks: Track[];
@@ -29,13 +31,18 @@ export const TrackList = ({ tracks }: Props) => {
     }
     setTrack(track);
   };
+
   return (
-    <div className="flex gap-4 overflow-x-auto py-4">
-      {tracks.map((track) => {
-        return (
-          <TrackItem key={track.id} track={track} onClick={onTrackClick} />
-        );
-      })}
+    <div className="py-4">
+      <TrackCardCarousel>
+        {tracks.map((track) => {
+          return (
+            <SwiperSlide key={track.id}>
+              <TrackItem track={track} onClick={onTrackClick} />
+            </SwiperSlide>
+          );
+        })}
+      </TrackCardCarousel>
     </div>
   );
 };
