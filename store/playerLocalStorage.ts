@@ -1,14 +1,11 @@
 import { StemType } from '@/modules/stem/domain/stem';
 import { Track } from '@/modules/track/domain/track';
+import { PlayerStoreState } from './usePlayerStore';
 
-export interface PlayerLocalStorageState {
-  currentTrack: Track | null;
-  stemType: StemType | null;
-  isMuted: boolean;
-  volume: number;
-  playlist: Track[];
-  playlistId: number | null;
-}
+export type PlayerLocalStorageState = Omit<
+  PlayerStoreState,
+  'isPlaying' | 'currentTime'
+>;
 
 type PlayerLocalStoragePayload =
   | { type: 'currentTrack'; currentTrack: Track | null; currentTime: number }
@@ -19,7 +16,7 @@ type PlayerLocalStoragePayload =
 
 export const PLAYER_LOCAL_STORAGE = 'JAZZIT_PLAYER_STATE';
 
-export const isValidPlayerStoreState = (
+export const isValidPlayerLocalStorageState = (
   item: any
 ): item is PlayerLocalStorageState => {
   return (
@@ -32,6 +29,15 @@ export const isValidPlayerStoreState = (
   );
 };
 
+const DEFAULT_PLAYER_STATE = {
+  currentTrack: null,
+  stemType: null,
+  isMuted: false,
+  volume: 1,
+  playlist: [],
+  playlistId: null,
+};
+
 export const initPlayerLocalStorage = () => {
   if (typeof window === 'undefined' || typeof Storage === 'undefined') {
     console.error('Local storage is not supported in this browser.');
@@ -39,14 +45,7 @@ export const initPlayerLocalStorage = () => {
   }
   localStorage.setItem(
     PLAYER_LOCAL_STORAGE,
-    JSON.stringify({
-      currentTrack: null,
-      stemType: null,
-      isMuted: false,
-      volume: 1,
-      playlist: [],
-      playlistId: null,
-    })
+    JSON.stringify(DEFAULT_PLAYER_STATE)
   );
 };
 
@@ -59,11 +58,12 @@ export const updatePlayerLocalStorage = (
   }
   try {
     let item: PlayerLocalStorageState;
+    // localStorage 값이 PlayerLocalStorageState와 다르면 default 값으로 초기화
     try {
       const parsed = JSON.parse(
         localStorage.getItem(PLAYER_LOCAL_STORAGE) || '{}'
       );
-      if (!isValidPlayerStoreState(parsed)) {
+      if (!isValidPlayerLocalStorageState(parsed)) {
         throw new Error('Invalid player state in local storage');
       }
       item = parsed;
@@ -71,14 +71,8 @@ export const updatePlayerLocalStorage = (
       console.error(
         'Failed to parse player state from local storage. Setting to initial state.'
       );
-      item = {
-        currentTrack: null,
-        stemType: null,
-        isMuted: false,
-        volume: 1,
-        playlist: [],
-        playlistId: null,
-      };
+      localStorage.removeItem(PLAYER_LOCAL_STORAGE);
+      item = DEFAULT_PLAYER_STATE;
     }
     switch (payload.type) {
       case 'currentTrack':

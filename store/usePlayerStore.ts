@@ -6,7 +6,7 @@ import {
 } from './playerLocalStorage';
 import { StemType } from '@/modules/stem/domain/stem';
 
-interface PlayerStoreState {
+export interface PlayerStoreState {
   currentTrack: Track | null;
   stemType: StemType | null;
   isPlaying: boolean;
