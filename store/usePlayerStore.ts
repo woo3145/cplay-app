@@ -1,6 +1,10 @@
 import { Track } from '@/modules/track/domain/track';
-import { StemType } from '@prisma/client';
 import { create } from 'zustand';
+import {
+  PlayerLocalStorageState,
+  updatePlayerLocalStorage,
+} from './playerLocalStorage';
+import { StemType } from '@/modules/stem/domain/stem';
 
 interface PlayerStoreState {
   currentTrack: Track | null;
@@ -14,6 +18,7 @@ interface PlayerStoreState {
   playlistId: number | null;
 }
 interface PlayerStoreActions {
+  initPlayerStore: (item: PlayerLocalStorageState) => void;
   setIsPlaying: (status: boolean) => void;
   setIsMuted: (status: boolean) => void;
   setTrack: (track: Track | null, stemType?: StemType) => void;
@@ -37,6 +42,19 @@ export const usePlayerStore = create<PlayerStoreState & PlayerStoreActions>(
     playlist: [],
     playlistId: null,
 
+    initPlayerStore: (item: PlayerLocalStorageState) => {
+      set({
+        currentTrack: item.currentTrack,
+        stemType: item.stemType,
+        isPlaying: false,
+        isMuted: item.isMuted,
+        volume: item.volume,
+        currentTime: 0,
+        playlist: item.playlist,
+        playlistId: item.playlistId,
+      });
+    },
+
     setTrack: (track: Track | null, stemType: StemType = StemType.FULL) => {
       set({
         currentTrack: track,
@@ -46,11 +64,17 @@ export const usePlayerStore = create<PlayerStoreState & PlayerStoreActions>(
       if (!usePlayerStore.getState().isPlaying) {
         usePlayerStore.getState().setIsPlaying(true);
       }
+      updatePlayerLocalStorage({
+        type: 'currentTrack',
+        currentTrack: track,
+        currentTime: 0,
+      });
     },
     setStemType: (stemType: StemType) => {
       set({
         stemType: stemType,
       });
+      updatePlayerLocalStorage({ type: 'stemType', stemType });
     },
     setIsPlaying: (status: boolean) => {
       set({
@@ -61,18 +85,25 @@ export const usePlayerStore = create<PlayerStoreState & PlayerStoreActions>(
       set({
         isMuted: status,
       });
+      updatePlayerLocalStorage({ type: 'isMuted', isMuted: status });
     },
     setCurrentTime: (time: number) => {
       set({ currentTime: time });
     },
     setVolume: (volume: number) => {
       set({ volume: volume });
+      updatePlayerLocalStorage({ type: 'volume', volume });
     },
 
     setPlaylist: (id: number, tracks: Track[]) => {
       set({
         playlistId: id,
         playlist: tracks,
+      });
+      updatePlayerLocalStorage({
+        type: 'playlist',
+        playlist: tracks,
+        playlistId: id,
       });
     },
 
@@ -104,6 +135,12 @@ export const usePlayerStore = create<PlayerStoreState & PlayerStoreActions>(
       set({
         currentTime: 0,
         currentTrack: nextTrack,
+      });
+
+      updatePlayerLocalStorage({
+        type: 'currentTrack',
+        currentTrack: nextTrack,
+        currentTime: 0,
       });
     },
   })
