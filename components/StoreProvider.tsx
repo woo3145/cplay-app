@@ -5,7 +5,7 @@ import { usePlayerStore } from '@/store/usePlayerStore';
 import {
   PLAYER_LOCAL_STORAGE,
   initPlayerLocalStorage,
-  isValidPlayerStoreState,
+  isValidPlayerLocalStorageState,
 } from '@/store/playerLocalStorage';
 
 export function StoreProvider({ children }: { children: React.ReactNode }) {
@@ -21,7 +21,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       const item = JSON.parse(
         localStorage.getItem(PLAYER_LOCAL_STORAGE) || '{}'
       );
-      if (!isValidPlayerStoreState(item)) {
+      if (!isValidPlayerLocalStorageState(item)) {
         throw new Error('Invalid player state in local storage');
       }
       initPlayerStore(item);
