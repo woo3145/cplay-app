@@ -159,7 +159,6 @@ export class TrackPrismaRepository implements TrackRepository {
         },
       },
     });
-    likedTracks.map((n) => n.track);
 
     return likedTracks.map((like) => toTrackDomainModel(like.track));
   }
