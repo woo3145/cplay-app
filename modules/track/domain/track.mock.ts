@@ -12,6 +12,7 @@ export const MockTracks: DomainTrack[] = [
     status: TrackStatus.PUBLISH,
     createdAt: new Date(),
     releaseDate: null,
+    likedByUser: false,
 
     genres: [
       {
@@ -41,6 +42,7 @@ export const MockTracks: DomainTrack[] = [
     status: TrackStatus.PUBLISH,
     createdAt: new Date(),
     releaseDate: null,
+    likedByUser: false,
 
     genres: [
       {
