@@ -8,6 +8,7 @@ import { ThemeProvider } from '@/components/ThemeProvider';
 import SessionProvider from '@/components/SessionProvider';
 import { Toaster } from '@/components/ui/toaster';
 import { Player } from '@/components/player/Player';
+import { StoreProvider } from '@/components/StoreProvider';
 
 // Next의 런타임 참고
 // https://nextjs.org/docs/app/building-your-application/rendering/edge-and-nodejs-runtimes#edge-runtime
@@ -36,15 +37,17 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <SessionProvider session={session}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-            <Player />
-          </ThemeProvider>
+          <StoreProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+              <Player />
+            </ThemeProvider>
+          </StoreProvider>
         </SessionProvider>
         <Toaster />
       </body>
