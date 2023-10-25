@@ -25,7 +25,7 @@ Pro - 모든 잼트랙 stem 제공
 
 ### todos
 
-- [ ] Zustand - LocalStorage랑 연동 작업
+- [x] Zustand - LocalStorage랑 연동 작업
 - [ ] 트랙, 번들 좋아요 기능
 - [ ] 트랙, 번들 라이브러리 추가 기능
 - [ ] (어드민) 커뮤니티 게시판 카테고리 CRUD
