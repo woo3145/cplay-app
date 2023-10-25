@@ -123,4 +123,44 @@ export class TrackPrismaRepository implements TrackRepository {
     await prisma.track.delete({ where: { id } });
     return toTrackDomainModel(exist);
   }
+
+  async likeTrack(userId: string, trackId: number) {
+    const likedTrack = await prisma.trackLike.create({
+      data: {
+        userId,
+        trackId,
+      },
+    });
+
+    return likedTrack;
+  }
+
+  async unlikeTrack(userId: string, trackId: number) {
+    const deletedTrack = await prisma.trackLike.delete({
+      where: {
+        userId_trackId: {
+          userId,
+          trackId,
+        },
+      },
+    });
+
+    return deletedTrack;
+  }
+
+  async getLikedTracksByUser(userId: string) {
+    const likedTracks = await prisma.trackLike.findMany({
+      where: {
+        userId,
+      },
+      include: {
+        track: {
+          include: trackIncludes,
+        },
+      },
+    });
+    likedTracks.map((n) => n.track);
+
+    return likedTracks.map((like) => toTrackDomainModel(like.track));
+  }
 }
