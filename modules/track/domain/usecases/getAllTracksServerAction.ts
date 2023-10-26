@@ -3,6 +3,7 @@
 import { repository } from '@/modules/config/repository';
 import { TrackRepository } from '../track.repository';
 import { unstable_cache } from 'next/cache';
+import { cacheKeys, cacheTags } from '@/modules/config/cacheHelper';
 
 // 페이지 네이션 필요
 export const getAllTracksServerAction = async (
@@ -11,16 +12,16 @@ export const getAllTracksServerAction = async (
   const repo = subTrackRepository || repository.track;
 
   try {
-    const tracks = unstable_cache(
+    const allTracks = await unstable_cache(
       async () => {
         const data = await repo.findAll();
-        console.log(`Prisma 호출 : allTracks`);
+        console.log(`Prisma 호출: ${cacheKeys.ADMIN_ALL_TRACKS}`);
         return data;
       },
-      [`allTracks`],
-      { tags: [`allTracks`], revalidate: 3600 }
+      [cacheKeys.ADMIN_ALL_TRACKS],
+      { tags: [cacheTags.ADMIN_ALL_TRACKS], revalidate: 3600 }
     )();
-    return tracks;
+    return allTracks;
   } catch (e) {
     console.error('getAllTracksServerAction Error: ', e);
     return [];

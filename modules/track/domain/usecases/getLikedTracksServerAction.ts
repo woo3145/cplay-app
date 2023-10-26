@@ -3,6 +3,7 @@
 import { repository } from '@/modules/config/repository';
 import { TrackRepository } from '../track.repository';
 import { unstable_cache } from 'next/cache';
+import { cacheKeys, cacheTags } from '@/modules/config/cacheHelper';
 
 // 페이지 네이션 필요
 export const getLikedTracksServerAction = async (
@@ -17,12 +18,12 @@ export const getLikedTracksServerAction = async (
     const likedTracks = await unstable_cache(
       async () => {
         const data = await repo.getLikedTracksByUser(userId);
-        console.log(`Prisma 호출 : likedTracks-${userId}`);
+        console.log(`Prisma 호출: ${cacheKeys.getLikedTracksByUser(userId)}`);
         return data;
       },
-      [`likedTracks-${userId}`],
+      [cacheKeys.getLikedTracksByUser(userId)],
       {
-        tags: [`likedTracks-${userId}`],
+        tags: [cacheTags.getLikedTracksByUser(userId)],
         revalidate: 3600,
       }
     )();

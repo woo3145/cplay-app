@@ -8,7 +8,7 @@ import {
   UsecaseCreateTrackInputSchema,
 } from '../validations/CreateTrackTypes';
 import { TrackRepository } from '../track.repository';
-import { TrackStatus } from '../track';
+import { cacheTags } from '@/modules/config/cacheHelper';
 
 export const createTrackServerAction = adminGuard(
   async (
@@ -20,13 +20,8 @@ export const createTrackServerAction = adminGuard(
 
     try {
       const track = await repo.create(parsedData);
-      revalidateTag('allTracks');
-      if (track.status === TrackStatus.PUBLISH) {
-        revalidateTag(`releasedTracks-all`);
-        track.genres.forEach((genre) => {
-          revalidateTag(`releasedTracks-${genre.slug}`);
-        });
-      }
+
+      revalidateTag(cacheTags.ADMIN_ALL_TRACKS);
 
       return { success: true, track };
     } catch (e) {

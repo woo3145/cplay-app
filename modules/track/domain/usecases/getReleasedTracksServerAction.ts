@@ -4,6 +4,7 @@ import { repository } from '@/modules/config/repository';
 import { TrackRepository } from '../track.repository';
 import { unstable_cache } from 'next/cache';
 import { RepositoryGetTracksQuery } from '../validations/GetTrackTypes';
+import { cacheKeys, cacheTags } from '@/modules/config/cacheHelper';
 
 export const getReleasedTracksServerAction = async (
   query: Pick<RepositoryGetTracksQuery, 'genre'>,
@@ -20,12 +21,16 @@ export const getReleasedTracksServerAction = async (
           count: 12,
         });
 
-        console.log(`Prisma 호출 : releasedTracks-${query.genre}`);
+        console.log(
+          `Prisma 호출: ${cacheKeys.getReleasedTracksByGenre(
+            query.genre ?? ''
+          )}`
+        );
         return data;
       },
-      [`releasedTracks-${query.genre}`, 'releasedTracks', 'allTracks'],
+      [cacheKeys.getReleasedTracksByGenre(query.genre ?? '')],
       {
-        tags: [`releasedTracks-${query.genre}`, 'releasedTracks', 'allTracks'],
+        tags: [cacheTags.RELEASED_TRACK],
         revalidate: 3600,
       }
     )();

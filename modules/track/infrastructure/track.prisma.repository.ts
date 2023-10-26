@@ -60,6 +60,9 @@ export class TrackPrismaRepository implements TrackRepository {
         ...whereCondition,
         status: 'PUBLISH',
       },
+      orderBy: {
+        id: 'desc',
+      },
       include: trackIncludes,
       skip: offset,
       take: count,
