@@ -46,6 +46,7 @@ export const toBundleDomainModel = (
     name: record.name,
     imageUrl: record.imageUrl,
     createdAt: record.createdAt,
+    likedByUser: false,
     status: record.status,
     types: record.types.map((item) => toBundleTypeDomainModel(item)),
     tracks: record.tracks.map((item) => toTrackDomainModel(item.track)),
