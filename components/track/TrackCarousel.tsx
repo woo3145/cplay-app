@@ -5,12 +5,21 @@ import { TrackItem } from './TrackItem';
 import { usePlayerStore } from '@/store/usePlayerStore';
 import { SoundCardCarousel } from '../carousel/SoundCardCarousel';
 import { SwiperSlide } from 'swiper/react';
+import { useUserStore } from '@/store/useUserStore';
 
 interface Props {
   tracks: Track[];
 }
 
 export const TrackCarousel = ({ tracks }: Props) => {
+  const likedTrackIds = useUserStore((state) => state.likedTracks).map(
+    (track) => track.id
+  );
+
+  tracks.forEach(
+    (track) => (track.likedByUser = likedTrackIds.includes(track.id))
+  );
+
   const { setTrack, setPlaylist, playlist, playlistId } = usePlayerStore(
     (state) => ({
       setTrack: state.setTrack,
