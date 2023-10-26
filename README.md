@@ -31,12 +31,13 @@ Pro - 모든 잼트랙 stem 제공
 ### todos
 
 - [x] Zustand - LocalStorage랑 연동 작업
-- [ ] 트랙, 번들 좋아요 기능
+- [x] 트랙, 번들 좋아요 기능
 - [ ] 트랙, 번들 라이브러리 추가 기능
 - [ ] (어드민) 커뮤니티 게시판 카테고리 CRUD
 - [ ] 게시글 CRUD
 - [ ] 모바일 playlist UI
 - [ ] 모바일 Navigation
+- [ ] 캐시 태그값 중앙화
 
 - 최적화
 
