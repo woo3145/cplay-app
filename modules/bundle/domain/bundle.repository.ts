@@ -28,4 +28,14 @@ export interface BundleRepository {
   create: (data: RepositoryCreateBundleInput) => Promise<DomainBundle>;
   edit: (id: number, data: RepositoryEditBundleInput) => Promise<DomainBundle>;
   delete: (id: number) => Promise<void>;
+
+  likeBundle: (
+    userId: string,
+    bundleId: number
+  ) => Promise<{ userId: string; bundleId: number }>;
+  unlikeBundle: (
+    userId: string,
+    bundleId: number
+  ) => Promise<{ userId: string; bundleId: number }>;
+  getLikedBundlesByUser: (userId: string) => Promise<DomainBundle[]>;
 }
