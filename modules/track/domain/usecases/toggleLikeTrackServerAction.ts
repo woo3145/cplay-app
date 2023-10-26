@@ -2,7 +2,8 @@
 
 import { repository } from '@/modules/config/repository';
 import { TrackRepository } from '../track.repository';
-import { revalidateTag, unstable_cache } from 'next/cache';
+import { revalidateTag } from 'next/cache';
+import { getLikedTracksServerAction } from './getLikedTracksServerAction';
 
 export const toggleLikeTrackServerAction = async (
   userId: string | null,
@@ -19,18 +20,7 @@ export const toggleLikeTrackServerAction = async (
   }
 
   try {
-    const likedTracks = await unstable_cache(
-      async () => {
-        const data = await repo.getLikedTracksByUser(userId);
-        console.log(`Prisma 호출 : likedTracks-${userId}`);
-        return data;
-      },
-      [`likedTracks-${userId}`],
-      {
-        tags: [`likedTracks-${userId}`],
-        revalidate: 3600,
-      }
-    )();
+    const likedTracks = await getLikedTracksServerAction(userId);
 
     const likedTrackIds = likedTracks.map((track) => track.id);
 

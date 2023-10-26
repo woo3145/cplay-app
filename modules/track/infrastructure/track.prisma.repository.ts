@@ -160,8 +160,6 @@ export class TrackPrismaRepository implements TrackRepository {
       },
     });
 
-    console.log('호출');
-
     return likedTracks.map((like) => toTrackDomainModel(like.track));
   }
 }
