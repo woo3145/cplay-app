@@ -9,19 +9,25 @@ import {
 } from '@/store/playerLocalStorage';
 import { Track } from '@/modules/track/domain/track';
 import { useUserStore } from '@/store/useUserStore';
+import { Bundle } from '@/modules/bundle/domain/bundle';
 
 interface Props {
   children: React.ReactNode;
   likedTracks: Track[];
+  likedBundles: Bundle[];
 }
 
-export function StoreProvider({ children, likedTracks }: Props) {
+export function StoreProvider({ children, likedTracks, likedBundles }: Props) {
   const initPlayerStore = usePlayerStore((state) => state.initPlayerStore);
-  const setLikedTracks = useUserStore((state) => state.setLikedTracks);
+  const [setLikedTracks, setLikedBundles] = useUserStore((state) => [
+    state.setLikedTracks,
+    state.setLikedBundles,
+  ]);
 
   useEffect(() => {
     setLikedTracks(likedTracks);
-  }, [likedTracks, setLikedTracks]);
+    setLikedBundles(likedBundles);
+  }, [likedTracks, setLikedTracks, likedBundles, setLikedBundles]);
 
   useEffect(() => {
     if (typeof window === 'undefined' || typeof Storage === 'undefined') {
