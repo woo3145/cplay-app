@@ -8,7 +8,7 @@ import {
   UsecaseCreateTrackInputSchema,
 } from '../validations/CreateTrackTypes';
 import { TrackRepository } from '../track.repository';
-import { cacheTags } from '@/modules/config/cacheHelper';
+import { cacheKeys } from '@/modules/config/cacheHelper';
 
 export const createTrackServerAction = adminGuard(
   async (
@@ -21,7 +21,7 @@ export const createTrackServerAction = adminGuard(
     try {
       const track = await repo.create(parsedData);
 
-      revalidateTag(cacheTags.ADMIN_ALL_TRACKS);
+      revalidateTag(cacheKeys.ADMIN_ALL_TRACKS);
 
       return { success: true, track };
     } catch (e) {

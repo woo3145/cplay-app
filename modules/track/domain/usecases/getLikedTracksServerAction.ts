@@ -3,7 +3,7 @@
 import { repository } from '@/modules/config/repository';
 import { TrackRepository } from '../track.repository';
 import { unstable_cache } from 'next/cache';
-import { cacheKeys, cacheTags } from '@/modules/config/cacheHelper';
+import { cacheKeys } from '@/modules/config/cacheHelper';
 
 // 페이지 네이션 필요
 export const getLikedTracksServerAction = async (
@@ -23,7 +23,7 @@ export const getLikedTracksServerAction = async (
       },
       [cacheKeys.getLikedTracksByUser(userId)],
       {
-        tags: [cacheTags.getLikedTracksByUser(userId)],
+        tags: [cacheKeys.getLikedTracksByUser(userId)],
         revalidate: 3600,
       }
     )();

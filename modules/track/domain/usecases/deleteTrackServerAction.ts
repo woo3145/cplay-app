@@ -4,7 +4,7 @@ import { repository } from '@/modules/config/repository';
 import { adminGuard } from '@/lib/guard/adminGuard';
 import { TrackRepository } from '@/modules/track/domain/track.repository';
 import { revalidateTag } from 'next/cache';
-import { cacheTags } from '@/modules/config/cacheHelper';
+import { cacheKeys } from '@/modules/config/cacheHelper';
 import { TrackStatus } from '../track';
 
 export const deleteTrackServerAction = adminGuard(
@@ -14,10 +14,10 @@ export const deleteTrackServerAction = adminGuard(
     try {
       const exist = await repo.delete(id);
 
-      revalidateTag(cacheTags.ADMIN_ALL_TRACKS);
+      revalidateTag(cacheKeys.ADMIN_ALL_TRACKS);
 
       if (exist.status === TrackStatus.PUBLISH) {
-        revalidateTag(cacheTags.RELEASED_TRACK);
+        revalidateTag(cacheKeys.RELEASED_TRACK);
       }
 
       return { success: true };

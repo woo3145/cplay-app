@@ -8,7 +8,7 @@ import {
   UsecaseCreateMoodInputSchema,
 } from '../validations/CreateMoodTypes';
 import { revalidateTag } from 'next/cache';
-import { cacheTags } from '@/modules/config/cacheHelper';
+import { cacheKeys } from '@/modules/config/cacheHelper';
 
 export const createMoodServerAction = adminGuard(
   async (
@@ -20,7 +20,7 @@ export const createMoodServerAction = adminGuard(
 
     try {
       const mood = await repo.create({ tag });
-      revalidateTag(cacheTags.ALL_MOODS);
+      revalidateTag(cacheKeys.ALL_MOODS);
 
       return { success: true, mood };
     } catch (e) {

@@ -3,7 +3,7 @@
 import { repository } from '@/modules/config/repository';
 import { TrackRepository } from '../track.repository';
 import { unstable_cache } from 'next/cache';
-import { cacheKeys, cacheTags } from '@/modules/config/cacheHelper';
+import { cacheKeys } from '@/modules/config/cacheHelper';
 
 // 페이지 네이션 필요
 export const getTrackServerAction = async (
@@ -21,7 +21,7 @@ export const getTrackServerAction = async (
       },
       [cacheKeys.getTrack(trackId)],
       {
-        tags: [cacheTags.getTrack(trackId), cacheTags.ADMIN_ALL_TRACKS],
+        tags: [cacheKeys.getTrack(trackId), cacheKeys.ADMIN_ALL_TRACKS],
         revalidate: 3600,
       }
     )();

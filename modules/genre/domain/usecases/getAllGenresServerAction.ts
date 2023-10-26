@@ -3,7 +3,7 @@
 import { repository } from '@/modules/config/repository';
 import { GenreRepository } from '../genre.repository';
 import { unstable_cache } from 'next/cache';
-import { cacheKeys, cacheTags } from '@/modules/config/cacheHelper';
+import { cacheKeys } from '@/modules/config/cacheHelper';
 
 export const getAllGenresServerAction = async (
   subGenreRepository: GenreRepository | null = null
@@ -18,7 +18,7 @@ export const getAllGenresServerAction = async (
         return data;
       },
       [cacheKeys.ALL_GENRES],
-      { tags: [cacheTags.ALL_GENRES], revalidate: 3600 }
+      { tags: [cacheKeys.ALL_GENRES], revalidate: 3600 }
     )();
     return genres;
   } catch (e) {

@@ -4,7 +4,7 @@ import { repository } from '@/modules/config/repository';
 import { adminGuard } from '@/lib/guard/adminGuard';
 import { GenreRepository } from '../genre.repository';
 import { revalidateTag } from 'next/cache';
-import { cacheTags } from '@/modules/config/cacheHelper';
+import { cacheKeys } from '@/modules/config/cacheHelper';
 
 export const deleteGenreServerAction = adminGuard(
   async (id: number, subGenreRepository: GenreRepository | null = null) => {
@@ -12,9 +12,9 @@ export const deleteGenreServerAction = adminGuard(
 
     try {
       await repo.delete(id);
-      revalidateTag(cacheTags.ALL_GENRES);
-      revalidateTag(cacheTags.ADMIN_ALL_TRACKS);
-      revalidateTag(cacheTags.RELEASED_TRACK);
+      revalidateTag(cacheKeys.ALL_GENRES);
+      revalidateTag(cacheKeys.ADMIN_ALL_TRACKS);
+      revalidateTag(cacheKeys.RELEASED_TRACK);
 
       return { success: true };
     } catch (e) {

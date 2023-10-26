@@ -4,7 +4,7 @@ import { repository } from '@/modules/config/repository';
 import { TrackRepository } from '../track.repository';
 import { revalidateTag } from 'next/cache';
 import { getLikedTracksServerAction } from './getLikedTracksServerAction';
-import { cacheTags } from '@/modules/config/cacheHelper';
+import { cacheKeys } from '@/modules/config/cacheHelper';
 
 export const toggleLikeTrackServerAction = async (
   userId: string | null,
@@ -33,7 +33,7 @@ export const toggleLikeTrackServerAction = async (
       await repo.likeTrack(userId, trackId);
     }
 
-    revalidateTag(cacheTags.getLikedTracksByUser(userId));
+    revalidateTag(cacheKeys.getLikedTracksByUser(userId));
 
     return {
       success: true,

@@ -1,24 +1,11 @@
-export const cacheTags = {
-  ADMIN_ALL_TRACKS: 'tag_adminAllTracks', // 어드민이 사용하는 전체 트랙
-  RELEASED_TRACK: 'tag_releasedTrack', // relaesed된 전체 트랙
-
-  getTrack: (trackId: number) => `tag_track_${trackId}`,
-  getLikedTracksByUser: (userId: string) => `tag_likedTracksByUser_${userId}`,
-  getReleasedTracksByGenre: (genre: string) =>
-    `tag_releasedTracksByGenre_${genre}`,
-
-  ALL_MOODS: 'tag_allMoods',
-  ALL_GENRES: 'tag_allGenres',
-};
-
 export const cacheKeys = {
-  ADMIN_ALL_TRACKS: 'key_adminAllTracks',
+  ALL_MOODS: 'allMoods',
+  ALL_GENRES: 'allGenres',
 
-  getTrack: (trackId: number) => `key_track_${trackId}`,
-  getLikedTracksByUser: (userId: string) => `key_likedTracksByUser_${userId}`,
-  getReleasedTracksByGenre: (genre: string) =>
-    `key_releasedTracksByGenre_${genre}`,
+  ADMIN_ALL_TRACKS: 'adminAllTracks', // 어드민이 사용하는 전체 트랙
+  RELEASED_TRACK: 'releasedTrack', // relaesed된 전체 트랙
 
-  ALL_MOODS: 'key_allMoods',
-  ALL_GENRES: 'key_allGenres',
+  getTrack: (trackId: number) => `track_${trackId}`,
+  getLikedTracksByUser: (userId: string) => `likedTracksByUser_${userId}`,
+  getReleasedTracksByGenre: (genre: string) => `releasedTracksByGenre_${genre}`,
 };

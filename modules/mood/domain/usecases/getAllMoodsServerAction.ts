@@ -3,7 +3,7 @@
 import { unstable_cache } from 'next/cache';
 import { repository } from '@/modules/config/repository';
 import { MoodRepository } from '../mood.repository';
-import { cacheKeys, cacheTags } from '@/modules/config/cacheHelper';
+import { cacheKeys } from '@/modules/config/cacheHelper';
 
 export const getAllMoodsServerAction = async (
   subMoodRepository: MoodRepository | null = null
@@ -18,7 +18,7 @@ export const getAllMoodsServerAction = async (
         return data;
       },
       [cacheKeys.ALL_MOODS],
-      { tags: [cacheTags.ALL_MOODS], revalidate: 3600 }
+      { tags: [cacheKeys.ALL_MOODS], revalidate: 3600 }
     )();
     return moods;
   } catch (e) {

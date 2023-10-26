@@ -4,7 +4,7 @@ import { repository } from '@/modules/config/repository';
 import { TrackRepository } from '../track.repository';
 import { unstable_cache } from 'next/cache';
 import { RepositoryGetTracksQuery } from '../validations/GetTrackTypes';
-import { cacheKeys, cacheTags } from '@/modules/config/cacheHelper';
+import { cacheKeys } from '@/modules/config/cacheHelper';
 
 export const getReleasedTracksServerAction = async (
   query: Pick<RepositoryGetTracksQuery, 'genre'>,
@@ -30,7 +30,7 @@ export const getReleasedTracksServerAction = async (
       },
       [cacheKeys.getReleasedTracksByGenre(query.genre ?? '')],
       {
-        tags: [cacheTags.RELEASED_TRACK],
+        tags: [cacheKeys.RELEASED_TRACK],
         revalidate: 3600,
       }
     )();

@@ -8,7 +8,7 @@ import {
   UsecaseEditMoodInputSchema,
 } from '../validations/EditMoodTypes';
 import { revalidateTag } from 'next/cache';
-import { cacheTags } from '@/modules/config/cacheHelper';
+import { cacheKeys } from '@/modules/config/cacheHelper';
 
 export const editMoodServerAction = adminGuard(
   async (
@@ -36,9 +36,9 @@ export const editMoodServerAction = adminGuard(
 
     try {
       const result = await repo.edit(id, { tag });
-      revalidateTag(cacheTags.ALL_MOODS);
-      revalidateTag(cacheTags.RELEASED_TRACK);
-      revalidateTag(cacheTags.ADMIN_ALL_TRACKS);
+      revalidateTag(cacheKeys.ALL_MOODS);
+      revalidateTag(cacheKeys.RELEASED_TRACK);
+      revalidateTag(cacheKeys.ADMIN_ALL_TRACKS);
 
       return { success: true, mood: result };
     } catch (e) {

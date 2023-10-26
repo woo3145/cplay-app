@@ -4,7 +4,7 @@ import { repository } from '@/modules/config/repository';
 import { adminGuard } from '@/lib/guard/adminGuard';
 import { MoodRepository } from '@/modules/mood/domain/mood.repository';
 import { revalidateTag } from 'next/cache';
-import { cacheTags } from '@/modules/config/cacheHelper';
+import { cacheKeys } from '@/modules/config/cacheHelper';
 
 export const deleteMoodServerAction = adminGuard(
   async (id: number, subMoodRepository: MoodRepository | null = null) => {
@@ -12,9 +12,9 @@ export const deleteMoodServerAction = adminGuard(
 
     try {
       await repo.delete(id);
-      revalidateTag(cacheTags.ALL_MOODS);
-      revalidateTag(cacheTags.RELEASED_TRACK);
-      revalidateTag(cacheTags.ADMIN_ALL_TRACKS);
+      revalidateTag(cacheKeys.ALL_MOODS);
+      revalidateTag(cacheKeys.RELEASED_TRACK);
+      revalidateTag(cacheKeys.ADMIN_ALL_TRACKS);
 
       return { success: true };
     } catch (e) {
