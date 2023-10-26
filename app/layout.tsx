@@ -10,6 +10,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { Player } from '@/components/player/Player';
 import { StoreProvider } from '@/components/StoreProvider';
 import { getLikedTracksServerAction } from '@/modules/track/domain/usecases/getLikedTracksServerAction';
+import { useUserStore } from '@/store/useUserStore';
 
 // Next의 런타임 참고
 // https://nextjs.org/docs/app/building-your-application/rendering/edge-and-nodejs-runtimes#edge-runtime
@@ -36,6 +37,9 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions);
   const likedTracks = await getLikedTracksServerAction(session?.user.id);
 
+  useUserStore.setState({
+    likedTracks,
+  });
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>

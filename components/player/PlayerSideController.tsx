@@ -5,9 +5,6 @@ import { Heart, Volume1, Volume2, VolumeX } from 'lucide-react';
 import { Slider } from '../ui/slider';
 import { usePlayerStore } from '@/store/usePlayerStore';
 import { PlaylistDialog } from '../playlist/PlaylistDialog';
-import { useSession } from 'next-auth/react';
-import { toast } from '../ui/use-toast';
-import { toggleLikeTrackServerAction } from '@/modules/track/domain/usecases/toggleLikeTrackServerAction';
 import { cn } from '@/lib/utils';
 import { useToggleLikeTrack } from '@/modules/track/application/useToggleLikeTrack';
 
