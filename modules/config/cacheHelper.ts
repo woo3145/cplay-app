@@ -3,8 +3,11 @@ export const cacheTags = {
   RELEASED_TRACK: 'tag_releasedTrack', // relaesed된 전체 트랙
 
   getTrack: (trackId: number) => `tag_track_${trackId}`,
-
   getLikedTracksByUser: (userId: string) => `tag_likedTracksByUser_${userId}`,
+  getReleasedTracksByGenre: (genre: string) =>
+    `tag_releasedTracksByGenre_${genre}`,
+
+  ALL_MOODS: 'tag_allMoods',
 };
 
 export const cacheKeys = {
@@ -14,4 +17,6 @@ export const cacheKeys = {
   getLikedTracksByUser: (userId: string) => `key_likedTracksByUser_${userId}`,
   getReleasedTracksByGenre: (genre: string) =>
     `key_releasedTracksByGenre_${genre}`,
+
+  ALL_MOODS: 'key_allMoods',
 };
