@@ -8,6 +8,7 @@ export const cacheTags = {
     `tag_releasedTracksByGenre_${genre}`,
 
   ALL_MOODS: 'tag_allMoods',
+  ALL_GENRES: 'tag_allGenres',
 };
 
 export const cacheKeys = {
@@ -19,4 +20,5 @@ export const cacheKeys = {
     `key_releasedTracksByGenre_${genre}`,
 
   ALL_MOODS: 'key_allMoods',
+  ALL_GENRES: 'key_allGenres',
 };

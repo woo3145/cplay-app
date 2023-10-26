@@ -8,6 +8,7 @@ import {
   UsecaseCreateGenreInput,
   UsecaseCreateGenreInputSchema,
 } from '../validations/CreateGenreTypes';
+import { cacheTags } from '@/modules/config/cacheHelper';
 
 export const createGenreServerAction = adminGuard(
   async (
@@ -20,7 +21,7 @@ export const createGenreServerAction = adminGuard(
 
     try {
       const genres = await repo.create({ tag, slug });
-      revalidateTag('allGenres');
+      revalidateTag(cacheTags.ALL_GENRES);
 
       return { success: true, genres };
     } catch (e) {
