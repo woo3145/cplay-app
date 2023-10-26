@@ -4,7 +4,6 @@ import { repository } from '@/modules/config/repository';
 import { adminGuard } from '@/lib/guard/adminGuard';
 import { TrackRepository } from '@/modules/track/domain/track.repository';
 import { revalidateTag } from 'next/cache';
-import { TrackStatus } from '../track';
 
 export const deleteTrackServerAction = adminGuard(
   async (id: number, subTrackRepository: TrackRepository | null = null) => {

@@ -12,7 +12,7 @@ export const getReleasedTracksServerAction = async (
   const repo = subTrackRepository || repository.track;
 
   try {
-    const tracks = unstable_cache(
+    const tracks = await unstable_cache(
       async () => {
         const data = await repo.findAllWithQuery({
           genre: query.genre === 'all' ? undefined : query.genre,

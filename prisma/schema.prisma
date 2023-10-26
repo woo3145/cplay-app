@@ -42,16 +42,17 @@ enum Role {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String      @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?     @unique
   emailVerified DateTime?
   image         String?
   password      String?
-  role          Role      @default(USER)
+  role          Role        @default(USER)
   accounts      Account[]
   sessions      Session[]
   Track         Track[]
+  likedTracks   TrackLike[]
 }
 
 model VerificationToken {
@@ -96,6 +97,17 @@ model Track {
   genres  Genre[]
   moods   Mood[]
   bundles BundleTrack[]
+  likedBy TrackLike[]
+}
+
+model TrackLike {
+  userId  String
+  trackId Int
+
+  user  User  @relation(fields: [userId], references: [id])
+  track Track @relation(fields: [trackId], references: [id])
+
+  @@id([userId, trackId])
 }
 
 enum StemType {

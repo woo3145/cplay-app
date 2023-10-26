@@ -1,10 +1,12 @@
 import { Track } from '@/modules/track/domain/track';
 import { RefObject, useEffect } from 'react';
 import { Button } from '../ui/button';
-import { ListMusic, Volume, Volume1, Volume2, VolumeX } from 'lucide-react';
+import { Heart, Volume1, Volume2, VolumeX } from 'lucide-react';
 import { Slider } from '../ui/slider';
 import { usePlayerStore } from '@/store/usePlayerStore';
 import { PlaylistDialog } from '../playlist/PlaylistDialog';
+import { cn } from '@/lib/utils';
+import { useToggleLikeTrack } from '@/modules/track/application/useToggleLikeTrack';
 
 interface Props {
   track: Track;
@@ -20,6 +22,8 @@ export const PlayerSideController = ({ track, videoRef }: Props) => {
       setIsMuted: state.setIsMuted,
     })
   );
+  const toggleLikeTrack = useToggleLikeTrack(track.id);
+
   const changeVolumeHandler = (volume: number[]) => {
     if (!videoRef.current) return;
     if (isMuted) setIsMuted(false);
@@ -30,13 +34,19 @@ export const PlayerSideController = ({ track, videoRef }: Props) => {
     setIsMuted(!isMuted);
   };
 
+  const onLikeClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    // 좋아요 버튼 클릭 이벤트가 트랙 클릭 이벤트로 전파되는 것을 방지
+    event.stopPropagation();
+    await toggleLikeTrack();
+  };
+
   useEffect(() => {
     if (!videoRef.current) return;
     videoRef.current.muted = isMuted;
   }, [videoRef, isMuted]);
 
   return (
-    <div className="hidden lg:flex w-1/4 shrink-0 justify-end">
+    <div className="hidden lg:flex w-1/4 shrink-0 justify-end gap-2">
       <div className="group flex gap-2">
         <Slider
           max={1}
@@ -57,6 +67,19 @@ export const PlayerSideController = ({ track, videoRef }: Props) => {
         </Button>
       </div>
       <PlaylistDialog />
+      <Button
+        type="button"
+        variant="ghost"
+        onClick={onLikeClick}
+        className="p-2 flex justify-center"
+      >
+        <Heart
+          className={cn(
+            'w-5 h-5',
+            track.likedByUser ? 'text-primary' : 'text-foreground/20'
+          )}
+        />
+      </Button>
     </div>
   );
 };

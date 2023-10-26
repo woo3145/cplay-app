@@ -27,6 +27,7 @@ export const toTrackDomainModel = (
     status: record.status,
     createdAt: record.createdAt,
     releaseDate: record.releaseDate,
+    likedByUser: false, // default 값
 
     genres: record.genres.map((item) => {
       return toGenreDomainModel(item);
