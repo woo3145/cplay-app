@@ -2,12 +2,10 @@
 
 import { cn } from '@/lib/utils';
 import { Track } from '@/modules/track/domain/track';
-import { toggleLikeTrackServerAction } from '@/modules/track/domain/usecases/toggleLikeTrackServerAction';
-import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import { toast } from '../ui/use-toast';
 import { Heart } from 'lucide-react';
 import { Button } from '../ui/button';
+import { useToggleLikeTrack } from '@/modules/track/application/useToggleLikeTrack';
 
 interface Props {
   track: Track;
@@ -15,7 +13,7 @@ interface Props {
 }
 
 export const TrackItem = ({ track, onClick }: Props) => {
-  const { data: session } = useSession();
+  const toggleLikeTrack = useToggleLikeTrack(track.id);
   const onTrackClick = () => {
     onClick(track);
   };
@@ -23,33 +21,7 @@ export const TrackItem = ({ track, onClick }: Props) => {
   const onLikeClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
     // 좋아요 버튼 클릭 이벤트가 트랙 클릭 이벤트로 전파되는 것을 방지
     event.stopPropagation();
-
-    if (!session?.user) {
-      toast({
-        variant: 'destructive',
-        title: '로그인이 필요합니다.',
-      });
-      return;
-    }
-
-    const result = await toggleLikeTrackServerAction(
-      session ? session.user.id : null,
-      track.id
-    );
-
-    if (result.success) {
-      toast({
-        variant: 'success',
-        title: result.isLiked
-          ? '성공적으로 좋아요를 눌렀습니다.'
-          : '성공적으로 좋아요를 취소했습니다.',
-      });
-    } else {
-      toast({
-        variant: 'destructive',
-        title: result.message,
-      });
-    }
+    await toggleLikeTrack();
   };
   return (
     <div
