@@ -14,8 +14,8 @@ export const getReleasedTracksServerAction = async (
 
   try {
     const tracksPromise = unstable_cache(
-      async () => {
-        const data = await repo.findAllWithQuery({
+      () => {
+        const data = repo.findAllWithQuery({
           genre: query.genre === 'all' ? undefined : query.genre,
           page: 1,
           count: 12,
@@ -35,7 +35,11 @@ export const getReleasedTracksServerAction = async (
 
     if (userId) {
       likedTracksPromise = unstable_cache(
-        () => repo.getLikedTracksByUser(userId),
+        () => {
+          const data = repo.getLikedTracksByUser(userId);
+          console.log(`Prisma 호출 : likedTracks-${userId}`);
+          return data;
+        },
         [`likedTracks-${userId}`],
         {
           tags: [`likedTracks-${userId}`],

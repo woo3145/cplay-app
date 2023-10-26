@@ -14,8 +14,8 @@ export const getTrackServerAction = async (
 
   try {
     const trackPromise = unstable_cache(
-      async () => {
-        const data = await repo.findById(trackId);
+      () => {
+        const data = repo.findById(trackId);
         console.log(`Prisma 호출 : track-${trackId}`);
         return data;
       },
@@ -26,7 +26,11 @@ export const getTrackServerAction = async (
     let likedTracksPromise;
     if (userId) {
       likedTracksPromise = unstable_cache(
-        () => repo.getLikedTracksByUser(userId),
+        () => {
+          const data = repo.getLikedTracksByUser(userId);
+          console.log(`Prisma 호출 : likedTracks-${userId}`);
+          return data;
+        },
         [`likedTracks-${userId}`],
         {
           tags: [`likedTracks-${userId}`],
