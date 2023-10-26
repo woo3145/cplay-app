@@ -147,4 +147,43 @@ export class BundlePrismaRepository implements BundleRepository {
     });
     await prisma.bundle.delete({ where: { id } });
   }
+
+  async likeBundle(userId: string, bundleId: number) {
+    const likedBundle = await prisma.bundleLike.create({
+      data: {
+        userId,
+        bundleId,
+      },
+    });
+
+    return likedBundle;
+  }
+
+  async unlikeBundle(userId: string, bundleId: number) {
+    const deletedBundle = await prisma.bundleLike.delete({
+      where: {
+        userId_bundleId: {
+          userId,
+          bundleId,
+        },
+      },
+    });
+
+    return deletedBundle;
+  }
+
+  async getLikedBundlesByUser(userId: string) {
+    const likedBundles = await prisma.bundleLike.findMany({
+      where: {
+        userId,
+      },
+      include: {
+        bundle: {
+          include: bundleIncludes,
+        },
+      },
+    });
+
+    return likedBundles.map((like) => toBundleDomainModel(like.bundle));
+  }
 }

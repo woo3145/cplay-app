@@ -42,17 +42,18 @@ enum Role {
 }
 
 model User {
-  id            String      @id @default(cuid())
+  id            String       @id @default(cuid())
   name          String?
-  email         String?     @unique
+  email         String?      @unique
   emailVerified DateTime?
   image         String?
   password      String?
-  role          Role        @default(USER)
+  role          Role         @default(USER)
   accounts      Account[]
   sessions      Session[]
   Track         Track[]
   likedTracks   TrackLike[]
+  likedBundles  BundleLike[]
 }
 
 model VerificationToken {
@@ -144,8 +145,19 @@ model Bundle {
   createdAt DateTime     @default(now()) // 생성 시간
   status    BundleStatus // 트랙 릴리즈 여부
 
-  tracks BundleTrack[]
-  types  BundleType[]
+  tracks  BundleTrack[]
+  types   BundleType[]
+  likedBy BundleLike[]
+}
+
+model BundleLike {
+  userId   String
+  bundleId Int
+
+  user   User   @relation(fields: [userId], references: [id])
+  bundle Bundle @relation(fields: [bundleId], references: [id])
+
+  @@id([userId, bundleId])
 }
 
 model BundleType {

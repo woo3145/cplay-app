@@ -5,18 +5,27 @@ import { Bundle } from '@/modules/bundle/domain/bundle';
 import { BundleItem } from './BundleItem';
 import { SwiperSlide } from 'swiper/react';
 import { SoundCardCarousel } from '../carousel/SoundCardCarousel';
+import { useUserStore } from '@/store/useUserStore';
 
 interface Props {
   bundles: Bundle[];
 }
 
 export const BundleCarousel = ({ bundles }: Props) => {
+  const likedBundleIds = useUserStore((state) => state.likedBundles).map(
+    (bundle) => bundle.id
+  );
+
+  bundles.forEach(
+    (bundle) => (bundle.likedByUser = likedBundleIds.includes(bundle.id))
+  );
+
   const [setTrack, setPlaylist] = usePlayerStore((state) => [
     state.setTrack,
     state.setPlaylist,
   ]);
 
-  const onTrackClick = (bundle: Bundle) => {
+  const onBundleClick = (bundle: Bundle) => {
     setPlaylist(bundle.id, bundle.tracks);
     setTrack(0 < bundle.tracks.length ? bundle.tracks[0] : null);
   };
@@ -26,7 +35,7 @@ export const BundleCarousel = ({ bundles }: Props) => {
         {bundles.map((bundle) => {
           return (
             <SwiperSlide key={bundle.id}>
-              <BundleItem bundle={bundle} onClick={onTrackClick} />
+              <BundleItem bundle={bundle} onClick={onBundleClick} />
             </SwiperSlide>
           );
         })}
