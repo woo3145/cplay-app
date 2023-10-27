@@ -28,6 +28,6 @@ export class StemPrismaRepository implements StemRepository {
 
     await prisma.stem.delete({ where: { id } });
 
-    return exist.trackId;
+    return toStemDomainModel(exist);
   }
 }

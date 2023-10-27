@@ -10,6 +10,7 @@ import {
   UsecaseEditUserInputSchema,
 } from '../validations/EditUserTypes';
 import { toUserDomainModel } from '../../infrastructure/user.prisma.mapper';
+import { cacheKeys } from '@/modules/config/cacheHelper';
 
 export const editUserServerAction = userGuard(
   async (
@@ -37,7 +38,7 @@ export const editUserServerAction = userGuard(
 
     try {
       const result = await repo.edit(id, updatedField);
-      revalidateTag(`sessionUser-${id}`);
+      revalidateTag(cacheKeys.getSessionUser(id));
       return { success: true, user: result };
     } catch (e) {
       console.error('Edit User Error: ', e);

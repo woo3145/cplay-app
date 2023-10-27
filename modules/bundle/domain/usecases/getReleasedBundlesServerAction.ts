@@ -2,8 +2,9 @@
 
 import { repository } from '@/modules/config/repository';
 import { unstable_cache } from 'next/cache';
-import { RepositoryGetBundlesQuery } from '../domain/validations/GetBundlesTypes';
-import { BundleRepository } from '../domain/bundle.repository';
+import { RepositoryGetBundlesQuery } from '../validations/GetBundlesTypes';
+import { BundleRepository } from '../bundle.repository';
+import { cacheKeys } from '@/modules/config/cacheHelper';
 
 export const getReleasedBundlesServerAction = async (
   query: Pick<RepositoryGetBundlesQuery, 'type'>,
@@ -20,15 +21,18 @@ export const getReleasedBundlesServerAction = async (
           count: 12,
         });
 
-        console.log(`Prisma 호출 : releasedBundles-${query.type}`);
+        console.log(
+          `Prisma 호출: ${cacheKeys.getReleasedBundlesByType(
+            query.type ?? 'all'
+          )}`
+        );
         return data;
       },
-      [`releasedBundles-${query.type}`, 'releasedBundles', 'allBundles'],
+      [cacheKeys.getReleasedBundlesByType(query.type ?? 'all')],
       {
         tags: [
-          `releasedBundles-${query.type}`,
-          'releasedBundles',
-          'allBundles',
+          cacheKeys.getReleasedBundlesByType(query.type ?? 'all'),
+          cacheKeys.RELEASED_BUNDLES,
         ],
         revalidate: 3600,
       }

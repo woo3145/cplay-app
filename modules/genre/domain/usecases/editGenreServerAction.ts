@@ -8,6 +8,7 @@ import {
   UsecaseEditGenreInputSchema,
 } from '../validations/EditGenreTypes';
 import { revalidateTag } from 'next/cache';
+import { cacheKeys } from '@/modules/config/cacheHelper';
 
 export const editGenreServerAction = adminGuard(
   async (
@@ -34,8 +35,9 @@ export const editGenreServerAction = adminGuard(
 
     try {
       const result = await repo.edit(id, { tag, slug });
-      revalidateTag('allGenres');
-      revalidateTag('allTracks');
+      revalidateTag(cacheKeys.ALL_GENRES);
+      revalidateTag(cacheKeys.ADMIN_ALL_TRACKS);
+      revalidateTag(cacheKeys.RELEASED_TRACKS);
       return { success: true, genre: result };
     } catch (e) {
       console.error('editGenreServerAction Error', e);

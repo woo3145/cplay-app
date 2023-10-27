@@ -3,6 +3,7 @@
 import { unstable_cache } from 'next/cache';
 import { repository } from '@/modules/config/repository';
 import { MoodRepository } from '../mood.repository';
+import { cacheKeys } from '@/modules/config/cacheHelper';
 
 export const getAllMoodsServerAction = async (
   subMoodRepository: MoodRepository | null = null
@@ -13,11 +14,11 @@ export const getAllMoodsServerAction = async (
     const moods = unstable_cache(
       async () => {
         const data = await repo.getAll();
-        console.log(`Prisma 호출 : allMoods`);
+        console.log(`Prisma 호출 : ${cacheKeys.ALL_MOODS}`);
         return data;
       },
-      [`allMoods`],
-      { tags: [`allMoods`], revalidate: 3600 }
+      [cacheKeys.ALL_MOODS],
+      { tags: [cacheKeys.ALL_MOODS], revalidate: 3600 }
     )();
     return moods;
   } catch (e) {

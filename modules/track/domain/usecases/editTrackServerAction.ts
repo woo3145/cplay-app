@@ -9,6 +9,8 @@ import {
 } from '../validations/EditTrackTypes';
 import { TrackRepository } from '../track.repository';
 import { arraysEqual } from '@/lib/utils';
+import { cacheKeys } from '@/modules/config/cacheHelper';
+import { TrackStatus } from '../track';
 
 export const editTrackServerAction = adminGuard(
   async (
@@ -62,12 +64,23 @@ export const editTrackServerAction = adminGuard(
 
     try {
       const result = await repo.edit(id, updatedField);
-      revalidateTag(`track-${id}`);
-      revalidateTag('allTracks');
-      revalidateTag(`releasedTracks-all`);
-      result.genres.forEach((genre) => {
-        revalidateTag(`releasedTracks-${genre.slug}`);
-      });
+
+      revalidateTag(cacheKeys.ADMIN_ALL_TRACKS);
+      revalidateTag(cacheKeys.getTrack(result.id));
+
+      // status가 publish 였거나 publish 로 수정될때만 releasedTrack 캐시 무효화
+      if (
+        exist.status === TrackStatus.PUBLISH ||
+        result.status === TrackStatus.PUBLISH
+      ) {
+        revalidateTag(cacheKeys.getReleasedTracksByGenre('all'));
+        const _genres = new Set([...exist.genres, ...result.genres]);
+
+        _genres.forEach((t) =>
+          revalidateTag(cacheKeys.getReleasedTracksByGenre(t.slug))
+        );
+      }
+
       return { success: true, track: result };
     } catch (e) {
       console.error('editTrackServerAction Error', e);

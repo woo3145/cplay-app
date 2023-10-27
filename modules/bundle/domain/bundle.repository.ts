@@ -27,7 +27,7 @@ export interface BundleRepository {
   ) => Promise<DomainBundle[]>;
   create: (data: RepositoryCreateBundleInput) => Promise<DomainBundle>;
   edit: (id: number, data: RepositoryEditBundleInput) => Promise<DomainBundle>;
-  delete: (id: number) => Promise<void>;
+  delete: (id: number) => Promise<DomainBundle>;
 
   likeBundle: (
     userId: string,

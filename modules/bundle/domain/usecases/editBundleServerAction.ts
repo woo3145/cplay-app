@@ -9,6 +9,8 @@ import {
   UsecaseEditBundleInputSchema,
 } from '../validations/EditBundleTypes';
 import { BundleRepository } from '../bundle.repository';
+import { cacheKeys } from '@/modules/config/cacheHelper';
+import { BundleStatus } from '../bundle';
 
 export const editBundleServerAction = adminGuard(
   async (
@@ -49,7 +51,22 @@ export const editBundleServerAction = adminGuard(
     try {
       const result = await repo.edit(id, updatedField);
 
-      revalidateTag('allBundles');
+      revalidateTag(cacheKeys.ADMIN_ALL_BUNDLES);
+      revalidateTag(cacheKeys.getBundle(result.id));
+
+      // status가 publish 였거나 publish 로 수정될때만 releasedBundles 캐시 무효화
+      if (
+        exist.status === BundleStatus.PUBLISH ||
+        result.status === BundleStatus.PUBLISH
+      ) {
+        revalidateTag(cacheKeys.getReleasedBundlesByType('all'));
+        const _types = new Set([...exist.types, ...result.types]);
+
+        _types.forEach((t) =>
+          revalidateTag(cacheKeys.getReleasedBundlesByType(t.name))
+        );
+      }
+
       return { success: true, bundle: result };
     } catch (e) {
       console.error('editBundleServerAction Error', e);
