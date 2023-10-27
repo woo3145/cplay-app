@@ -8,6 +8,7 @@ import {
   UsecaseEditBundleTypeInputSchema,
 } from '../validations/EditBundleTypeTypes';
 import { BundleTypeRepository } from '../bundle.repository';
+import { cacheKeys } from '@/modules/config/cacheHelper';
 
 export const editBundleTypeServerAction = adminGuard(
   async (
@@ -34,7 +35,9 @@ export const editBundleTypeServerAction = adminGuard(
 
     try {
       const result = await repo.edit(id, { name });
-      revalidateTag('allBundleTypes');
+      revalidateTag(cacheKeys.ALL_BUNDLE_TYPE);
+      revalidateTag(cacheKeys.ADMIN_ALL_BUNDLES);
+      revalidateTag(cacheKeys.RELEASED_BUNDLES);
 
       return { success: true, mood: result };
     } catch (e) {

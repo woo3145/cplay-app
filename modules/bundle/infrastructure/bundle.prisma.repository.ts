@@ -128,7 +128,10 @@ export class BundlePrismaRepository implements BundleRepository {
   }
 
   async delete(id: number) {
-    const exist = await prisma.bundle.findFirst({ where: { id } });
+    const exist = await prisma.bundle.findFirst({
+      where: { id },
+      include: bundleIncludes,
+    });
 
     if (!exist) {
       throw new Error('Bundle이 존재하지 않습니다.');
@@ -146,6 +149,8 @@ export class BundlePrismaRepository implements BundleRepository {
       },
     });
     await prisma.bundle.delete({ where: { id } });
+
+    return toBundleDomainModel(exist);
   }
 
   async likeBundle(userId: string, bundleId: number) {

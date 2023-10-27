@@ -1,5 +1,5 @@
 import { BundleCarousel } from '@/components/bundle/BundleCarousel';
-import { getReleasedBundlesServerAction } from '@/modules/bundle/application/getReleasedBundlesServerAction';
+import { getReleasedBundlesServerAction } from '@/modules/bundle/domain/usecases/getReleasedBundlesServerAction';
 import { BundleType } from '@/modules/bundle/domain/bundle';
 
 interface Props {

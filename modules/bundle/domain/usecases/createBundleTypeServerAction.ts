@@ -8,6 +8,7 @@ import {
   UsecaseCreateBundleTypeInputSchema,
 } from '../validations/CreateBundleTypeTypes';
 import { revalidateTag } from 'next/cache';
+import { cacheKeys } from '@/modules/config/cacheHelper';
 
 export const createBundleTypeServerAction = adminGuard(
   async (
@@ -19,7 +20,7 @@ export const createBundleTypeServerAction = adminGuard(
 
     try {
       const bundleType = await repo.create({ name });
-      revalidateTag('allBundleTypes');
+      revalidateTag(cacheKeys.ALL_BUNDLE_TYPE);
 
       return { success: true, bundleType };
     } catch (e) {

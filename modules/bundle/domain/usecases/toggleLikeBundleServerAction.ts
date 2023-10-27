@@ -4,6 +4,7 @@ import { repository } from '@/modules/config/repository';
 import { revalidateTag } from 'next/cache';
 import { BundleRepository } from '../bundle.repository';
 import { getLikedBundlesServerAction } from './getLikedBundlesServerAction';
+import { cacheKeys } from '@/modules/config/cacheHelper';
 
 export const toggleLikeBundleServerAction = async (
   userId: string | null,
@@ -31,7 +32,7 @@ export const toggleLikeBundleServerAction = async (
       await repo.likeBundle(userId, bundleId);
     }
 
-    revalidateTag(`likedBundles-${userId}`);
+    revalidateTag(cacheKeys.getLikedBundlesByUser(userId));
 
     return {
       success: true,

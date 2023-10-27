@@ -8,6 +8,7 @@ import {
   UsecaseCreateBundleInputSchema,
 } from '../validations/CreateBundleTypes';
 import { BundleRepository } from '../bundle.repository';
+import { cacheKeys } from '@/modules/config/cacheHelper';
 
 export const createBundleServerAction = adminGuard(
   async (
@@ -19,7 +20,7 @@ export const createBundleServerAction = adminGuard(
 
     try {
       const bundle = await repo.create(parsedData);
-      revalidateTag('allBundles');
+      revalidateTag(cacheKeys.ADMIN_ALL_BUNDLES);
 
       return { success: true, bundle };
     } catch (e) {

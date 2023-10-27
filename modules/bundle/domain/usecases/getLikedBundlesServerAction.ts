@@ -3,6 +3,7 @@
 import { repository } from '@/modules/config/repository';
 import { unstable_cache } from 'next/cache';
 import { BundleRepository } from '../bundle.repository';
+import { cacheKeys } from '@/modules/config/cacheHelper';
 
 // 페이지 네이션 필요
 export const getLikedBundlesServerAction = async (
@@ -17,12 +18,12 @@ export const getLikedBundlesServerAction = async (
     const likedBundles = await unstable_cache(
       async () => {
         const data = await repo.getLikedBundlesByUser(userId);
-        console.log(`Prisma 호출 : likedBundles-${userId}`);
+        console.log(`Prisma 호출: ${cacheKeys.getLikedBundlesByUser(userId)}`);
         return data;
       },
-      [`likedBundles-${userId}`],
+      [cacheKeys.getLikedBundlesByUser(userId)],
       {
-        tags: [`likedBundles-${userId}`],
+        tags: [cacheKeys.getLikedBundlesByUser(userId)],
         revalidate: 3600,
       }
     )();
