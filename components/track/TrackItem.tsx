@@ -3,9 +3,10 @@
 import { cn } from '@/lib/utils';
 import { Track } from '@/modules/track/domain/track';
 import Image from 'next/image';
-import { Heart } from 'lucide-react';
+import { Heart, Pause, Play } from 'lucide-react';
 import { Button } from '../ui/button';
 import { useToggleLikeTrack } from '@/modules/track/application/useToggleLikeTrack';
+import { usePlayerStore } from '@/store/usePlayerStore';
 
 interface Props {
   track: Track;
@@ -13,8 +14,26 @@ interface Props {
 }
 
 export const TrackItem = ({ track, onClick }: Props) => {
+  const [playlistId, currentTrack, isPlaying, setIsPlaying] = usePlayerStore(
+    (state) => [
+      state.playlistId,
+      state.currentTrack,
+      state.isPlaying,
+      state.setIsPlaying,
+    ]
+  );
+
+  const isSelectedTrack =
+    playlistId === 0 && currentTrack && currentTrack.id === track.id;
+
   const toggleLikeTrack = useToggleLikeTrack(track.id);
   const onTrackClick = () => {
+    // 이미 선택 된 트랙이라면 isPlaying 토글
+    if (isSelectedTrack) {
+      setIsPlaying(!isPlaying);
+      return;
+    }
+
     onClick(track);
   };
 
@@ -41,15 +60,35 @@ export const TrackItem = ({ track, onClick }: Props) => {
           )}
         />
       </Button>
-      <Image
-        src={track.imageUrl}
-        alt={track.title}
-        width={256}
-        height={256}
-        className={cn(
-          'w-full object-cover transition-all aspect-square rounded-md'
+      <div className="relative flex items-center justify-center group">
+        <Image
+          src={track.imageUrl}
+          alt={track.title}
+          width={256}
+          height={256}
+          className={cn(
+            'w-full object-cover transition-all aspect-square rounded-md group-hover:brightness-50',
+            isSelectedTrack && isPlaying && 'brightness-50'
+          )}
+        />
+
+        {isSelectedTrack && isPlaying ? (
+          <Pause
+            className={cn(
+              'absolute w-7 h-7 hidden group-hover:block text-white text-primary',
+              isSelectedTrack && 'block'
+            )}
+          />
+        ) : (
+          <Play
+            className={cn(
+              'absolute w-7 h-7 hidden group-hover:block text-white text-primary',
+              isSelectedTrack && isPlaying && 'block'
+            )}
+          />
         )}
-      />
+      </div>
+
       <div className="space-y-1 text-sm">
         <h3 className="font-medium leading-none">{track.title}</h3>
         <p className="text-xs text-muted-foreground">{track.creator?.name}</p>

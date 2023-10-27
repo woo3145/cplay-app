@@ -33,7 +33,7 @@ export const TrackCarousel = ({ tracks }: Props) => {
     if (playlistId === null || playlist.length === 0) {
       setPlaylist(0, [track]);
     } else {
-      setPlaylist(playlistId, [
+      setPlaylist(0, [
         ...playlist.filter((item) => item.id !== track.id),
         track,
       ]);
