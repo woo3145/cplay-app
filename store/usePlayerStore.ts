@@ -67,7 +67,6 @@ export const usePlayerStore = create<PlayerStoreState & PlayerStoreActions>(
       updatePlayerLocalStorage({
         type: 'currentTrack',
         currentTrack: track,
-        currentTime: 0,
       });
     },
     setStemType: (stemType: StemType) => {
@@ -140,7 +139,6 @@ export const usePlayerStore = create<PlayerStoreState & PlayerStoreActions>(
       updatePlayerLocalStorage({
         type: 'currentTrack',
         currentTrack: nextTrack,
-        currentTime: 0,
       });
     },
   })

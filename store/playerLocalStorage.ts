@@ -8,7 +8,7 @@ export type PlayerLocalStorageState = Omit<
 >;
 
 type PlayerLocalStoragePayload =
-  | { type: 'currentTrack'; currentTrack: Track | null; currentTime: number }
+  | { type: 'currentTrack'; currentTrack: Track | null }
   | { type: 'stemType'; stemType: StemType | null }
   | { type: 'isMuted'; isMuted: boolean }
   | { type: 'volume'; volume: number }

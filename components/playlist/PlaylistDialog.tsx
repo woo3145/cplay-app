@@ -44,7 +44,7 @@ export const PlaylistDialog = () => {
   };
 
   const onClickRemove = (track: Track) => {
-    if (!playlistId) return;
+    if (playlistId === null) return;
     if (currentTrack && currentTrack.id === track.id) {
       toast({
         variant: 'default',
