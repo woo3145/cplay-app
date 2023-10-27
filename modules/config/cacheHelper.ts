@@ -17,4 +17,6 @@ export const cacheKeys = {
   getLikedBundlesByUser: (userId: string) => `likedBundlesByUser_${userId}`,
   getReleasedBundlesByType: (bundleType: string) =>
     `releasedBundlesByType_${bundleType}`,
+
+  getSessionUser: (userId: string) => `sessionUser_${userId}`,
 };

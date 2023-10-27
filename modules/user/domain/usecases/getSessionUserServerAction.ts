@@ -8,6 +8,7 @@ import { UserRepository } from '../user.repository';
 import { authOptions } from '@/api/auth/[...nextauth]/route';
 import { SessionUser } from '../user';
 import { toSessionUserDomainModel } from '../../infrastructure/user.prisma.mapper';
+import { cacheKeys } from '@/modules/config/cacheHelper';
 
 export const getSessionUserServerAction = async (
   subUserRepository: UserRepository | null = null
@@ -24,15 +25,17 @@ export const getSessionUserServerAction = async (
           session.user.id,
           toSessionUserDomainModel
         );
-        console.log(`Prisma 호출 : sessionUser-${session.user.id}`);
+        console.log(
+          `Prisma 호출: ${cacheKeys.getSessionUser(session.user.id)}`
+        );
         return data;
       },
-      [`sessionUser-${session.user.id}`],
-      { tags: [`sessionUser-${session.user.id}`], revalidate: 3600 }
+      [cacheKeys.getSessionUser(session.user.id)],
+      { tags: [cacheKeys.getSessionUser(session.user.id)], revalidate: 3600 }
     )();
     return user;
   } catch (e) {
-    console.log('GetSessionUser Error: ', e);
+    console.log('getSessionUserServerAction Error: ', e);
     return null;
   }
 };
