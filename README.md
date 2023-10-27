@@ -37,7 +37,7 @@ Pro - 모든 잼트랙 stem 제공
 - [ ] 게시글 CRUD
 - [ ] 모바일 playlist UI
 - [ ] 모바일 Navigation
-- [ ] 캐시 태그값 중앙화
+- [x] 캐시 태그값 중앙화
 
 - 최적화
 
