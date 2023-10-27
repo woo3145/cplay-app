@@ -21,7 +21,7 @@ export const getTrackServerAction = async (
       },
       [cacheKeys.getTrack(trackId)],
       {
-        tags: [cacheKeys.getTrack(trackId), cacheKeys.ADMIN_ALL_TRACKS],
+        tags: [cacheKeys.getTrack(trackId)],
         revalidate: 3600,
       }
     )();

@@ -37,7 +37,7 @@ export const editMoodServerAction = adminGuard(
     try {
       const result = await repo.edit(id, { tag });
       revalidateTag(cacheKeys.ALL_MOODS);
-      revalidateTag(cacheKeys.RELEASED_TRACK);
+      revalidateTag(cacheKeys.RELEASED_TRACKS);
       revalidateTag(cacheKeys.ADMIN_ALL_TRACKS);
 
       return { success: true, mood: result };

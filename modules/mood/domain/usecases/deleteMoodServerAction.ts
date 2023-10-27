@@ -13,7 +13,7 @@ export const deleteMoodServerAction = adminGuard(
     try {
       await repo.delete(id);
       revalidateTag(cacheKeys.ALL_MOODS);
-      revalidateTag(cacheKeys.RELEASED_TRACK);
+      revalidateTag(cacheKeys.RELEASED_TRACKS);
       revalidateTag(cacheKeys.ADMIN_ALL_TRACKS);
 
       return { success: true };

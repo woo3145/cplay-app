@@ -14,7 +14,7 @@ export const deleteGenreServerAction = adminGuard(
       await repo.delete(id);
       revalidateTag(cacheKeys.ALL_GENRES);
       revalidateTag(cacheKeys.ADMIN_ALL_TRACKS);
-      revalidateTag(cacheKeys.RELEASED_TRACK);
+      revalidateTag(cacheKeys.RELEASED_TRACKS);
 
       return { success: true };
     } catch (e) {

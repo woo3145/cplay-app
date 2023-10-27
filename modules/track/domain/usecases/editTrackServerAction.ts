@@ -66,13 +66,19 @@ export const editTrackServerAction = adminGuard(
       const result = await repo.edit(id, updatedField);
 
       revalidateTag(cacheKeys.ADMIN_ALL_TRACKS);
+      revalidateTag(cacheKeys.getTrack(result.id));
 
       // status가 publish 였거나 publish 로 수정될때만 releasedTrack 캐시 무효화
       if (
         exist.status === TrackStatus.PUBLISH ||
         result.status === TrackStatus.PUBLISH
       ) {
-        revalidateTag(cacheKeys.RELEASED_TRACK);
+        revalidateTag(cacheKeys.getReleasedTracksByGenre('all'));
+        const _genres = new Set([...exist.genres, ...result.genres]);
+
+        _genres.forEach((t) =>
+          revalidateTag(cacheKeys.getReleasedTracksByGenre(t.slug))
+        );
       }
 
       return { success: true, track: result };

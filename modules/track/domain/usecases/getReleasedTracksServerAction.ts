@@ -30,7 +30,10 @@ export const getReleasedTracksServerAction = async (
       },
       [cacheKeys.getReleasedTracksByGenre(query.genre ?? '')],
       {
-        tags: [cacheKeys.RELEASED_TRACK],
+        tags: [
+          cacheKeys.RELEASED_TRACKS,
+          cacheKeys.getReleasedTracksByGenre(query.genre ?? 'all'),
+        ],
         revalidate: 3600,
       }
     )();

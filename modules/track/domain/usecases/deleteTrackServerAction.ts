@@ -17,7 +17,7 @@ export const deleteTrackServerAction = adminGuard(
       revalidateTag(cacheKeys.ADMIN_ALL_TRACKS);
 
       if (exist.status === TrackStatus.PUBLISH) {
-        revalidateTag(cacheKeys.RELEASED_TRACK);
+        revalidateTag(cacheKeys.RELEASED_TRACKS);
       }
 
       return { success: true };
