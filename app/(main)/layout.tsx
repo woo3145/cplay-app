@@ -34,14 +34,9 @@ const userSideBarNavItems = [
     title: '내 스튜디오',
   },
   {
-    href: '/my/library',
-    icon: <Library className="mr-2 h-4 w-4" />,
-    title: '라이브러리',
-  },
-  {
     href: '/',
     icon: <Heart className="mr-2 h-4 w-4" />,
-    title: '찜목록',
+    title: '좋아요 표시',
   },
 ];
 
