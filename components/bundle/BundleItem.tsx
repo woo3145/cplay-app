@@ -3,7 +3,8 @@ import { useToggleLikeBundle } from '@/modules/bundle/application/useToggleLikeB
 import { Bundle } from '@/modules/bundle/domain/bundle';
 import Image from 'next/image';
 import { Button } from '../ui/button';
-import { Heart } from 'lucide-react';
+import { Heart, Pause, Play } from 'lucide-react';
+import { usePlayerStore } from '@/store/usePlayerStore';
 
 interface Props {
   bundle: Bundle;
@@ -11,8 +12,20 @@ interface Props {
 }
 
 export const BundleItem = ({ bundle, onClick }: Props) => {
+  const [currentPlaylistId, isPlaying, setIsPlaying] = usePlayerStore(
+    (state) => [state.playlistId, state.isPlaying, state.setIsPlaying]
+  );
+
+  const isSelectedBundle = currentPlaylistId === bundle.id;
+
   const toggleLikeTrack = useToggleLikeBundle(bundle.id);
   const onTrackClick = () => {
+    // 이미 선택 된 번들이라면 isPlaying 토글
+    if (isSelectedBundle) {
+      setIsPlaying(!isPlaying);
+      return;
+    }
+
     onClick(bundle);
   };
 
@@ -39,15 +52,34 @@ export const BundleItem = ({ bundle, onClick }: Props) => {
           )}
         />
       </Button>
-      <Image
-        src={bundle.imageUrl}
-        alt={bundle.name}
-        width={256}
-        height={256}
-        className={cn(
-          'w-full object-cover transition-all hover:scale-105 aspect-square rounded-md'
+      <div className="relative flex items-center justify-center group">
+        <Image
+          src={bundle.imageUrl}
+          alt={bundle.name}
+          width={256}
+          height={256}
+          className={cn(
+            'w-full object-cover transition-all aspect-square rounded-md group-hover:brightness-50',
+            isSelectedBundle && isPlaying && 'brightness-50'
+          )}
+        />
+
+        {isSelectedBundle && isPlaying ? (
+          <Pause
+            className={cn(
+              'absolute w-7 h-7 hidden group-hover:block text-white text-primary',
+              isSelectedBundle && 'block'
+            )}
+          />
+        ) : (
+          <Play
+            className={cn(
+              'absolute w-7 h-7 hidden group-hover:block text-white text-primary',
+              isSelectedBundle && isPlaying && 'block'
+            )}
+          />
         )}
-      />
+      </div>
       <div className="space-y-1 text-sm">
         <h3 className="font-medium leading-none">{bundle.name}</h3>
       </div>

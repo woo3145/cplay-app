@@ -5,9 +5,15 @@ import { trackIncludes } from '@/modules/track/infrastructure/track.prisma.repos
 import { RepositoryCreateBundleInput } from '../domain/validations/CreateBundleTypes';
 import { RepositoryEditBundleInput } from '../domain/validations/EditBundleTypes';
 import { RepositoryGetBundlesQuery } from '../domain/validations/GetBundlesTypes';
+import { TrackStatus } from '@/modules/track/domain/track';
 
 export const bundleIncludes = {
   tracks: {
+    where: {
+      track: {
+        status: TrackStatus.PUBLISH,
+      },
+    },
     include: {
       track: {
         include: trackIncludes,
