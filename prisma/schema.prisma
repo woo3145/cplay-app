@@ -42,18 +42,19 @@ enum Role {
 }
 
 model User {
-  id            String       @id @default(cuid())
+  id            String         @id @default(cuid())
   name          String?
-  email         String?      @unique
+  email         String?        @unique
   emailVerified DateTime?
   image         String?
   password      String?
-  role          Role         @default(USER)
+  role          Role           @default(USER)
   accounts      Account[]
   sessions      Session[]
   Track         Track[]
   likedTracks   TrackLike[]
   likedBundles  BundleLike[]
+  playlists     UserPlaylist[]
 }
 
 model VerificationToken {
@@ -95,10 +96,11 @@ model Track {
   stems Stem[] // 원곡을 이루는 개별트랙
 
   // Many to Many
-  genres  Genre[]
-  moods   Mood[]
-  bundles BundleTrack[]
-  likedBy TrackLike[]
+  genres        Genre[]
+  moods         Mood[]
+  bundles       BundleTrack[]
+  likedBy       TrackLike[]
+  userPlaylists UserPlaylist[]
 }
 
 model TrackLike {
@@ -174,4 +176,15 @@ model BundleTrack {
   track  Track  @relation(fields: [trackId], references: [id])
 
   @@id([bundleId, trackId])
+}
+
+model UserPlaylist {
+  id     String @id @default(cuid())
+  userId String
+
+  name   String
+  user   User    @relation(fields: [userId], references: [id])
+  tracks Track[]
+
+  @@unique([id, userId])
 }
