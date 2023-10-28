@@ -1,4 +1,3 @@
-import { getProviders } from 'next-auth/react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { SocialSignInList } from '@/app/(auth)/SocialSignInList';
@@ -14,8 +13,6 @@ const SAMPLE_IMAGE =
   'https://images.unsplash.com/photo-1503528290183-6e934b7d6981?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80';
 
 export default async function LoginPage() {
-  const providers = await getProviders();
-
   return (
     <div className={'flex flex-col h-full xl:flex-row'}>
       <div className="flex justify-center w-full xl:w-6/12">
@@ -33,7 +30,7 @@ export default async function LoginPage() {
             </p>
           </header>
 
-          <SocialSignInList providers={providers} />
+          <SocialSignInList />
 
           <Separator className="my-4" />
 

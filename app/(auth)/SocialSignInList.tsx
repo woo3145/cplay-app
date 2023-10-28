@@ -1,22 +1,33 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { BuiltInProviderType } from 'next-auth/providers/index';
-import { ClientSafeProvider, LiteralUnion, signIn } from 'next-auth/react';
-import { ReactNode } from 'react';
+import {
+  ClientSafeProvider,
+  LiteralUnion,
+  getProviders,
+  signIn,
+} from 'next-auth/react';
+import { ReactNode, useEffect, useState } from 'react';
 import { BsGoogle } from 'react-icons/bs';
-
-interface Props {
-  providers: Record<
-    LiteralUnion<BuiltInProviderType, string>,
-    ClientSafeProvider
-  > | null;
-}
 
 const ProviderIcon: { [key: string]: ReactNode } = {
   google: <BsGoogle />,
 };
 
-export const SocialSignInList = ({ providers }: Props) => {
+export const SocialSignInList = () => {
+  const [providers, setProviders] = useState<Record<
+    LiteralUnion<BuiltInProviderType, string>,
+    ClientSafeProvider
+  > | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      const res = await getProviders();
+      setProviders(res);
+    })();
+  }, []);
+
+  useEffect(() => {}, []);
   return (
     <ul className="flex flex-col gap-2">
       {providers &&
