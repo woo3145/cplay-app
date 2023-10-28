@@ -174,6 +174,31 @@ export const registerUser = (
 
 ## 🚨 에러 모음
 
+#### 빌드 중 [next-auth][error][CLIENT_FETCH_ERROR] 에러
+
+```
+[next-auth][error][CLIENT_FETCH_ERROR]
+https://next-auth.js.org/errors#client_fetch_error fetch failed {
+  error: {
+    message: 'fetch failed',
+    stack: 'TypeError: fetch failed\n' +
+      '    at Object.fetch (node:internal/deps/undici/undici:11576:11)\n' +
+      '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)',
+    name: 'TypeError'
+  },
+  url: 'http://127.0.0.1:3000/api/auth/providers',
+  message: 'fetch failed'
+}
+```
+
+##### 원인
+
+getProviders는 http://127.0.0.1:3000/api/auth/providers 로 요청을 보내는데 빌드 시점에는 서버가 켜져있지 않기 때문에 fetch failed 에러 발생
+
+##### 해결
+
+기존 SRC에서 요청하던 getProviders를 SocialSignInList 컴포넌트에서 클라이언트 요청을 통해 가져오도록 함
+
 #### @aws-sdk/signature-v4-crt 경고
 
 ```
