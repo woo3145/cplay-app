@@ -44,6 +44,7 @@ export default async function RootLayout({
   useUserStore.setState({
     likedTracks,
     likedBundles,
+    playlists,
   });
   return (
     <html lang="en" suppressHydrationWarning>

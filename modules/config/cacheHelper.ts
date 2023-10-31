@@ -21,4 +21,5 @@ export const cacheKeys = {
   getSessionUser: (userId: string) => `sessionUser_${userId}`,
 
   getPlaylistsByUser: (userId: string) => `playlists_${userId}`,
+  getPlaylistById: (playlistId: string) => `playlist_${playlistId}`,
 };

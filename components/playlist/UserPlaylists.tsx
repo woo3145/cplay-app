@@ -5,6 +5,7 @@ import { Button } from '../ui/button';
 import { ScrollArea } from '../ui/scroll-area';
 import { CreatePlaylistDialog } from './CreatePlaylistDialog';
 import { useUserStore } from '@/store/useUserStore';
+import Link from 'next/link';
 
 export const UserPlaylists = () => {
   const playlists = useUserStore((state) => state.playlists);
@@ -17,14 +18,19 @@ export const UserPlaylists = () => {
       <ScrollArea className="h-[240px] px-1">
         {playlists.map((playlist) => {
           return (
-            <Button
+            <Link
               key={playlist.id}
-              variant="ghost"
-              className="w-full justify-start gap-2 font-normal"
+              href={`/playlists/${playlist.id}`}
+              prefetch={false}
             >
-              <ListMusic className="w-5 h-5" />
-              {playlist.name}
-            </Button>
+              <Button
+                variant="ghost"
+                className="w-full justify-start gap-2 font-normal"
+              >
+                <ListMusic className="w-5 h-5" />
+                {playlist.name}
+              </Button>
+            </Link>
           );
         })}
       </ScrollArea>
