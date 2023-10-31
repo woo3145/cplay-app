@@ -4,7 +4,7 @@ import { z } from 'zod';
 export const CreatePlaylistFormSchema = z.object({
   name: z.string().min(1, 'name은 필수 입력 사항입니다.'),
 });
-export type CreateBundleFormData = z.infer<typeof CreatePlaylistFormSchema>;
+export type CreatePlaylistFormData = z.infer<typeof CreatePlaylistFormSchema>;
 
 // usecase
 export const UsecaseCreatePlaylistInputSchema = CreatePlaylistFormSchema.extend(

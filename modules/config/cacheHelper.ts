@@ -19,4 +19,6 @@ export const cacheKeys = {
     `releasedBundlesByType_${bundleType}`,
 
   getSessionUser: (userId: string) => `sessionUser_${userId}`,
+
+  getPlaylistsByUser: (userId: string) => `playlists_${userId}`,
 };

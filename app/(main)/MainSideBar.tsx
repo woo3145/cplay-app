@@ -7,8 +7,7 @@ import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Role } from '@prisma/client';
-import { DoorOpen, ListMusic, PlusSquare } from 'lucide-react';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { DoorOpen } from 'lucide-react';
 import { UserPlaylists } from '@/components/playlist/UserPlaylists';
 
 interface MainSideBarProps extends React.HTMLAttributes<HTMLElement> {

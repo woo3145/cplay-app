@@ -1,13 +1,6 @@
 import { Header } from '@/components/common/Header';
 import { MainSideBar } from '@/app/(main)/MainSideBar';
-import {
-  Heart,
-  LayoutGrid,
-  Library,
-  Monitor,
-  Music,
-  Users,
-} from 'lucide-react';
+import { Heart, LayoutGrid, Monitor, Music, Users } from 'lucide-react';
 
 const mainSidebarNavItems = [
   {
