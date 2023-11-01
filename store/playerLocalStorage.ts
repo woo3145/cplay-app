@@ -12,7 +12,13 @@ type PlayerLocalStoragePayload =
   | { type: 'stemType'; stemType: StemType | null }
   | { type: 'isMuted'; isMuted: boolean }
   | { type: 'volume'; volume: number }
-  | { type: 'playlist'; playlist: Track[]; playlistId: number | null };
+  | {
+      type: 'playlist';
+      playlist: Track[];
+      playlistName: string;
+      playlistId: string;
+      isBundleSelected: boolean;
+    };
 
 export const PLAYER_LOCAL_STORAGE = 'JAZZIT_PLAYER_STATE';
 
@@ -34,8 +40,10 @@ const DEFAULT_PLAYER_STATE = {
   stemType: null,
   isMuted: false,
   volume: 1,
+  playlistName: '',
   playlist: [],
-  playlistId: null,
+  playlistId: '',
+  isBundleSelected: false,
 };
 
 export const initPlayerLocalStorage = () => {
@@ -88,8 +96,10 @@ export const updatePlayerLocalStorage = (
         item.volume = payload.volume;
         break;
       case 'playlist':
+        item.playlistName = payload.playlistName;
         item.playlist = payload.playlist;
         item.playlistId = payload.playlistId;
+        item.isBundleSelected = payload.isBundleSelected;
         break;
     }
     localStorage.setItem(PLAYER_LOCAL_STORAGE, JSON.stringify(item));

@@ -12,11 +12,16 @@ interface Props {
 }
 
 export const BundleItem = ({ bundle, onClick }: Props) => {
-  const [currentPlaylistId, isPlaying, setIsPlaying] = usePlayerStore(
-    (state) => [state.playlistId, state.isPlaying, state.setIsPlaying]
-  );
+  const [currentPlaylistId, isPlaying, setIsPlaying, isBundleSelected] =
+    usePlayerStore((state) => [
+      state.playlistId,
+      state.isPlaying,
+      state.setIsPlaying,
+      state.isBundleSelected,
+    ]);
 
-  const isSelectedBundle = currentPlaylistId === bundle.id;
+  const isSelectedBundle =
+    isBundleSelected && currentPlaylistId === bundle.id.toString();
 
   const toggleLikeTrack = useToggleLikeBundle(bundle.id);
   const onTrackClick = () => {
