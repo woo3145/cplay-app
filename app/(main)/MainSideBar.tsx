@@ -93,8 +93,8 @@ export function MainSideBar({
           </div>
         ) : null}
         {session?.user ? (
-          <div className="py-2">
-            <h2 className="relative px-7 text-lg font-semibold tracking-tight">
+          <div className="px-3 py-2">
+            <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
               Playlists
             </h2>
             <UserPlaylists />

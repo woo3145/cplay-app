@@ -1,5 +1,8 @@
 import { getPlaylistServerAction } from '@/modules/playlist/domain/usecases/getPlaylistServerAction';
+import { PlaylistController } from './PlaylistController';
 import { PlaylistInfo } from './PlaylistInfo';
+import { PlaylistList } from './PlaylistList';
+import { Separator } from '@/components/ui/separator';
 
 export default async function PlaylistPage({
   params: { playlistId },
@@ -16,11 +19,15 @@ export default async function PlaylistPage({
     );
   }
   return (
-    <div className="flex w-full px-4 lg:px-8 py-6 gap-8">
-      <div className="w-1/3 shrink-0 bg-red-200">
-        <PlaylistInfo playlist={playlist} />
+    <div className="flex flex-col items-center w-full px-4 lg:flex-row lg:items-start lg:px-8 py-6 gap-8">
+      <div className="w-full sm:w-3/5 lg:w-1/3 shrink-0">
+        <PlaylistController playlist={playlist} />
       </div>
-      <div className="w-full bg-slate-500">Playlist {playlist.name}</div>
+      <div className="w-full space-y-4">
+        <PlaylistInfo playlist={playlist} />
+        <Separator className="w-full" />
+        <PlaylistList playlist={playlist} />
+      </div>
     </div>
   );
 }

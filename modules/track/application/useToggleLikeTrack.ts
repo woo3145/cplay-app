@@ -4,10 +4,11 @@ import { useSession } from 'next-auth/react';
 import { toggleLikeTrackServerAction } from '@/modules/track/domain/usecases/toggleLikeTrackServerAction';
 import { toast } from '@/components/ui/use-toast';
 
-export const useToggleLikeTrack = (trackId: number) => {
+export const useToggleLikeTrack = (trackId: number | null) => {
   const { data: session } = useSession();
 
   const toggleLikeTrack = async () => {
+    if (!trackId) return;
     if (!session?.user) {
       toast({
         variant: 'destructive',
