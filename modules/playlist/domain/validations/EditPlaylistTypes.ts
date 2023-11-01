@@ -8,6 +8,7 @@ export type EditPlaylistFormData = z.infer<typeof EditPlaylistFormSchema>;
 
 // usecase
 export const UsecaseEditPlaylistInputSchema = EditPlaylistFormSchema.extend({
+  userId: z.string(),
   trackIds: z.number().array(),
 });
 export type UsecaseEditPlaylistInput = z.infer<

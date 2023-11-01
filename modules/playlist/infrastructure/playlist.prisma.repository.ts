@@ -39,7 +39,7 @@ export class PlaylistPrismaRepository implements PlaylistRepository {
 
   async create(data: RepositoryCreatePlaylistInput) {
     const { trackIds, userId, ...rest } = data;
-    const bundle = await prisma.userPlaylist.create({
+    const playlist = await prisma.userPlaylist.create({
       data: {
         ...rest,
         userId,
@@ -51,7 +51,7 @@ export class PlaylistPrismaRepository implements PlaylistRepository {
       },
       include: playlistIncludes,
     });
-    return toPlaylistDomainModel(bundle);
+    return toPlaylistDomainModel(playlist);
   }
 
   async edit(id: string, updatedField: RepositoryEditPlaylistInput) {
@@ -67,7 +67,7 @@ export class PlaylistPrismaRepository implements PlaylistRepository {
       });
     }
 
-    const updatedBundle = await prisma.userPlaylist.update({
+    const updatedPlaylist = await prisma.userPlaylist.update({
       where: { id },
       data: {
         ...rest,
@@ -83,7 +83,7 @@ export class PlaylistPrismaRepository implements PlaylistRepository {
       include: playlistIncludes,
     });
 
-    return toPlaylistDomainModel(updatedBundle);
+    return toPlaylistDomainModel(updatedPlaylist);
   }
 
   async delete(id: string) {
