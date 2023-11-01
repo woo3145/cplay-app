@@ -7,8 +7,7 @@ interface Props {
 export const PlaylistInfo = ({ playlist }: Props) => {
   return (
     <div className="w-full">
-      <div>{playlist.id}</div>
-      <div>{playlist.name}</div>
+      <h2 className="text-4xl">{playlist.name}</h2>
     </div>
   );
 };

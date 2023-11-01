@@ -21,8 +21,8 @@ export const CreatePlaylistDialog = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className="w-full" asChild>
-        <Button variant="ghost">
-          <PlusCircle className="mr-2 h-4 w-4" />
+        <Button variant="ghost" className="gap-2">
+          <PlusCircle className="h-4 w-4" />
           Add Playlist
         </Button>
       </DialogTrigger>
