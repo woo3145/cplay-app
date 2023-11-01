@@ -1,12 +1,12 @@
 'use server';
 
 import { repository } from '@/modules/config/repository';
-import { adminGuard } from '@/lib/guard/adminGuard';
 import { revalidateTag } from 'next/cache';
 import { cacheKeys } from '@/modules/config/cacheHelper';
 import { PlaylistRepository } from '../playlist.repository';
+import { userGuard } from '@/lib/guard/userGuard';
 
-export const deletePlaylistServerAction = adminGuard(
+export const deletePlaylistServerAction = userGuard(
   async (
     id: string,
     userId: string,

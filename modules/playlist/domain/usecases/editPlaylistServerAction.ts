@@ -1,7 +1,6 @@
 'use server';
 
 import { repository } from '@/modules/config/repository';
-import { adminGuard } from '@/lib/guard/adminGuard';
 import { revalidateTag } from 'next/cache';
 import { arraysEqual } from '@/lib/utils';
 import { cacheKeys } from '@/modules/config/cacheHelper';
@@ -10,8 +9,9 @@ import {
   UsecaseEditPlaylistInputSchema,
 } from '../validations/EditPlaylistTypes';
 import { PlaylistRepository } from '../playlist.repository';
+import { userGuard } from '@/lib/guard/userGuard';
 
-export const editPlaylistServerAction = adminGuard(
+export const editPlaylistServerAction = userGuard(
   async (
     id: string,
     data: UsecaseEditPlaylistInput,
