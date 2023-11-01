@@ -17,7 +17,7 @@ type PlayerLocalStoragePayload =
       playlist: Track[];
       playlistName: string;
       playlistId: string;
-      isBundleSelected: boolean;
+      selectedBundleId: string;
     };
 
 export const PLAYER_LOCAL_STORAGE = 'JAZZIT_PLAYER_STATE';
@@ -43,7 +43,7 @@ const DEFAULT_PLAYER_STATE = {
   playlistName: '',
   playlist: [],
   playlistId: '',
-  isBundleSelected: false,
+  selectedBundleId: '',
 };
 
 export const initPlayerLocalStorage = () => {
@@ -99,7 +99,7 @@ export const updatePlayerLocalStorage = (
         item.playlistName = payload.playlistName;
         item.playlist = payload.playlist;
         item.playlistId = payload.playlistId;
-        item.isBundleSelected = payload.isBundleSelected;
+        item.selectedBundleId = payload.selectedBundleId;
         break;
     }
     localStorage.setItem(PLAYER_LOCAL_STORAGE, JSON.stringify(item));

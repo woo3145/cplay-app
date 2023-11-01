@@ -30,7 +30,6 @@ export const PlaylistDialog = () => {
     setPlaylist,
     isPlaying,
     setIsPlaying,
-    isBundleSelected,
   } = usePlayerStore((state) => ({
     playlistName: state.playlistName,
     playlistId: state.playlistId,
@@ -40,7 +39,6 @@ export const PlaylistDialog = () => {
     setPlaylist: state.setPlaylist,
     isPlaying: state.isPlaying,
     setIsPlaying: state.setIsPlaying,
-    isBundleSelected: state.isBundleSelected,
   }));
 
   const onClickPlay = (track: Track) => {
@@ -76,7 +74,7 @@ export const PlaylistDialog = () => {
       return;
     }
     if (playlistId === null) return;
-    if (playlistId === 'custom' || isBundleSelected) {
+    if (playlistId === 'custom') {
       const result = await createPlaylistServerAction({
         userId: session.user.id,
         name: playlistName,
@@ -123,10 +121,8 @@ export const PlaylistDialog = () => {
           variant: 'success',
           title: '플레이리스트를 저장했습니다.',
         });
-
         return;
       }
-      return;
     }
   };
 
@@ -206,7 +202,7 @@ export const PlaylistDialog = () => {
           </Button>
           <DialogClose asChild>
             <Button type="button" variant="secondary">
-              Close
+              닫기
             </Button>
           </DialogClose>
         </DialogFooter>

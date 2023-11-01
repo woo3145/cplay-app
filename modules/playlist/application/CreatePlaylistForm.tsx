@@ -19,6 +19,7 @@ import {
 } from '../domain/validations/CreatePlaylistTypes';
 import { createPlaylistServerAction } from '../domain/usecases/createPlaylistServerAction';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   closeModal: () => void;
@@ -26,6 +27,7 @@ interface Props {
 
 export const CreatePlaylistForm = ({ closeModal }: Props) => {
   const { data: session } = useSession();
+  const router = useRouter();
   const form = useForm<CreatePlaylistFormData>({
     resolver: zodResolver(CreatePlaylistFormSchema),
     defaultValues: {
@@ -61,6 +63,9 @@ export const CreatePlaylistForm = ({ closeModal }: Props) => {
         variant: 'success',
         title: '성공적으로 Playlists를 생성했습니다.',
       });
+      if (result.playlist?.id) {
+        router.push(`/playlists/${result.playlist.id}`);
+      }
 
       closeModal();
     } catch (e) {

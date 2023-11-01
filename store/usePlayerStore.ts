@@ -17,7 +17,7 @@ export interface PlayerStoreState {
   playlistName: string;
   playlist: Track[];
   playlistId: string;
-  isBundleSelected: boolean;
+  selectedBundleId: string;
 }
 interface PlayerStoreActions {
   initPlayerStore: (item: PlayerLocalStorageState) => void;
@@ -32,7 +32,7 @@ interface PlayerStoreActions {
     id: string,
     name: string,
     tracks: Track[],
-    isBundleSelected?: boolean
+    selectedBundleId?: string
   ) => void;
   changeMusic: (type: 'next' | 'prev') => void;
 }
@@ -49,7 +49,7 @@ export const usePlayerStore = create<PlayerStoreState & PlayerStoreActions>(
     playlistName: '',
     playlist: [],
     playlistId: '',
-    isBundleSelected: false,
+    selectedBundleId: '',
 
     initPlayerStore: (item: PlayerLocalStorageState) => {
       set({
@@ -108,20 +108,20 @@ export const usePlayerStore = create<PlayerStoreState & PlayerStoreActions>(
       id: string,
       name: string,
       tracks: Track[],
-      isBundleSelected: boolean = false
+      selectedBundleId: string = ''
     ) => {
       set({
         playlistName: name,
         playlistId: id.toString(),
         playlist: tracks,
-        isBundleSelected,
+        selectedBundleId,
       });
       updatePlayerLocalStorage({
         type: 'playlist',
         playlist: tracks,
         playlistName: name,
         playlistId: id.toString(),
-        isBundleSelected,
+        selectedBundleId,
       });
     },
 
