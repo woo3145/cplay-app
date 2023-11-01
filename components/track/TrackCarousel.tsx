@@ -20,20 +20,21 @@ export const TrackCarousel = ({ tracks }: Props) => {
     (track) => (track.likedByUser = likedTrackIds.includes(track.id))
   );
 
-  const { setTrack, setPlaylist, playlist, playlistId } = usePlayerStore(
-    (state) => ({
+  const { setTrack, setPlaylist, playlistName, playlist, playlistId } =
+    usePlayerStore((state) => ({
       setTrack: state.setTrack,
+      playlistName: state.playlistName,
       playlist: state.playlist,
       playlistId: state.playlistId,
       setPlaylist: state.setPlaylist,
-    })
-  );
+    }));
 
   const onTrackClick = (track: Track) => {
-    if (playlistId === null || playlist.length === 0) {
-      setPlaylist(0, [track]);
+    if (playlistId === '') {
+      // 현재 선택 된 플레이리스트가 없는 경우
+      setPlaylist('custom', 'custom', [track]);
     } else {
-      setPlaylist(0, [
+      setPlaylist(playlistId, playlistName, [
         ...playlist.filter((item) => item.id !== track.id),
         track,
       ]);

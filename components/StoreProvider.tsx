@@ -10,24 +10,38 @@ import {
 import { Track } from '@/modules/track/domain/track';
 import { useUserStore } from '@/store/useUserStore';
 import { Bundle } from '@/modules/bundle/domain/bundle';
+import { UserPlaylist } from '@/modules/playlist/domain/playlist';
 
 interface Props {
   children: React.ReactNode;
   likedTracks: Track[];
   likedBundles: Bundle[];
+  playlists: UserPlaylist[];
 }
 
-export function StoreProvider({ children, likedTracks, likedBundles }: Props) {
+export function StoreProvider({
+  children,
+  likedTracks,
+  likedBundles,
+  playlists,
+}: Props) {
   const initPlayerStore = usePlayerStore((state) => state.initPlayerStore);
-  const [setLikedTracks, setLikedBundles] = useUserStore((state) => [
-    state.setLikedTracks,
-    state.setLikedBundles,
-  ]);
+  const [setLikedTracks, setLikedBundles, setPlaylists] = useUserStore(
+    (state) => [state.setLikedTracks, state.setLikedBundles, state.setPlaylists]
+  );
 
   useEffect(() => {
     setLikedTracks(likedTracks);
     setLikedBundles(likedBundles);
-  }, [likedTracks, setLikedTracks, likedBundles, setLikedBundles]);
+    setPlaylists(playlists);
+  }, [
+    likedTracks,
+    setLikedTracks,
+    likedBundles,
+    setLikedBundles,
+    playlists,
+    setPlaylists,
+  ]);
 
   useEffect(() => {
     if (typeof window === 'undefined' || typeof Storage === 'undefined') {

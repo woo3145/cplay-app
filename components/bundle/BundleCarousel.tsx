@@ -26,7 +26,7 @@ export const BundleCarousel = ({ bundles }: Props) => {
   ]);
 
   const onBundleClick = (bundle: Bundle) => {
-    setPlaylist(bundle.id, bundle.tracks);
+    setPlaylist('custom', bundle.name, bundle.tracks, bundle.id.toString());
     setTrack(0 < bundle.tracks.length ? bundle.tracks[0] : null);
   };
   return (

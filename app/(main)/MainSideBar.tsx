@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Role } from '@prisma/client';
 import { DoorOpen } from 'lucide-react';
+import { UserPlaylists } from '@/components/playlist/UserPlaylists';
 
 interface MainSideBarProps extends React.HTMLAttributes<HTMLElement> {
   mainNavItems: {
@@ -31,7 +32,7 @@ export function MainSideBar({
   const { data: session } = useSession();
   return (
     <div className={cn('pb-12', className)}>
-      <div className="space-y-4 py-4">
+      <div className="space-y-2 py-4">
         {session?.user.role === Role.ADMIN && (
           <div className="px-3 py-2">
             <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
@@ -89,6 +90,14 @@ export function MainSideBar({
                 );
               })}
             </div>
+          </div>
+        ) : null}
+        {session?.user ? (
+          <div className="px-3 py-2">
+            <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
+              Playlists
+            </h2>
+            <UserPlaylists />
           </div>
         ) : null}
       </div>

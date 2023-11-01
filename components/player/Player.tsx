@@ -10,21 +10,24 @@ export const Player = () => {
   const likedTrackIds = useUserStore((state) => state.likedTracks).map(
     (track) => track.id
   );
-  const { track } = usePlayerStore((state) => ({
+  const { track, playlist } = usePlayerStore((state) => ({
     track: state.currentTrack,
+    playlist: state.playlist,
   }));
   const videoRef = useRef<HTMLAudioElement>(null);
 
-  if (!track) {
+  if (!playlist) {
     return null;
   }
 
-  track.likedByUser = likedTrackIds.includes(track.id);
+  if (track) {
+    track.likedByUser = likedTrackIds.includes(track.id);
+  }
 
   return (
     <div className="fixed bottom-0 z-50 w-full flex justify-between items-center px-4 py-2 bg-background">
       <TrackInfo track={track} />
-      <PlayerController track={track} videoRef={videoRef} />
+      {track ? <PlayerController track={track} videoRef={videoRef} /> : null}
       <PlayerSideController track={track} videoRef={videoRef} />
     </div>
   );

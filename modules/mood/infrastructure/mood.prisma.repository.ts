@@ -2,7 +2,6 @@ import prisma from '@/lib/db/prisma';
 import { MoodRepository } from '../domain/mood.repository';
 import { RepositoryEditMoodInput } from '../domain/validations/EditMoodTypes';
 import { RepositoryCreateMoodInput } from '../domain/validations/CreateMoodTypes';
-import { Mood } from '../domain/mood';
 import { toMoodDomainModel } from './mood.prisma.mapper';
 
 export class MoodPrismaRepository implements MoodRepository {

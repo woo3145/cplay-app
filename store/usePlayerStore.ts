@@ -14,8 +14,10 @@ export interface PlayerStoreState {
   volume: number;
   currentTime: number;
 
+  playlistName: string;
   playlist: Track[];
-  playlistId: number | null;
+  playlistId: string;
+  selectedBundleId: string;
 }
 interface PlayerStoreActions {
   initPlayerStore: (item: PlayerLocalStorageState) => void;
@@ -26,7 +28,12 @@ interface PlayerStoreActions {
   setCurrentTime: (time: number) => void;
   setVolume: (volume: number) => void;
 
-  setPlaylist: (id: number, tracks: Track[]) => void;
+  setPlaylist: (
+    id: string,
+    name: string,
+    tracks: Track[],
+    selectedBundleId?: string
+  ) => void;
   changeMusic: (type: 'next' | 'prev') => void;
 }
 
@@ -39,8 +46,10 @@ export const usePlayerStore = create<PlayerStoreState & PlayerStoreActions>(
     volume: 1,
     currentTime: 0,
 
+    playlistName: '',
     playlist: [],
-    playlistId: null,
+    playlistId: '',
+    selectedBundleId: '',
 
     initPlayerStore: (item: PlayerLocalStorageState) => {
       set({
@@ -52,6 +61,7 @@ export const usePlayerStore = create<PlayerStoreState & PlayerStoreActions>(
         currentTime: 0,
         playlist: item.playlist,
         playlistId: item.playlistId,
+        playlistName: item.playlistName,
       });
     },
 
@@ -94,15 +104,24 @@ export const usePlayerStore = create<PlayerStoreState & PlayerStoreActions>(
       updatePlayerLocalStorage({ type: 'volume', volume });
     },
 
-    setPlaylist: (id: number, tracks: Track[]) => {
+    setPlaylist: (
+      id: string,
+      name: string,
+      tracks: Track[],
+      selectedBundleId: string = ''
+    ) => {
       set({
-        playlistId: id,
+        playlistName: name,
+        playlistId: id.toString(),
         playlist: tracks,
+        selectedBundleId,
       });
       updatePlayerLocalStorage({
         type: 'playlist',
         playlist: tracks,
-        playlistId: id,
+        playlistName: name,
+        playlistId: id.toString(),
+        selectedBundleId,
       });
     },
 

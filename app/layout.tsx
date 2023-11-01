@@ -12,6 +12,7 @@ import { StoreProvider } from '@/components/StoreProvider';
 import { getLikedTracksServerAction } from '@/modules/track/domain/usecases/getLikedTracksServerAction';
 import { useUserStore } from '@/store/useUserStore';
 import { getLikedBundlesServerAction } from '@/modules/bundle/domain/usecases/getLikedBundlesServerAction';
+import { getPlaylistsServerAction } from '@/modules/playlist/domain/usecases/getPlaylistsServerAction';
 
 // Next의 런타임 참고
 // https://nextjs.org/docs/app/building-your-application/rendering/edge-and-nodejs-runtimes#edge-runtime
@@ -38,16 +39,22 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions);
   const likedTracks = await getLikedTracksServerAction(session?.user.id);
   const likedBundles = await getLikedBundlesServerAction(session?.user.id);
+  const playlists = await getPlaylistsServerAction(session?.user.id);
 
   useUserStore.setState({
     likedTracks,
     likedBundles,
+    playlists,
   });
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <SessionProvider session={session}>
-          <StoreProvider likedTracks={likedTracks} likedBundles={likedBundles}>
+          <StoreProvider
+            likedTracks={likedTracks}
+            likedBundles={likedBundles}
+            playlists={playlists}
+          >
             <ThemeProvider
               attribute="class"
               defaultTheme="system"

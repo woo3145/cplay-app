@@ -23,6 +23,7 @@ export const PlayerController = ({ track, videoRef }: Props) => {
     setCurrentTime,
     changeMusic,
     playlistId,
+    selectedBundleId,
   } = usePlayerStore((state) => ({
     currentTime: state.currentTime,
     volume: state.volume,
@@ -32,6 +33,7 @@ export const PlayerController = ({ track, videoRef }: Props) => {
     setCurrentTime: state.setCurrentTime,
     changeMusic: state.changeMusic,
     playlistId: state.playlistId,
+    selectedBundleId: state.selectedBundleId,
   }));
   const [duration, setDuration] = useState<number>();
   const trackSrc = useMemo(() => {
@@ -74,7 +76,7 @@ export const PlayerController = ({ track, videoRef }: Props) => {
       }
     }
     // eslint-disable-next-line
-  }, [trackSrc, isPlaying, playlistId]);
+  }, [trackSrc, isPlaying, playlistId, selectedBundleId]);
 
   return (
     <div className="flex justify-center w-full max-w-xl mx-auto">

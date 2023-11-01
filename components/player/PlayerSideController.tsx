@@ -1,3 +1,5 @@
+'use client';
+
 import { Track } from '@/modules/track/domain/track';
 import { RefObject, useEffect } from 'react';
 import { Button } from '../ui/button';
@@ -9,7 +11,7 @@ import { cn } from '@/lib/utils';
 import { useToggleLikeTrack } from '@/modules/track/application/useToggleLikeTrack';
 
 interface Props {
-  track: Track;
+  track: Track | null;
   videoRef: RefObject<HTMLAudioElement>;
 }
 
@@ -22,14 +24,13 @@ export const PlayerSideController = ({ track, videoRef }: Props) => {
       setIsMuted: state.setIsMuted,
     })
   );
-  const toggleLikeTrack = useToggleLikeTrack(track.id);
+  const toggleLikeTrack = useToggleLikeTrack(track ? track.id : null);
 
   const changeVolumeHandler = (volume: number[]) => {
-    if (!videoRef.current) return;
     if (isMuted) setIsMuted(false);
-    videoRef.current.volume = volume[0];
     setVolume(volume[0]);
   };
+
   const toggleMuteHandler = () => {
     setIsMuted(!isMuted);
   };
@@ -40,10 +41,17 @@ export const PlayerSideController = ({ track, videoRef }: Props) => {
     await toggleLikeTrack();
   };
 
+  // muted 적용
   useEffect(() => {
     if (!videoRef.current) return;
     videoRef.current.muted = isMuted;
   }, [videoRef, isMuted]);
+
+  // volume 적용
+  useEffect(() => {
+    if (!videoRef.current) return;
+    videoRef.current.volume = volume;
+  }, [videoRef, volume]);
 
   return (
     <div className="hidden lg:flex w-1/4 shrink-0 justify-end gap-2">
@@ -67,19 +75,21 @@ export const PlayerSideController = ({ track, videoRef }: Props) => {
         </Button>
       </div>
       <PlaylistDialog />
-      <Button
-        type="button"
-        variant="ghost"
-        onClick={onLikeClick}
-        className="p-2 flex justify-center"
-      >
-        <Heart
-          className={cn(
-            'w-5 h-5',
-            track.likedByUser ? 'text-primary' : 'text-foreground/20'
-          )}
-        />
-      </Button>
+      {track ? (
+        <Button
+          type="button"
+          variant="ghost"
+          onClick={onLikeClick}
+          className="p-2 flex justify-center"
+        >
+          <Heart
+            className={cn(
+              'w-5 h-5',
+              track.likedByUser ? 'text-primary' : 'text-foreground/20'
+            )}
+          />
+        </Button>
+      ) : null}
     </div>
   );
 };
