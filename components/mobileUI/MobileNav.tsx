@@ -1,18 +1,34 @@
 'use client';
 
 import { cn } from '@/lib/utils';
+import { LayoutGrid, ListMusic, Music, Users } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-interface Props extends React.HTMLAttributes<HTMLElement> {
-  mobileNavItems: {
-    href: string;
-    icon: React.ReactNode;
-    title: string;
-  }[];
-}
+const mobileNavItems = [
+  {
+    href: '/',
+    icon: <LayoutGrid className="h-4 w-4" />,
+    title: '탐색',
+  },
+  {
+    href: '/sounds',
+    icon: <Music className="h-4 w-4" />,
+    title: '트랙',
+  },
+  {
+    href: '/community',
+    icon: <Users className="h-4 w-4" />,
+    title: '커뮤니티',
+  },
+  {
+    href: '/playlists',
+    icon: <ListMusic className="h-4 w-4" />,
+    title: '플레이리스트',
+  },
+];
 
-export const MobileNav = ({ mobileNavItems }: Props) => {
+export const MobileNav = () => {
   const pathname = usePathname();
   return (
     <nav>
