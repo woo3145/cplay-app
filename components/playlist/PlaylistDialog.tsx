@@ -196,15 +196,15 @@ export const PlaylistDialog = () => {
           </ul>
         </ScrollArea>
 
-        <DialogFooter className="sm:justify-end">
-          <Button type="button" onClick={() => onClickSave(playlist)}>
-            저장
-          </Button>
+        <DialogFooter className="sm:justify-end gap-2">
           <DialogClose asChild>
             <Button type="button" variant="secondary">
               닫기
             </Button>
           </DialogClose>
+          <Button type="button" onClick={() => onClickSave(playlist)}>
+            저장
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

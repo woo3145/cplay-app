@@ -6,8 +6,10 @@ import { RefObject, useEffect, useMemo, useRef, useState } from 'react';
 import { Button } from '../ui/button';
 import { Slider } from '../ui/slider';
 import { cn } from '@/lib/utils';
-import { Pause, Play, SkipBack, SkipForward } from 'lucide-react';
+import { MoreVertical, Pause, Play, SkipBack, SkipForward } from 'lucide-react';
 import { formatSeconds } from '@/lib/dateFormat';
+import { PlayerProgressBar } from './\bPlayerProgressBar';
+import { PlaylistDialog } from '../playlist/PlaylistDialog';
 
 interface Props {
   track: Track;
@@ -35,7 +37,7 @@ export const PlayerController = ({ track, videoRef }: Props) => {
     playlistId: state.playlistId,
     selectedBundleId: state.selectedBundleId,
   }));
-  const [duration, setDuration] = useState<number>();
+  const [duration, setDuration] = useState<number>(0);
   const trackSrc = useMemo(() => {
     if (!track.stems.length) return null;
     const curStem = track.stems.filter((stem) => stem.stemType === stemType);
@@ -79,50 +81,59 @@ export const PlayerController = ({ track, videoRef }: Props) => {
   }, [trackSrc, isPlaying, playlistId, selectedBundleId]);
 
   return (
-    <div className="flex justify-center w-full max-w-xl mx-auto">
-      <div className="flex flex-col items-center w-full">
+    <div className="flex justify-center w-full lg:max-w-xl mx-auto">
+      {/* (예정) 모바일에서 플레이어의 배경을 누르면 모바일 플레이어 모달 오픈 */}
+      <div className="flex flex-col items-center w-full gap-2 lg:gap-0">
         {/* 이전곡, 재생, 다음곡 */}
-        <div className="flex gap-4">
-          <Button
-            shape="circle"
-            type="button"
-            variant="ghost"
-            onClick={() => changeMusic('prev')}
-            className="shrink-0 w-10 h-10 p-3"
-          >
-            <SkipBack />
-          </Button>
+        <div className="flex justify-center items-center w-full">
+          <div className="w-full lg:hidden">
+            <PlaylistDialog />
+          </div>
+          <div className="flex gap-4 shrink-0">
+            <Button
+              shape="circle"
+              type="button"
+              variant="ghost"
+              onClick={() => changeMusic('prev')}
+              className="shrink-0 w-10 h-10 p-3"
+            >
+              <SkipBack />
+            </Button>
 
-          <Button
-            shape="circle"
-            type="button"
-            onClick={playClickHandler}
-            className="shrink-0 w-10 h-10 p-3"
-          >
-            {isPlaying ? <Pause /> : <Play />}
-          </Button>
+            <Button
+              shape="circle"
+              type="button"
+              onClick={playClickHandler}
+              className="shrink-0 w-10 h-10 p-3"
+            >
+              {isPlaying ? <Pause /> : <Play />}
+            </Button>
 
-          <Button
-            shape="circle"
-            type="button"
-            variant="ghost"
-            className="shrink-0 w-10 h-10 p-3"
-            onClick={() => changeMusic('next')}
-          >
-            <SkipForward />
-          </Button>
+            <Button
+              shape="circle"
+              type="button"
+              variant="ghost"
+              className="shrink-0 w-10 h-10 p-3"
+              onClick={() => changeMusic('next')}
+            >
+              <SkipForward />
+            </Button>
+          </div>
+          <div className="w-full lg:hidden flex justify-end">
+            {/* (예정) Open Track Menu (좋아요, 상세페이지 이동 등)*/}
+            <Button
+              type="button"
+              variant="ghost"
+              className="p-2 flex justify-center"
+            >
+              <MoreVertical />
+            </Button>
+          </div>
         </div>
-        {/* 재생바 */}
-        <div className="flex items-center w-full text-sm gap-2">
-          <span>{formatSeconds(currentTime)}</span>
-          <Slider
-            max={duration}
-            value={[currentTime]}
-            onValueChange={currentTimeChangeHandler}
-            className={cn('w-full cursor-pointer')}
-          />
-          <span>{formatSeconds(track.length)}</span>
-        </div>
+        <PlayerProgressBar
+          duration={duration}
+          currentTimeChangeHandler={currentTimeChangeHandler}
+        />
       </div>
       {track && trackSrc && (
         <audio

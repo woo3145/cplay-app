@@ -80,8 +80,8 @@ export default async function MainLayout({
         <div
           className={cn(
             'absolute left-0 z-40 w-56 h-auto overflow-auto bg-background',
-            'lg:fixed lg:h-full lg:block',
-            'portrait:hidden landscape:block' // 모바일 세로 모드일때 보이기
+            'hidden landscape:block', // 모바일 가로 모드일때 보이기
+            'lg:fixed lg:h-full' // 데스크탑부턴 헤더가 감춰지지 않음으로 fixed로 고정
           )}
         >
           <MainSideBar
@@ -92,8 +92,8 @@ export default async function MainLayout({
         <main className="w-full lg:pl-56 landscape:pl-56">
           <div
             className={cn(
-              'h-full lg:border-l pb-40',
-              'lg:pb-20 landscape:border-l landscape:pb-20'
+              'h-full pb-40', // 모바일은 BottomNav(h-16) + Player(h-16) = h-32
+              'landscape:border-l landscape:pb-28' // 가로 모드부터는 Player(h-20) = h-20
             )}
           >
             {children}
@@ -103,8 +103,7 @@ export default async function MainLayout({
         <div
           className={cn(
             'fixed bottom-0 w-full z-50 bg-foreground',
-            'lg-hidden',
-            'landscape:hidden' // 모바일 가로모드에서 숨기기
+            'landscape:hidden' // 모바일 가로 모드 사이즈부터는 BottomNav 사용 X
           )}
         >
           <MobileNav mobileNavItems={mobileNavItems} />

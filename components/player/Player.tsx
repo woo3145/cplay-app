@@ -28,8 +28,8 @@ export const Player = () => {
   return (
     <div
       className={cn(
-        'fixed left-0 right-0 bottom-16 z-50 flex justify-between items-center h-20 px-4 lg:border-l bg-background',
-        'lg:bottom-0 lg:left-56',
+        'fixed left-0 right-0 bottom-16 z-50 flex justify-between items-center h-16 px-4 bg-background',
+        'lg:bottom-0 lg:left-56 lg:h-20',
         'landscape:bottom-0 landscape:left-56 landscape:border-l'
       )}
     >
