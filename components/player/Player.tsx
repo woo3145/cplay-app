@@ -5,6 +5,7 @@ import { TrackInfo } from './TrackInfo';
 import { useRef } from 'react';
 import { PlayerSideController } from './PlayerSideController';
 import { useUserStore } from '@/store/useUserStore';
+import { cn } from '@/lib/utils';
 
 export const Player = () => {
   const likedTrackIds = useUserStore((state) => state.likedTracks).map(
@@ -25,7 +26,13 @@ export const Player = () => {
   }
 
   return (
-    <div className="fixed bottom-16 sm:bottom-20 lg:bottom-0 z-50 w-full h-20 flex justify-between items-center px-4 bg-background">
+    <div
+      className={cn(
+        'fixed left-0 right-0 bottom-16 z-50 flex justify-between items-center h-20 px-4 lg:border-l bg-background',
+        'lg:bottom-0 lg:left-56',
+        'landscape:bottom-0 landscape:left-56 landscape:border-l'
+      )}
+    >
       <TrackInfo track={track} />
       {track ? <PlayerController track={track} videoRef={videoRef} /> : null}
       <PlayerSideController track={track} videoRef={videoRef} />
