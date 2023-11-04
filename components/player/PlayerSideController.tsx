@@ -3,7 +3,7 @@
 import { Track } from '@/modules/track/domain/track';
 import { RefObject, useEffect } from 'react';
 import { Button } from '../ui/button';
-import { Heart, Volume1, Volume2, VolumeX } from 'lucide-react';
+import { Heart, MoreVertical, Volume1, Volume2, VolumeX } from 'lucide-react';
 import { Slider } from '../ui/slider';
 import { usePlayerStore } from '@/store/usePlayerStore';
 import { PlaylistDialog } from '../playlist/PlaylistDialog';
@@ -55,13 +55,13 @@ export const PlayerSideController = ({ track, videoRef }: Props) => {
 
   return (
     <div className="hidden lg:flex w-1/4 shrink-0 justify-end gap-2">
-      <div className="group flex gap-2">
+      <div className="group flex items-center gap-2">
         <Slider
           max={1}
           step={0.05}
           value={isMuted ? [0] : [volume]}
           onValueChange={changeVolumeHandler}
-          className="w-40 hidden group-hover:flex cursor-pointer"
+          className="w-40 hidden group-hover:flex cursor-pointer h-4 px-2 rounded-md"
         />
         <Button
           type="button"
@@ -75,6 +75,9 @@ export const PlayerSideController = ({ track, videoRef }: Props) => {
         </Button>
       </div>
       <PlaylistDialog />
+      <Button type="button" variant="ghost" className="p-2 flex justify-center">
+        <MoreVertical />
+      </Button>
       {track ? (
         <Button
           type="button"

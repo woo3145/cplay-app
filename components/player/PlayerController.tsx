@@ -4,15 +4,12 @@ import { Track } from '@/modules/track/domain/track';
 import { usePlayerStore } from '@/store/usePlayerStore';
 import { RefObject, useEffect, useMemo, useRef, useState } from 'react';
 import { Button } from '../ui/button';
-import { Slider } from '../ui/slider';
-import { cn } from '@/lib/utils';
 import { MoreVertical, Pause, Play, SkipBack, SkipForward } from 'lucide-react';
-import { formatSeconds } from '@/lib/dateFormat';
-import { PlayerProgressBar } from './\bPlayerProgressBar';
+import { PlayerProgressBar } from './PlayerProgressBar';
 import { PlaylistDialog } from '../playlist/PlaylistDialog';
 
 interface Props {
-  track: Track;
+  track: Track | null;
   videoRef: RefObject<HTMLAudioElement>;
 }
 export const PlayerController = ({ track, videoRef }: Props) => {
@@ -39,7 +36,7 @@ export const PlayerController = ({ track, videoRef }: Props) => {
   }));
   const [duration, setDuration] = useState<number>(0);
   const trackSrc = useMemo(() => {
-    if (!track.stems.length) return null;
+    if (!track || !track.stems.length) return null;
     const curStem = track.stems.filter((stem) => stem.stemType === stemType);
     return curStem.length ? curStem[0].src : null;
   }, [stemType, track]);
@@ -96,6 +93,7 @@ export const PlayerController = ({ track, videoRef }: Props) => {
               variant="ghost"
               onClick={() => changeMusic('prev')}
               className="shrink-0 w-10 h-10 p-3"
+              disabled={!track}
             >
               <SkipBack />
             </Button>
@@ -105,6 +103,7 @@ export const PlayerController = ({ track, videoRef }: Props) => {
               type="button"
               onClick={playClickHandler}
               className="shrink-0 w-10 h-10 p-3"
+              disabled={!track}
             >
               {isPlaying ? <Pause /> : <Play />}
             </Button>
@@ -115,6 +114,7 @@ export const PlayerController = ({ track, videoRef }: Props) => {
               variant="ghost"
               className="shrink-0 w-10 h-10 p-3"
               onClick={() => changeMusic('next')}
+              disabled={!track}
             >
               <SkipForward />
             </Button>

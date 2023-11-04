@@ -11,9 +11,10 @@ export const Player = () => {
   const likedTrackIds = useUserStore((state) => state.likedTracks).map(
     (track) => track.id
   );
-  const { track, playlist } = usePlayerStore((state) => ({
+  const { track, playlist, playlistId } = usePlayerStore((state) => ({
     track: state.currentTrack,
     playlist: state.playlist,
+    playlistId: state.playlistId,
   }));
   const videoRef = useRef<HTMLAudioElement>(null);
 
@@ -34,7 +35,7 @@ export const Player = () => {
       )}
     >
       <TrackInfo track={track} />
-      {track ? <PlayerController track={track} videoRef={videoRef} /> : null}
+      <PlayerController track={track} videoRef={videoRef} />
       <PlayerSideController track={track} videoRef={videoRef} />
     </div>
   );

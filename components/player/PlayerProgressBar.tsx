@@ -19,7 +19,7 @@ export const PlayerProgressBar = ({
     currentTrack: state.currentTrack,
   }));
   return (
-    <div className="absolute lg:static top-0 flex items-center w-full text-sm gap-2">
+    <div className="absolute lg:static top-0 flex items-center w-full text-xs gap-4">
       <span className="hidden lg:block">{formatSeconds(currentTime)}</span>
       <Slider
         max={duration}
