@@ -8,6 +8,7 @@ const nextConfig = {
       'images.unsplash.com',
       'lh3.googleusercontent.com',
       'jazzit-dev.s3.us-east-1.amazonaws.com',
+      'jazzit-product.s3.ap-northeast-2.amazonaws.com',
     ],
   },
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
