@@ -4,26 +4,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { usePlayerStore } from '@/store/usePlayerStore';
 import { ChevronDown, ListMusic, Music } from 'lucide-react';
 import { PlayerTrackContent } from './PlayerTrackContent';
-import { useUserStore } from '@/store/useUserStore';
 import { useRouter } from 'next/navigation';
 import { PlayerPlaylistContent } from './PlayerPlaylistContent';
 
 export default function PlayerPage() {
   const router = useRouter();
-  const { track, playlist } = usePlayerStore((state) => ({
+  const { track } = usePlayerStore((state) => ({
     track: state.currentTrack,
-    playlist: state.playlist,
   }));
-  const likedTrackIds = useUserStore((state) => state.likedTracks).map(
-    (track) => track.id
-  );
-
   const onClickBack = () => {
     router.back();
   };
-  if (track) {
-    track.likedByUser = likedTrackIds.includes(track.id);
-  }
 
   return (
     <div className="absolute top-0 left-0 right-0 h-full flex justify-center bg-background z-[70]">

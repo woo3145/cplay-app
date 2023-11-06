@@ -26,7 +26,7 @@ export const PlaylistList = ({ playlist }: Props) => {
 
   const onClickAddTrack = () => {
     setPlaylist(playlist.id, playlist.name, []);
-    setTrack(null);
+    setTrack(null, null);
     router.push('/');
   };
 

@@ -2,37 +2,32 @@
 import { usePlayerStore } from '@/store/usePlayerStore';
 import { PlayerController } from './PlayerController';
 import { TrackInfo } from './TrackInfo';
-import { useMemo } from 'react';
 import { PlayerSideController } from './PlayerSideController';
-import { useUserStore } from '@/store/useUserStore';
 import { cn } from '@/lib/utils';
 import { useUIStatusStore } from '@/store/useUIStatusStorage';
 import { useAudioPlayer } from './useAudioPlayer';
+import { useUserStore } from '@/store/useUserStore';
+import { useEffect } from 'react';
 
 export const Player = () => {
-  const [isPlayerOpen] = useUIStatusStore((state) => [state.isPlayerOpen]);
-  const likedTrackIds = useUserStore((state) => state.likedTracks).map(
-    (track) => track.id
+  const isPlayerOpen = useUIStatusStore((state) => state.isPlayerOpen);
+  const likedTrack = useUserStore((state) => state.likedTracks);
+  const { trackSrc, playlist, updateCurrentTrackLikedStatus } = usePlayerStore(
+    (state) => ({
+      trackSrc: state.trackSrc,
+      playlist: state.playlist,
+      updateCurrentTrackLikedStatus: state.updateCurrentTrackLikedStatus,
+    })
   );
-  const { track, playlist, stemType } = usePlayerStore((state) => ({
-    track: state.currentTrack,
-    playlist: state.playlist,
-    stemType: state.stemType,
-  }));
-  const trackSrc = useMemo(() => {
-    if (!track || !track.stems.length) return null;
-    const curStem = track.stems.filter((stem) => stem.stemType === stemType);
-    return curStem.length ? curStem[0].src : null;
-  }, [stemType, track]);
+  const audioRef = useAudioPlayer({ trackSrc: trackSrc });
 
-  const audioRef = useAudioPlayer({ trackSrc });
+  // 유저의 좋아요 목록이 변경되면 트랙 좋아요 상태 업데이트
+  useEffect(() => {
+    updateCurrentTrackLikedStatus();
+  }, [updateCurrentTrackLikedStatus, likedTrack]);
 
   if (!playlist) {
     return null;
-  }
-
-  if (track) {
-    track.likedByUser = likedTrackIds.includes(track.id);
   }
 
   return isPlayerOpen ? (

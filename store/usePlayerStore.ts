@@ -6,10 +6,12 @@ import {
 } from './playerLocalStorage';
 import { StemType } from '@/modules/stem/domain/stem';
 import { useUIStatusStore } from './useUIStatusStorage';
+import { useUserStore } from './useUserStore';
 
 export interface PlayerStoreState {
   // 실제 오디오 플레이어 객체에 반영되는 데이터
   currentTrack: Track | null;
+  trackSrc: string | null;
   stemType: StemType | null;
   isPlaying: boolean;
   isMuted: boolean;
@@ -27,8 +29,8 @@ interface PlayerStoreActions {
   initPlayerStore: (item: PlayerLocalStorageState) => void;
   setIsPlaying: (status: boolean) => void;
   setIsMuted: (status: boolean) => void;
-  setTrack: (track: Track | null, stemType?: StemType) => void;
-  setStemType: (StemType: StemType) => void;
+  setTrack: (track: Track | null, stemType?: StemType | null) => void;
+  setStemType: (StemType: StemType | null) => void;
   setCurrentTime: (time: number) => void;
   setVolume: (volume: number) => void;
   setDuration: (duration: number) => void;
@@ -40,11 +42,15 @@ interface PlayerStoreActions {
     selectedBundleId?: string
   ) => void;
   changeMusic: (type: 'next' | 'prev') => void;
+
+  setTrackSrc: (track: Track | null, stemType: StemType | null) => void;
+  updateCurrentTrackLikedStatus: () => void;
 }
 
 export const usePlayerStore = create<PlayerStoreState & PlayerStoreActions>(
-  (set) => ({
+  (set, get) => ({
     currentTrack: null,
+    trackSrc: null,
     stemType: null,
     isPlaying: false,
     isMuted: false,
@@ -60,6 +66,7 @@ export const usePlayerStore = create<PlayerStoreState & PlayerStoreActions>(
     initPlayerStore: (item: PlayerLocalStorageState) => {
       set({
         currentTrack: item.currentTrack,
+        trackSrc: item.trackSrc,
         stemType: item.stemType,
         isPlaying: false,
         isMuted: item.isMuted,
@@ -70,31 +77,37 @@ export const usePlayerStore = create<PlayerStoreState & PlayerStoreActions>(
         playlistName: item.playlistName,
       });
 
-      if (usePlayerStore.getState().playlistId !== '') {
+      if (get().playlistId !== '') {
         useUIStatusStore.getState().setIsPlyerOpen(true);
       }
     },
 
-    setTrack: (track: Track | null, stemType: StemType = StemType.FULL) => {
+    setTrack: (track: Track | null, stemType?: StemType | null) => {
+      const _stemType = stemType === undefined ? StemType.FULL : stemType;
       set({
         currentTrack: track,
         currentTime: 0,
         duration: track?.length ?? 0,
       });
-      usePlayerStore.getState().setStemType(stemType);
-      if (!usePlayerStore.getState().isPlaying) {
-        usePlayerStore.getState().setIsPlaying(true);
+
+      if (!get().isPlaying) {
+        get().setIsPlaying(true);
       }
       updatePlayerLocalStorage({
         type: 'currentTrack',
         currentTrack: track,
       });
+
+      get().setStemType(_stemType);
+      get().setTrackSrc(track, _stemType);
     },
-    setStemType: (stemType: StemType) => {
+    setStemType: (stemType: StemType | null) => {
       set({
         stemType: stemType,
       });
       updatePlayerLocalStorage({ type: 'stemType', stemType });
+
+      get().setTrackSrc(get().currentTrack, stemType);
     },
     setIsPlaying: (status: boolean) => {
       set({
@@ -143,8 +156,9 @@ export const usePlayerStore = create<PlayerStoreState & PlayerStoreActions>(
     },
 
     changeMusic: (type: 'next' | 'prev') => {
-      const currentTrack = usePlayerStore.getState().currentTrack;
-      const playlist = usePlayerStore.getState().playlist;
+      const currentTrack = get().currentTrack;
+      const playlist = get().playlist;
+      const stemType = get().stemType;
 
       if (!currentTrack || playlist.length === 0) {
         set({
@@ -172,10 +186,39 @@ export const usePlayerStore = create<PlayerStoreState & PlayerStoreActions>(
         currentTrack: nextTrack,
       });
 
+      get().setTrackSrc(nextTrack, stemType);
       updatePlayerLocalStorage({
         type: 'currentTrack',
         currentTrack: nextTrack,
       });
+    },
+
+    setTrackSrc: (track, stemType) => {
+      let trackSrc: string | null = '';
+      if (track && stemType) {
+        const curStem = track.stems.filter(
+          (stem) => stem.stemType === stemType
+        );
+        trackSrc = curStem.length ? curStem[0].src : null;
+      }
+
+      set({ trackSrc });
+      updatePlayerLocalStorage({
+        type: 'trackSrc',
+        trackSrc: trackSrc,
+      });
+    },
+
+    updateCurrentTrackLikedStatus: () => {
+      const likedTracks = useUserStore.getState().likedTracks;
+      const currentTrack = get().currentTrack;
+      if (currentTrack) {
+        currentTrack.likedByUser = likedTracks
+          .map((t) => t.id)
+          .includes(currentTrack.id);
+      }
+
+      set({ currentTrack });
     },
   })
 );

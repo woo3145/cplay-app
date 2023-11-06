@@ -1,7 +1,6 @@
 'use client';
 
 import { PlayerController } from '@/components/player/PlayerController';
-import { PlayerProgressBar } from '@/components/player/PlayerProgressBar';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useToggleLikeTrack } from '@/modules/track/application/useToggleLikeTrack';

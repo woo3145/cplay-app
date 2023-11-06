@@ -14,15 +14,15 @@ export const TrackInfo = () => {
       {track ? (
         <Image
           src={track.imageUrl}
-          width={50}
-          height={50}
+          width={40}
+          height={40}
           sizes="100vw"
           loading="lazy"
           className="aspect-square object-cover rounded-md"
           alt={'coverImage'}
         />
       ) : (
-        <div className="w-12 h-12 aspect-square object-cover rounded-md bg-slate-300" />
+        <div className="w-10 h-10 aspect-square object-cover rounded-md bg-slate-300" />
       )}
       {/* track 상세페이지 이동 */}
       {track ? (

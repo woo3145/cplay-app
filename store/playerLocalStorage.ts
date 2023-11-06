@@ -8,8 +8,12 @@ export type PlayerLocalStorageState = Omit<
 >;
 
 type PlayerLocalStoragePayload =
-  | { type: 'currentTrack'; currentTrack: Track | null }
+  | {
+      type: 'currentTrack';
+      currentTrack: Track | null;
+    }
   | { type: 'stemType'; stemType: StemType | null }
+  | { type: 'trackSrc'; trackSrc: string | null }
   | { type: 'isMuted'; isMuted: boolean }
   | { type: 'volume'; volume: number }
   | { type: 'duration'; duration: number }
@@ -39,6 +43,7 @@ export const isValidPlayerLocalStorageState = (
 
 const DEFAULT_PLAYER_STATE = {
   currentTrack: null,
+  trackSrc: null,
   stemType: null,
   isMuted: false,
   volume: 1,
@@ -91,6 +96,9 @@ export const updatePlayerLocalStorage = (
         break;
       case 'stemType':
         item.stemType = payload.stemType;
+        break;
+      case 'trackSrc':
+        item.trackSrc = payload.trackSrc;
         break;
       case 'isMuted':
         item.isMuted = payload.isMuted;
