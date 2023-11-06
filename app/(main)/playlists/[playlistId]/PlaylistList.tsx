@@ -2,54 +2,30 @@
 
 import { Button } from '@/components/ui/button';
 import { UserPlaylist } from '@/modules/playlist/domain/playlist';
-import { Track } from '@/modules/track/domain/track';
 import { usePlayerStore } from '@/store/usePlayerStore';
 import { Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { PlaylistItem } from './PlaylistItem';
-import { toast } from '@/components/ui/use-toast';
 import { useState } from 'react';
-import { editPlaylistServerAction } from '@/modules/playlist/domain/usecases/editPlaylistServerAction';
-import { createPlaylistServerAction } from '@/modules/playlist/domain/usecases/createPlaylistServerAction';
-import { useSession } from 'next-auth/react';
+import { usePlaylistActions } from '@/components/playlist/usePlaylistActions';
 
 interface Props {
   playlist: UserPlaylist;
 }
 
 export const PlaylistList = ({ playlist }: Props) => {
-  const { data: session } = useSession();
   const router = useRouter();
   const [_playlist, _setPlaylist] = useState(playlist.tracks);
-  const [
-    setTrack,
-    setPlaylist,
-    currentTrack,
-    isPlaying,
-    setIsPlaying,
-    playlistId,
-    playlistName,
-  ] = usePlayerStore((state) => [
+  const [setTrack, setPlaylist, currentTrack] = usePlayerStore((state) => [
     state.setTrack,
     state.setPlaylist,
     state.currentTrack,
-    state.isPlaying,
-    state.setIsPlaying,
-    state.playlistId,
-    state.playlistName,
   ]);
 
-  const onClickPlay = (track: Track) => {
-    if (currentTrack && currentTrack.id === track.id) {
-      setIsPlaying(!isPlaying);
-    } else {
-      setPlaylist(playlist.id, playlist.name, playlist.tracks);
-      setTrack(track);
-    }
-  };
+  const { onClickPlay } = usePlaylistActions();
 
   const onClickAddTrack = () => {
-    setPlaylist(playlist.id, playlist.name, playlist.tracks);
+    setPlaylist(playlist.id, playlist.name, []);
     setTrack(null);
     router.push('/');
   };
