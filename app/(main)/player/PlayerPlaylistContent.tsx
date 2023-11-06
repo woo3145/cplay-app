@@ -1,46 +1,35 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
 import { usePlayerStore } from '@/store/usePlayerStore';
-import { ListMusic, Pause, Play, X } from 'lucide-react';
-import { ScrollArea } from '../ui/scroll-area';
+import { PlaylistItem } from '../playlists/[playlistId]/PlaylistItem';
 import { Track } from '@/modules/track/domain/track';
-import { toast } from '../ui/use-toast';
-import { createPlaylistServerAction } from '@/modules/playlist/domain/usecases/createPlaylistServerAction';
-import { useSession } from 'next-auth/react';
+import { ScrollArea } from '@radix-ui/react-scroll-area';
+import { toast } from '@/components/ui/use-toast';
+import { Button } from '@/components/ui/button';
 import { editPlaylistServerAction } from '@/modules/playlist/domain/usecases/editPlaylistServerAction';
-import { PlaylistItem } from '@/app/(main)/playlists/[playlistId]/PlaylistItem';
+import { useSession } from 'next-auth/react';
+import { createPlaylistServerAction } from '@/modules/playlist/domain/usecases/createPlaylistServerAction';
 
-export const PlaylistDialog = () => {
+export const PlayerPlaylistContent = () => {
   const { data: session } = useSession();
   const {
     playlistName,
-    playlistId,
     playlist,
-    currentTrack,
     setTrack,
+    currentTrack,
+    playlistId,
     setPlaylist,
-    isPlaying,
     setIsPlaying,
+    isPlaying,
   } = usePlayerStore((state) => ({
-    playlistName: state.playlistName,
-    playlistId: state.playlistId,
-    playlist: state.playlist,
-    currentTrack: state.currentTrack,
     setTrack: state.setTrack,
+    playlist: state.playlist,
+    playlistName: state.playlistName,
+    currentTrack: state.currentTrack,
+    playlistId: state.playlistId,
     setPlaylist: state.setPlaylist,
-    isPlaying: state.isPlaying,
     setIsPlaying: state.setIsPlaying,
+    isPlaying: state.isPlaying,
   }));
 
   const onClickPlay = (track: Track) => {
@@ -129,51 +118,36 @@ export const PlaylistDialog = () => {
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button
-          type="button"
-          variant="ghost"
-          className="p-2 flex justify-center"
-        >
-          <ListMusic />
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-xl">
-        <DialogHeader>
-          <DialogTitle>Playlist - {playlistName}</DialogTitle>
-          <DialogDescription>
-            현재 재생중인 플레이리스트입니다.
-          </DialogDescription>
-        </DialogHeader>
-        <ScrollArea className="h-96">
-          <div className="space-y-2">
-            {playlist.map((track) => {
-              const isSelected = currentTrack && track.id === currentTrack.id;
-              return (
-                <PlaylistItem
-                  key={track.id}
-                  track={track}
-                  isSelected={isSelected}
-                  onClickPlay={onClickPlay}
-                  onClickRemove={onClickRemove}
-                />
-              );
-            })}
-          </div>
-        </ScrollArea>
+    <div className="flex flex-col w-full gap-2 items-center">
+      <div className="w-full pb-4">
+        <h2 className="text-2xl line-clamp-1 break-all font-semibold">
+          {playlistName}
+        </h2>
+      </div>
 
-        <DialogFooter className="sm:justify-end gap-2">
-          <DialogClose asChild>
-            <Button type="button" variant="secondary">
-              닫기
-            </Button>
-          </DialogClose>
-          <Button type="button" onClick={() => onClickSave(playlist)}>
-            저장
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      <ScrollArea className="w-full h-[calc(100vh-240px)] overflow-y-scroll space-y-2">
+        {playlist.map((track) => {
+          const isSelected = currentTrack && track.id === currentTrack.id;
+          return (
+            <PlaylistItem
+              key={track.id}
+              isSelected={isSelected}
+              track={track}
+              onClickPlay={() => onClickPlay(track)}
+              onClickRemove={() => onClickRemove(track)}
+            />
+          );
+        })}
+      </ScrollArea>
+      <Button
+        type="button"
+        className="w-full"
+        onClick={() => {
+          onClickSave(playlist);
+        }}
+      >
+        저장
+      </Button>
+    </div>
   );
 };

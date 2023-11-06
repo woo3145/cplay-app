@@ -1,30 +1,51 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { formatSeconds } from '@/lib/dateFormat';
-import { cn } from '@/lib/utils';
 import { UserPlaylist } from '@/modules/playlist/domain/playlist';
 import { Track } from '@/modules/track/domain/track';
 import { usePlayerStore } from '@/store/usePlayerStore';
 import { Plus } from 'lucide-react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { PlaylistItem } from './PlaylistItem';
+import { toast } from '@/components/ui/use-toast';
+import { useState } from 'react';
+import { editPlaylistServerAction } from '@/modules/playlist/domain/usecases/editPlaylistServerAction';
+import { createPlaylistServerAction } from '@/modules/playlist/domain/usecases/createPlaylistServerAction';
+import { useSession } from 'next-auth/react';
 
 interface Props {
   playlist: UserPlaylist;
 }
 
 export const PlaylistList = ({ playlist }: Props) => {
+  const { data: session } = useSession();
   const router = useRouter();
-  const [setTrack, setPlaylist, currentTrack] = usePlayerStore((state) => [
+  const [_playlist, _setPlaylist] = useState(playlist.tracks);
+  const [
+    setTrack,
+    setPlaylist,
+    currentTrack,
+    isPlaying,
+    setIsPlaying,
+    playlistId,
+    playlistName,
+  ] = usePlayerStore((state) => [
     state.setTrack,
     state.setPlaylist,
     state.currentTrack,
+    state.isPlaying,
+    state.setIsPlaying,
+    state.playlistId,
+    state.playlistName,
   ]);
 
   const onClickPlay = (track: Track) => {
-    setPlaylist(playlist.id, playlist.name, playlist.tracks);
-    setTrack(track);
+    if (currentTrack && currentTrack.id === track.id) {
+      setIsPlaying(!isPlaying);
+    } else {
+      setPlaylist(playlist.id, playlist.name, playlist.tracks);
+      setTrack(track);
+    }
   };
 
   const onClickAddTrack = () => {
@@ -32,8 +53,9 @@ export const PlaylistList = ({ playlist }: Props) => {
     setTrack(null);
     router.push('/');
   };
+
   return (
-    <ul className="w-full pt-4 space-y-2">
+    <div className="w-full pt-4 space-y-2">
       {!playlist.tracks.length ? (
         <div className="flex flex-col items-center justify-center">
           <p className="pt-4 pb-8">현재 플레이리스에 트랙이 없습니다.</p>
@@ -47,31 +69,17 @@ export const PlaylistList = ({ playlist }: Props) => {
           </Button>
         </div>
       ) : null}
-      {playlist.tracks.map((track) => {
+      {_playlist.map((track) => {
         const isSelected = currentTrack && track.id === currentTrack.id;
         return (
-          <li
+          <PlaylistItem
             key={track.id}
-            className={cn(
-              'flex items-center px-4 py-1 gap-2 cursor-pointer rounded-md',
-              isSelected ? 'bg-muted' : 'hover:bg-muted'
-            )}
-            onClick={() => onClickPlay(track)}
-          >
-            <Image
-              src={track.imageUrl}
-              alt="trackCoverImage"
-              width={40}
-              height={40}
-              className="aspect-square rounded-md"
-            />
-            <span className="w-full">{track.title}</span>
-            <span className="text-muted-foreground text-sm">
-              {formatSeconds(track.length)}
-            </span>
-          </li>
+            isSelected={isSelected}
+            track={track}
+            onClickPlay={onClickPlay}
+          />
         );
       })}
-    </ul>
+    </div>
   );
 };
