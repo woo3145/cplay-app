@@ -5,6 +5,7 @@ import {
   updatePlayerLocalStorage,
 } from './playerLocalStorage';
 import { StemType } from '@/modules/stem/domain/stem';
+import { useUIStatusStore } from './useUIStatusStorage';
 
 export interface PlayerStoreState {
   currentTrack: Track | null;
@@ -63,6 +64,10 @@ export const usePlayerStore = create<PlayerStoreState & PlayerStoreActions>(
         playlistId: item.playlistId,
         playlistName: item.playlistName,
       });
+
+      if (usePlayerStore.getState().playlistId !== '') {
+        useUIStatusStore.getState().setIsPlyerOpen(true);
+      }
     },
 
     setTrack: (track: Track | null, stemType: StemType = StemType.FULL) => {
@@ -123,6 +128,10 @@ export const usePlayerStore = create<PlayerStoreState & PlayerStoreActions>(
         playlistId: id.toString(),
         selectedBundleId,
       });
+
+      if (id !== '') {
+        useUIStatusStore.getState().setIsPlyerOpen(true);
+      }
     },
 
     changeMusic: (type: 'next' | 'prev') => {

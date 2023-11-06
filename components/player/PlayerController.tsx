@@ -4,9 +4,10 @@ import { Track } from '@/modules/track/domain/track';
 import { usePlayerStore } from '@/store/usePlayerStore';
 import { RefObject, useEffect, useMemo, useRef, useState } from 'react';
 import { Button } from '../ui/button';
-import { MoreVertical, Pause, Play, SkipBack, SkipForward } from 'lucide-react';
+import { Pause, Play, SkipBack, SkipForward } from 'lucide-react';
 import { PlayerProgressBar } from './PlayerProgressBar';
 import { PlaylistDialog } from '../playlist/PlaylistDialog';
+import { PlayerMoreButton } from './PlayerMoreButton';
 
 interface Props {
   track: Track | null;
@@ -120,14 +121,7 @@ export const PlayerController = ({ track, videoRef }: Props) => {
             </Button>
           </div>
           <div className="w-full lg:hidden flex justify-end">
-            {/* (예정) Open Track Menu (좋아요, 상세페이지 이동 등)*/}
-            <Button
-              type="button"
-              variant="ghost"
-              className="p-2 flex justify-center"
-            >
-              <MoreVertical />
-            </Button>
+            <PlayerMoreButton />
           </div>
         </div>
         <PlayerProgressBar

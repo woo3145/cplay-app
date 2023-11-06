@@ -9,6 +9,7 @@ import { usePlayerStore } from '@/store/usePlayerStore';
 import { PlaylistDialog } from '../playlist/PlaylistDialog';
 import { cn } from '@/lib/utils';
 import { useToggleLikeTrack } from '@/modules/track/application/useToggleLikeTrack';
+import { PlayerMoreButton } from './PlayerMoreButton';
 
 interface Props {
   track: Track | null;
@@ -75,9 +76,7 @@ export const PlayerSideController = ({ track, videoRef }: Props) => {
         </Button>
       </div>
       <PlaylistDialog />
-      <Button type="button" variant="ghost" className="p-2 flex justify-center">
-        <MoreVertical />
-      </Button>
+      <PlayerMoreButton />
       {track ? (
         <Button
           type="button"

@@ -6,8 +6,10 @@ import { useRef } from 'react';
 import { PlayerSideController } from './PlayerSideController';
 import { useUserStore } from '@/store/useUserStore';
 import { cn } from '@/lib/utils';
+import { useUIStatusStore } from '@/store/useUIStatusStorage';
 
 export const Player = () => {
+  const [isPlayerOpen] = useUIStatusStore((state) => [state.isPlayerOpen]);
   const likedTrackIds = useUserStore((state) => state.likedTracks).map(
     (track) => track.id
   );
@@ -26,7 +28,7 @@ export const Player = () => {
     track.likedByUser = likedTrackIds.includes(track.id);
   }
 
-  return (
+  return isPlayerOpen ? (
     <div
       className={cn(
         'fixed left-0 right-0 bottom-16 z-50 flex justify-between items-center h-16 px-4 bg-background',
@@ -38,5 +40,5 @@ export const Player = () => {
       <PlayerController track={track} videoRef={videoRef} />
       <PlayerSideController track={track} videoRef={videoRef} />
     </div>
-  );
+  ) : null;
 };
