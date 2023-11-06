@@ -32,7 +32,7 @@ export const MobileNav = () => {
   const pathname = usePathname();
   return (
     <nav>
-      <ul className="flex items-stretch h-16">
+      <ul className="flex items-stretch h-16 border-t">
         {mobileNavItems.map((item) => {
           const isSelected = pathname === item.href;
           return (
@@ -44,8 +44,8 @@ export const MobileNav = () => {
                 href={item.href}
                 prefetch={false}
                 className={cn(
-                  'flex flex-col items-center justify-center w-full gap-1 text-background/60 text-xs',
-                  isSelected ? 'text-background' : 'group-hover:text-background'
+                  'flex flex-col items-center justify-center w-full gap-1 text-foreground/60 text-xs',
+                  isSelected ? 'text-foreground' : 'group-hover:text-foreground'
                 )}
               >
                 {item.icon}

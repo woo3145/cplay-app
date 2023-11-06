@@ -72,7 +72,7 @@ export default async function MainLayout({
 
         <div
           className={cn(
-            'fixed bottom-0 w-full z-50 bg-foreground',
+            'fixed bottom-0 w-full z-50 bg-background',
             'landscape:hidden' // 모바일 가로 모드 사이즈부터는 BottomNav 사용 X
           )}
         >
