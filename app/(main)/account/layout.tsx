@@ -21,7 +21,7 @@ export default async function MainLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="space-y-6 p-10 pb-16">
+    <div className="space-y-6 p-4 pb-16 landscape:p-10">
       <div className="flex flex-col space-y-8 w-full lg:max-w-5xl mx-auto">
         <aside>
           <AccountNavTabs items={sidebarNavItems} />

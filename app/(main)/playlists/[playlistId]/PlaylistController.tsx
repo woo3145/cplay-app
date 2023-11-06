@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { formatSeconds } from '@/lib/dateFormat';
 import { UserPlaylist } from '@/modules/playlist/domain/playlist';
 import { usePlayerStore } from '@/store/usePlayerStore';
-import { Play, Shuffle, Trash } from 'lucide-react';
+import { Check, Play, Shuffle, Trash } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 interface Props {
@@ -75,11 +75,13 @@ export const PlaylistController = ({ playlist }: Props) => {
         <span className="text-muted-foreground tracking-wide">
           {playlist.tracks.length}곡, 총 {formatSeconds(totalTrackLength)}
         </span>
-        <DeletePlaylistDialog playlist={playlist}>
-          <span className="flex items-center gap-2 text-destructive cursor-pointer">
-            <Trash className="w-4 h-4" /> Delete
-          </span>
-        </DeletePlaylistDialog>
+        <div className="flex gap-4 items-center">
+          <DeletePlaylistDialog playlist={playlist}>
+            <span className="flex items-center gap-2 text-destructive cursor-pointer">
+              <Trash className="w-4 h-4" /> Delete
+            </span>
+          </DeletePlaylistDialog>
+        </div>
       </div>
       <div className="flex gap-2 pt-4">
         <Button className="gap-2 w-full" onClick={onPlayClick}>

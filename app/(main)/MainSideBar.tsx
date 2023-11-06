@@ -61,7 +61,7 @@ export function MainSideBar({
                   <Button
                     variant="ghost"
                     className={cn(
-                      'w-full justify-start',
+                      'w-full justify-start gap-2',
                       isActive && 'bg-accent text-accent-foreground'
                     )}
                   >
@@ -82,7 +82,10 @@ export function MainSideBar({
               {userNavItems.map((nav) => {
                 return (
                   <Link key={nav.title} href={nav.href} prefetch={false}>
-                    <Button variant="ghost" className="w-full justify-start">
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start gap-2"
+                    >
                       {nav.icon}
                       {nav.title}
                     </Button>

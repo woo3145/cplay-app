@@ -1,7 +1,5 @@
 'use client';
 
-import { Track } from '@/modules/track/domain/track';
-import { RefObject, useEffect } from 'react';
 import { Button } from '../ui/button';
 import { Heart, Volume1, Volume2, VolumeX } from 'lucide-react';
 import { Slider } from '../ui/slider';
@@ -9,15 +7,12 @@ import { usePlayerStore } from '@/store/usePlayerStore';
 import { PlaylistDialog } from '../playlist/PlaylistDialog';
 import { cn } from '@/lib/utils';
 import { useToggleLikeTrack } from '@/modules/track/application/useToggleLikeTrack';
+import { PlayerMoreButton } from './PlayerMoreButton';
 
-interface Props {
-  track: Track | null;
-  videoRef: RefObject<HTMLAudioElement>;
-}
-
-export const PlayerSideController = ({ track, videoRef }: Props) => {
-  const { volume, setVolume, isMuted, setIsMuted } = usePlayerStore(
+export const PlayerSideController = () => {
+  const { track, volume, setVolume, isMuted, setIsMuted } = usePlayerStore(
     (state) => ({
+      track: state.currentTrack,
       volume: state.volume,
       setVolume: state.setVolume,
       isMuted: state.isMuted,
@@ -41,27 +36,15 @@ export const PlayerSideController = ({ track, videoRef }: Props) => {
     await toggleLikeTrack();
   };
 
-  // muted 적용
-  useEffect(() => {
-    if (!videoRef.current) return;
-    videoRef.current.muted = isMuted;
-  }, [videoRef, isMuted]);
-
-  // volume 적용
-  useEffect(() => {
-    if (!videoRef.current) return;
-    videoRef.current.volume = volume;
-  }, [videoRef, volume]);
-
   return (
     <div className="hidden lg:flex w-1/4 shrink-0 justify-end gap-2">
-      <div className="group flex gap-2">
+      <div className="group flex items-center gap-2">
         <Slider
           max={1}
           step={0.05}
           value={isMuted ? [0] : [volume]}
           onValueChange={changeVolumeHandler}
-          className="w-40 hidden group-hover:flex cursor-pointer"
+          className="w-40 hidden group-hover:flex cursor-pointer h-4 px-2 rounded-md"
         />
         <Button
           type="button"
@@ -75,6 +58,7 @@ export const PlayerSideController = ({ track, videoRef }: Props) => {
         </Button>
       </div>
       <PlaylistDialog />
+      <PlayerMoreButton />
       {track ? (
         <Button
           type="button"
