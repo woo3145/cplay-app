@@ -41,6 +41,10 @@ export const useAudioPlayer = ({
 
   // 트랙/번들/플레이리스트 변경 시 audioElement 등록 && 기존 상태 유지(volume, isPlaying)
   useEffect(() => {
+    if (!trackSrc) {
+      if (audioRef.current) audioRef.current.src = '';
+      setAudioElement(null);
+    }
     if (!audioRef.current || !trackSrc) {
       return;
     }
