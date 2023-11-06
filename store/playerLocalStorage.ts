@@ -12,6 +12,7 @@ type PlayerLocalStoragePayload =
   | { type: 'stemType'; stemType: StemType | null }
   | { type: 'isMuted'; isMuted: boolean }
   | { type: 'volume'; volume: number }
+  | { type: 'duration'; duration: number }
   | {
       type: 'playlist';
       playlist: Track[];
@@ -30,6 +31,7 @@ export const isValidPlayerLocalStorageState = (
     'stemType' in item &&
     'isMuted' in item &&
     'volume' in item &&
+    'duration' in item &&
     'playlist' in item &&
     'playlistId' in item
   );
@@ -40,6 +42,7 @@ const DEFAULT_PLAYER_STATE = {
   stemType: null,
   isMuted: false,
   volume: 1,
+  duration: 0,
   playlistName: '',
   playlist: [],
   playlistId: '',
@@ -94,6 +97,9 @@ export const updatePlayerLocalStorage = (
         break;
       case 'volume':
         item.volume = payload.volume;
+        break;
+      case 'duration':
+        item.duration = payload.duration;
         break;
       case 'playlist':
         item.playlistName = payload.playlistName;

@@ -8,17 +8,20 @@ import { StemType } from '@/modules/stem/domain/stem';
 import { useUIStatusStore } from './useUIStatusStorage';
 
 export interface PlayerStoreState {
+  // 실제 오디오 플레이어 객체에 반영되는 데이터
   currentTrack: Track | null;
   stemType: StemType | null;
   isPlaying: boolean;
   isMuted: boolean;
   volume: number;
   currentTime: number;
+  duration: number;
 
+  // 오디오가 속한 플레이리스트에 관한 데이터
   playlistName: string;
   playlist: Track[];
   playlistId: string;
-  selectedBundleId: string;
+  selectedBundleId: string; // 번들을 클릭하여 플레이리스트가 세팅 되었을때 갱신됨
 }
 interface PlayerStoreActions {
   initPlayerStore: (item: PlayerLocalStorageState) => void;
@@ -28,6 +31,7 @@ interface PlayerStoreActions {
   setStemType: (StemType: StemType) => void;
   setCurrentTime: (time: number) => void;
   setVolume: (volume: number) => void;
+  setDuration: (duration: number) => void;
 
   setPlaylist: (
     id: string,
@@ -46,6 +50,7 @@ export const usePlayerStore = create<PlayerStoreState & PlayerStoreActions>(
     isMuted: false,
     volume: 1,
     currentTime: 0,
+    duration: 0,
 
     playlistName: '',
     playlist: [],
@@ -74,6 +79,7 @@ export const usePlayerStore = create<PlayerStoreState & PlayerStoreActions>(
       set({
         currentTrack: track,
         currentTime: 0,
+        duration: track?.length ?? 0,
       });
       usePlayerStore.getState().setStemType(stemType);
       if (!usePlayerStore.getState().isPlaying) {
@@ -108,7 +114,9 @@ export const usePlayerStore = create<PlayerStoreState & PlayerStoreActions>(
       set({ volume: volume });
       updatePlayerLocalStorage({ type: 'volume', volume });
     },
-
+    setDuration: (duration) => {
+      set({ duration: duration });
+    },
     setPlaylist: (
       id: string,
       name: string,

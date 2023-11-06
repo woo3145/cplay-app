@@ -1,25 +1,32 @@
 import { create } from 'zustand';
 import { usePlayerStore } from './usePlayerStore';
 
-export interface PlayerStoreState {
-  isPlayerOpen: boolean;
+export interface UIStatusStoreState {
+  isPlayerOpen: boolean; // 오디오 플레이어의 상태 (on, off)
+  playerCurrentTime: number; // 오디오 플레이어의 SlideBar 상태
 }
-interface PlayerStoreActions {
+interface UIStatusStoreActions {
   setIsPlyerOpen: (status: boolean) => void;
   closePlayer: () => void;
+  setPlayerCurrentTime: (time: number) => void;
 }
 
-export const useUIStatusStore = create<PlayerStoreState & PlayerStoreActions>(
-  (set) => ({
-    isPlayerOpen: false,
-    setIsPlyerOpen: (status) => {
-      set({ isPlayerOpen: status });
-    },
+export const useUIStatusStore = create<
+  UIStatusStoreState & UIStatusStoreActions
+>((set) => ({
+  isPlayerOpen: false,
+  playerCurrentTime: 0,
+  setIsPlyerOpen: (status) => {
+    set({ isPlayerOpen: status });
+  },
 
-    closePlayer: () => {
-      useUIStatusStore.getState().setIsPlyerOpen(false);
-      usePlayerStore.getState().setPlaylist('', '', []);
-      usePlayerStore.getState().setTrack(null);
-    },
-  })
-);
+  setPlayerCurrentTime: (time) => {
+    set({ playerCurrentTime: time });
+  },
+
+  closePlayer: () => {
+    useUIStatusStore.getState().setIsPlyerOpen(false);
+    usePlayerStore.getState().setPlaylist('', '', []);
+    usePlayerStore.getState().setTrack(null);
+  },
+}));

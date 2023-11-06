@@ -21,6 +21,7 @@ export const PlayerMoreButton = () => {
           type="button"
           variant="ghost"
           className="p-2 flex justify-center"
+          onClick={(e: React.MouseEvent) => e.stopPropagation()}
         >
           <MoreVertical />
         </Button>
