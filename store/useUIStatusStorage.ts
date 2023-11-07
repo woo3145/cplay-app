@@ -27,6 +27,6 @@ export const useUIStatusStore = create<
   closePlayer: () => {
     useUIStatusStore.getState().setIsPlyerOpen(false);
     usePlayerStore.getState().setPlaylist('', '', []);
-    usePlayerStore.getState().setTrack(null);
+    usePlayerStore.getState().setTrack(null, null);
   },
 }));
