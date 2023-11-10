@@ -40,7 +40,6 @@ export default async function RootLayout({
   const likedTracks = await getLikedTracksServerAction(session?.user.id);
   const likedBundles = await getLikedBundlesServerAction(session?.user.id);
   const playlists = await getPlaylistsServerAction(session?.user.id);
-
   useUserStore.setState({
     likedTracks,
     likedBundles,
