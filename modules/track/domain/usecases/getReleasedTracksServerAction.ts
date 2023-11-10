@@ -7,40 +7,53 @@ import { RepositoryGetTracksQuery } from '../validations/GetTrackTypes';
 import { cacheKeys } from '@/modules/config/cacheHelper';
 
 export const getReleasedTracksServerAction = async (
-  query: Pick<RepositoryGetTracksQuery, 'genre'>,
+  query: RepositoryGetTracksQuery,
   subTrackRepository: TrackRepository | null = null
 ) => {
   const repo = subTrackRepository || repository.track;
-
   try {
     const tracks = await unstable_cache(
       async () => {
         const data = await repo.findAllWithQuery({
-          genre: query.genre === 'all' ? undefined : query.genre,
-          page: 1,
-          count: 12,
+          genre: query.genre,
+          page: query.page,
+          take: query.take,
         });
 
         console.log(
-          `Prisma 호출: ${cacheKeys.getReleasedTracksByGenre(
-            query.genre ?? ''
-          )}`
+          `Prisma 호출: ${cacheKeys.getReleasedTracksWithQuery(query)}`
         );
         return data;
       },
-      [cacheKeys.getReleasedTracksByGenre(query.genre ?? '')],
+      [cacheKeys.getReleasedTracksWithQuery(query)],
       {
         tags: [
           cacheKeys.RELEASED_TRACKS,
-          cacheKeys.getReleasedTracksByGenre(query.genre ?? 'all'),
+          cacheKeys.getReleasedTracksWithQuery(query),
+        ],
+        revalidate: 3600,
+      }
+    )();
+    const totalTracksCount = await unstable_cache(
+      async () => {
+        const data = await repo.countTracksWithQuery(query);
+
+        console.log(`Prisma 호출: ${cacheKeys.getCountTracksWithQuery(query)}`);
+        return data;
+      },
+      [cacheKeys.getCountTracksWithQuery(query)],
+      {
+        tags: [
+          cacheKeys.RELEASED_TRACKS,
+          cacheKeys.getCountTracksWithQuery(query),
         ],
         revalidate: 3600,
       }
     )();
 
-    return tracks;
+    return { tracks, count: totalTracksCount };
   } catch (e) {
     console.error('getReleasedTracksServerAction Error: ', e);
-    return [];
+    return { tracks: [], count: 0 };
   }
 };

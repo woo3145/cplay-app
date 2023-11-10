@@ -73,11 +73,11 @@ export const editTrackServerAction = adminGuard(
         exist.status === TrackStatus.PUBLISH ||
         result.status === TrackStatus.PUBLISH
       ) {
-        revalidateTag(cacheKeys.getReleasedTracksByGenre('all'));
+        revalidateTag(cacheKeys.getReleasedTracksWithQuery({}));
         const _genres = new Set([...exist.genres, ...result.genres]);
 
         _genres.forEach((t) =>
-          revalidateTag(cacheKeys.getReleasedTracksByGenre(t.slug))
+          revalidateTag(cacheKeys.getReleasedTracksWithQuery({ genre: t.slug }))
         );
       }
 

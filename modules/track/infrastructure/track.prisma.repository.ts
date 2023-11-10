@@ -34,8 +34,32 @@ export class TrackPrismaRepository implements TrackRepository {
     return tracks.map((track) => toTrackDomainModel(track));
   }
 
+  async countTracksWithQuery(query: RepositoryGetTracksQuery) {
+    const { genre, mood, title } = query;
+
+    let whereCondition: any = {};
+
+    if (genre) {
+      whereCondition.genres = { some: { slug: genre } };
+    }
+
+    if (mood) {
+      whereCondition.moods = { some: { tag: mood } };
+    }
+
+    if (title) {
+      whereCondition.title = { contains: title, mode: 'insensitive' };
+    }
+
+    const count = await prisma.track.count({
+      where: { ...whereCondition, status: 'PUBLISH' },
+    });
+
+    return count;
+  }
+
   async findAllWithQuery(query: RepositoryGetTracksQuery) {
-    const { page = 1, count = 10, genre, mood } = query;
+    const { page = 1, take = 10, genre, mood, title } = query;
     const offset = (page - 1) * 10;
 
     let whereCondition: any = {};
@@ -55,6 +79,11 @@ export class TrackPrismaRepository implements TrackRepository {
         },
       };
     }
+
+    if (title) {
+      whereCondition.title = { contains: title, mode: 'insensitive' };
+    }
+
     const tracks = await prisma.track.findMany({
       where: {
         ...whereCondition,
@@ -65,7 +94,7 @@ export class TrackPrismaRepository implements TrackRepository {
       },
       include: trackIncludes,
       skip: offset,
-      take: count,
+      take: take,
     });
 
     return tracks.map((track) => toTrackDomainModel(track));

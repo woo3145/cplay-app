@@ -41,7 +41,7 @@ export const ReleasedTrackSection = ({ genres }: Props) => {
         </TabsList>
         <TabsContent key={'all'} value={'all'}>
           <Suspense fallback={<div>Loading...</div>}>
-            <RelasedTrackList genre={'all'} />
+            <RelasedTrackList />
           </Suspense>
         </TabsContent>
         {genres.map((genre) => {

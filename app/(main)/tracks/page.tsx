@@ -1,16 +1,19 @@
-import { getAllTracksServerAction } from '@/modules/track/domain/usecases/getAllTracksServerAction';
 import { TrackList } from './TrackList';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Pagination } from './Pagination';
+import { getReleasedTracksServerAction } from '@/modules/track/domain/usecases/getReleasedTracksServerAction';
 
 export default async function TracksPage({
   searchParams,
 }: {
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
-  const tracks = await getAllTracksServerAction();
+  const page = Number(searchParams?.page);
+  const { tracks, count } = await getReleasedTracksServerAction({
+    page: isNaN(page) ? 1 : page,
+  });
   return (
     <div className="flex flex-col items-center justify-between px-4">
       <div className="w-full max-w-screen-xl py-16 space-y-8">
@@ -29,9 +32,9 @@ export default async function TracksPage({
         </div>
         <TrackList tracks={tracks} />
         <Pagination
-          totalItems={140}
+          totalItems={count}
           take={10}
-          page={Number(searchParams?.page) ?? 1}
+          page={isNaN(page) ? 1 : page}
         />
       </div>
     </div>
