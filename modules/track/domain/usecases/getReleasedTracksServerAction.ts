@@ -12,10 +12,15 @@ export const getReleasedTracksServerAction = async (
 ) => {
   const repo = subTrackRepository || repository.track;
   try {
+    query.genres?.sort((a, b) => a - b);
+    query.moods?.sort((a, b) => a - b);
+
     const tracks = await unstable_cache(
       async () => {
         const data = await repo.findAllWithQuery({
+          title: query.title,
           genres: query.genres,
+          moods: query.moods,
           page: query.page,
           take: query.take,
         });

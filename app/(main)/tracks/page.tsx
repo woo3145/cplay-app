@@ -5,15 +5,39 @@ import { Button } from '@/components/ui/button';
 import { Pagination } from './Pagination';
 import { getReleasedTracksServerAction } from '@/modules/track/domain/usecases/getReleasedTracksServerAction';
 
+export interface TracksSearchParams {
+  page?: string;
+  title?: string;
+  genres?: string[];
+  moods?: string[];
+}
+
 export default async function TracksPage({
   searchParams,
 }: {
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams?: TracksSearchParams;
 }) {
   const page = Number(searchParams?.page);
+  const title = searchParams?.title ? searchParams.title.toString() : undefined;
+  let genres = [];
+  let moods = [];
+  try {
+    genres = JSON.parse(searchParams?.genres?.toString() || '[]');
+  } catch (e) {
+    genres = [];
+  }
+  try {
+    moods = JSON.parse(searchParams?.moods?.toString() || '[]');
+  } catch (e) {
+    moods = [];
+  }
   const { tracks, count } = await getReleasedTracksServerAction({
     page: isNaN(page) ? 1 : page,
+    genres,
+    moods,
+    title: title,
   });
+
   return (
     <div className="flex flex-col items-center justify-between px-4">
       <div className="w-full max-w-screen-xl py-16 space-y-8">
@@ -35,6 +59,7 @@ export default async function TracksPage({
           totalItems={count}
           take={10}
           page={isNaN(page) ? 1 : page}
+          searchParams={searchParams}
         />
       </div>
     </div>

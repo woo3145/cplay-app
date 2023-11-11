@@ -37,26 +37,32 @@ export class TrackPrismaRepository implements TrackRepository {
   async countTracksWithQuery(query: RepositoryGetTracksQuery) {
     const { genres, moods, title } = query;
 
-    let whereCondition: any = {};
+    let whereCondition: any = {
+      status: 'PUBLISH',
+    };
 
     if (genres && 0 < genres.length) {
-      whereCondition.genres = {
-        some: {
-          id: {
-            in: genres,
+      whereCondition.AND = genres.map((id) => ({
+        genres: {
+          some: {
+            id: id,
           },
         },
-      };
+      }));
     }
 
     if (moods && 0 < moods.length) {
-      whereCondition.moods = {
-        some: {
-          id: {
-            in: moods,
+      const moodConditions = moods.map((id) => ({
+        moods: {
+          some: {
+            id: id,
           },
         },
-      };
+      }));
+
+      whereCondition.AND = whereCondition.AND
+        ? [...whereCondition.AND, ...moodConditions]
+        : moodConditions;
     }
 
     if (title) {
@@ -64,7 +70,7 @@ export class TrackPrismaRepository implements TrackRepository {
     }
 
     const count = await prisma.track.count({
-      where: { ...whereCondition, status: 'PUBLISH' },
+      where: { ...whereCondition },
     });
 
     return count;
@@ -74,26 +80,32 @@ export class TrackPrismaRepository implements TrackRepository {
     const { page = 1, take = 10, genres, moods, title } = query;
     const offset = (page - 1) * 10;
 
-    let whereCondition: any = {};
+    let whereCondition: any = {
+      status: 'PUBLISH',
+    };
 
     if (genres && 0 < genres.length) {
-      whereCondition.genres = {
-        some: {
-          id: {
-            in: genres,
+      whereCondition.AND = genres.map((id) => ({
+        genres: {
+          some: {
+            id: id,
           },
         },
-      };
+      }));
     }
 
     if (moods && 0 < moods.length) {
-      whereCondition.moods = {
-        some: {
-          id: {
-            in: moods,
+      const moodConditions = moods.map((id) => ({
+        moods: {
+          some: {
+            id: id,
           },
         },
-      };
+      }));
+
+      whereCondition.AND = whereCondition.AND
+        ? [...whereCondition.AND, ...moodConditions]
+        : moodConditions;
     }
 
     if (title) {
@@ -103,7 +115,6 @@ export class TrackPrismaRepository implements TrackRepository {
     const tracks = await prisma.track.findMany({
       where: {
         ...whereCondition,
-        status: 'PUBLISH',
       },
       orderBy: {
         id: 'desc',
