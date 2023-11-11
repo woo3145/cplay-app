@@ -35,16 +35,28 @@ export class TrackPrismaRepository implements TrackRepository {
   }
 
   async countTracksWithQuery(query: RepositoryGetTracksQuery) {
-    const { genre, mood, title } = query;
+    const { genres, moods, title } = query;
 
     let whereCondition: any = {};
 
-    if (genre) {
-      whereCondition.genres = { some: { slug: genre } };
+    if (genres && 0 < genres.length) {
+      whereCondition.genres = {
+        some: {
+          id: {
+            in: genres,
+          },
+        },
+      };
     }
 
-    if (mood) {
-      whereCondition.moods = { some: { tag: mood } };
+    if (moods && 0 < moods.length) {
+      whereCondition.moods = {
+        some: {
+          id: {
+            in: moods,
+          },
+        },
+      };
     }
 
     if (title) {
@@ -59,23 +71,27 @@ export class TrackPrismaRepository implements TrackRepository {
   }
 
   async findAllWithQuery(query: RepositoryGetTracksQuery) {
-    const { page = 1, take = 10, genre, mood, title } = query;
+    const { page = 1, take = 10, genres, moods, title } = query;
     const offset = (page - 1) * 10;
 
     let whereCondition: any = {};
 
-    if (genre) {
+    if (genres && 0 < genres.length) {
       whereCondition.genres = {
         some: {
-          slug: genre,
+          id: {
+            in: genres,
+          },
         },
       };
     }
 
-    if (mood) {
+    if (moods && 0 < moods.length) {
       whereCondition.moods = {
         some: {
-          tag: mood,
+          id: {
+            in: moods,
+          },
         },
       };
     }

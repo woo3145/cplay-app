@@ -15,7 +15,7 @@ export const getReleasedTracksServerAction = async (
     const tracks = await unstable_cache(
       async () => {
         const data = await repo.findAllWithQuery({
-          genre: query.genre,
+          genres: query.genres,
           page: query.page,
           take: query.take,
         });

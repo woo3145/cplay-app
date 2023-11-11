@@ -8,7 +8,7 @@ interface Props {
 
 export const RelasedTrackList = async ({ genre }: Props) => {
   const { tracks } = await getReleasedTracksServerAction({
-    genre: genre?.slug,
+    genres: genre ? [genre.id] : undefined,
   });
 
   return <TrackCarousel tracks={tracks} />;

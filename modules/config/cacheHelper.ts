@@ -12,15 +12,15 @@ export const cacheKeys = {
   getLikedTracksByUser: (userId: string) => `likedTracksByUser_${userId}`,
 
   getReleasedTracksWithQuery: (query: RepositoryGetTracksQuery) =>
-    `releasedTracksWithQuery_genre=${query.genre || 'all'}&mood=${
-      query.mood || 'all'
+    `releasedTracksWithQuery_genre=[${query.genres || ''}]&mood=${
+      query.moods || 'all'
     }&page=${query.page || 1}&take=${query.take || 15}&title=${
       query.title || ''
     }`,
 
   getCountTracksWithQuery: (query: RepositoryGetTracksQuery) =>
-    `getCountTracksWithQuery_genre=${query.genre || 'all'}&mood=${
-      query.mood || 'all'
+    `getCountTracksWithQuery_genre=[${query.genres || ''}]&mood=${
+      query.moods || 'all'
     }&title=${query.title || ''}`,
 
   ADMIN_ALL_BUNDLES: 'adminAllTracks', // 어드민이 사용하는 전체 번들
