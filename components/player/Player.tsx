@@ -30,6 +30,7 @@ export const Player = () => {
     return null;
   }
 
+  // 플레이어를 닫으면 오디오와 관련된 자원들 모두 클린업
   return isPlayerOpen ? (
     <div
       className={cn(

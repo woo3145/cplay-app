@@ -7,6 +7,8 @@ export interface TrackRepository {
   findById: (id: number) => Promise<DomainTrack | null>;
   findAll: () => Promise<DomainTrack[]>;
   findAllWithQuery: (query: RepositoryGetTracksQuery) => Promise<DomainTrack[]>;
+  countTracksWithQuery: (query: RepositoryGetTracksQuery) => Promise<number>;
+
   create: (data: RepositoryCreateTrackInput) => Promise<DomainTrack>;
   edit: (id: number, data: RepositoryEditTrackInput) => Promise<DomainTrack>;
   delete: (id: number) => Promise<DomainTrack>;

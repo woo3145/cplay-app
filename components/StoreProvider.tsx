@@ -11,12 +11,17 @@ import { Track } from '@/modules/track/domain/track';
 import { useUserStore } from '@/store/useUserStore';
 import { Bundle } from '@/modules/bundle/domain/bundle';
 import { UserPlaylist } from '@/modules/playlist/domain/playlist';
+import { Genre } from '@/modules/genre/domain/genre';
+import { Mood } from '@/modules/mood/domain/mood';
+import { useAppStore } from '@/store/useAppStore';
 
 interface Props {
   children: React.ReactNode;
   likedTracks: Track[];
   likedBundles: Bundle[];
   playlists: UserPlaylist[];
+  genres: Genre[];
+  moods: Mood[];
 }
 
 export function StoreProvider({
@@ -24,16 +29,24 @@ export function StoreProvider({
   likedTracks,
   likedBundles,
   playlists,
+  genres,
+  moods,
 }: Props) {
   const initPlayerStore = usePlayerStore((state) => state.initPlayerStore);
   const [setLikedTracks, setLikedBundles, setPlaylists] = useUserStore(
     (state) => [state.setLikedTracks, state.setLikedBundles, state.setPlaylists]
   );
+  const [setGenres, setMoods] = useAppStore((state) => [
+    state.setGenres,
+    state.setMoods,
+  ]);
 
   useEffect(() => {
     setLikedTracks(likedTracks);
     setLikedBundles(likedBundles);
     setPlaylists(playlists);
+    setGenres(genres);
+    setMoods(moods);
   }, [
     likedTracks,
     setLikedTracks,
@@ -41,6 +54,10 @@ export function StoreProvider({
     setLikedBundles,
     playlists,
     setPlaylists,
+    setGenres,
+    genres,
+    setMoods,
+    moods,
   ]);
 
   useEffect(() => {

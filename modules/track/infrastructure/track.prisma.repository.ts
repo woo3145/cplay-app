@@ -34,38 +34,94 @@ export class TrackPrismaRepository implements TrackRepository {
     return tracks.map((track) => toTrackDomainModel(track));
   }
 
+  async countTracksWithQuery(query: RepositoryGetTracksQuery) {
+    const { genres, moods, title } = query;
+
+    let whereCondition: any = {
+      status: 'PUBLISH',
+    };
+
+    if (genres && 0 < genres.length) {
+      whereCondition.AND = genres.map((id) => ({
+        genres: {
+          some: {
+            id: id,
+          },
+        },
+      }));
+    }
+
+    if (moods && 0 < moods.length) {
+      const moodConditions = moods.map((id) => ({
+        moods: {
+          some: {
+            id: id,
+          },
+        },
+      }));
+
+      whereCondition.AND = whereCondition.AND
+        ? [...whereCondition.AND, ...moodConditions]
+        : moodConditions;
+    }
+
+    if (title) {
+      whereCondition.title = { contains: title, mode: 'insensitive' };
+    }
+
+    const count = await prisma.track.count({
+      where: { ...whereCondition },
+    });
+
+    return count;
+  }
+
   async findAllWithQuery(query: RepositoryGetTracksQuery) {
-    const { page = 1, count = 10, genre, mood } = query;
+    const { page = 1, take = 10, genres, moods, title } = query;
     const offset = (page - 1) * 10;
 
-    let whereCondition: any = {};
+    let whereCondition: any = {
+      status: 'PUBLISH',
+    };
 
-    if (genre) {
-      whereCondition.genres = {
-        some: {
-          slug: genre,
+    if (genres && 0 < genres.length) {
+      whereCondition.AND = genres.map((id) => ({
+        genres: {
+          some: {
+            id: id,
+          },
         },
-      };
+      }));
     }
 
-    if (mood) {
-      whereCondition.moods = {
-        some: {
-          tag: mood,
+    if (moods && 0 < moods.length) {
+      const moodConditions = moods.map((id) => ({
+        moods: {
+          some: {
+            id: id,
+          },
         },
-      };
+      }));
+
+      whereCondition.AND = whereCondition.AND
+        ? [...whereCondition.AND, ...moodConditions]
+        : moodConditions;
     }
+
+    if (title) {
+      whereCondition.title = { contains: title, mode: 'insensitive' };
+    }
+
     const tracks = await prisma.track.findMany({
       where: {
         ...whereCondition,
-        status: 'PUBLISH',
       },
       orderBy: {
         id: 'desc',
       },
       include: trackIncludes,
       skip: offset,
-      take: count,
+      take: take,
     });
 
     return tracks.map((track) => toTrackDomainModel(track));

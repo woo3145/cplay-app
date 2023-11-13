@@ -32,10 +32,7 @@ export const createStemServerAction = adminGuard(
       revalidateTag(cacheKeys.getTrack(trackId));
 
       if (track.status === TrackStatus.PUBLISH) {
-        revalidateTag(cacheKeys.getReleasedTracksByGenre('all'));
-        track.genres.forEach((genre) => {
-          revalidateTag(cacheKeys.getReleasedTracksByGenre(genre.slug));
-        });
+        revalidateTag(cacheKeys.RELEASED_TRACKS);
       }
 
       return { success: true, stem };

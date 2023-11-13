@@ -24,10 +24,7 @@ export const deleteStemServerAction = adminGuard(
         revalidateTag(cacheKeys.getTrack(track.id));
 
         if (track.status === TrackStatus.PUBLISH) {
-          revalidateTag(cacheKeys.getReleasedTracksByGenre('all'));
-          track.genres.forEach((genre) => {
-            revalidateTag(cacheKeys.getReleasedTracksByGenre(genre.slug));
-          });
+          revalidateTag(cacheKeys.RELEASED_TRACKS);
         }
       }
 

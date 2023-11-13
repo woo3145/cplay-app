@@ -1,6 +1,7 @@
 export type RepositoryGetTracksQuery = {
   page?: number;
-  count?: number;
-  genre?: string;
-  mood?: string;
+  take?: number;
+  genres?: number[];
+  moods?: number[];
+  title?: string;
 };

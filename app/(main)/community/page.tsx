@@ -1,7 +1,7 @@
 export default function CommunityPage() {
   return (
     <div className="flex flex-col items-center justify-between">
-      <div>Community</div>
+      <div>Tracks</div>
     </div>
   );
 }

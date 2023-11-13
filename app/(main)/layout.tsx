@@ -12,7 +12,7 @@ const mainSidebarNavItems = [
     title: '탐색',
   },
   {
-    href: '/sounds',
+    href: '/tracks',
     icon: <Music className="h-4 w-4" />,
     title: '트랙',
   },

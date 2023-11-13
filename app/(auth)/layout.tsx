@@ -1,5 +1,6 @@
 import { getSessionUserServerAction } from '@/modules/user/domain/usecases/getSessionUserServerAction';
 import { redirect } from 'next/navigation';
+import { ClosePlayerTrigger } from './ClosePlayerTrigger';
 
 export default async function AuthLayout({
   children,
@@ -11,5 +12,10 @@ export default async function AuthLayout({
   if (user) {
     redirect('/');
   }
-  return <div>{children}</div>;
+  return (
+    <div>
+      {children}
+      <ClosePlayerTrigger />
+    </div>
+  );
 }
