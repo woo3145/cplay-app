@@ -8,14 +8,42 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { formatSeconds } from '@/lib/dateFormat';
+import { createTracksQueryString } from '@/lib/queryString';
 import { Track } from '@/modules/track/domain/track';
 import { Play } from 'lucide-react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   tracks: Track[];
 }
 export const TrackList = ({ tracks }: Props) => {
+  const router = useRouter();
+  const onClickClearFilter = () => {
+    try {
+      const query = createTracksQueryString({
+        genreIds: [],
+        moodIds: [],
+        title: '',
+      });
+
+      router.push(`/tracks?${query}`);
+    } catch (e) {
+      console.log('Error toggling filter', e);
+    }
+  };
+
+  if (tracks.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-4 space-y-2">
+        <p className="text-xl">😢 일치하는 트랙이 없습니다.</p>
+        <p className="text-muted-foreground">
+          더 적은 수의 필터를 사용해보세요.
+        </p>
+        <Button onClick={() => onClickClearFilter()}>Clear Filter</Button>
+      </div>
+    );
+  }
   return (
     <div>
       <div className="w-full py-2 px-2 space-x-4 flex items-center rounded-md text-sm">

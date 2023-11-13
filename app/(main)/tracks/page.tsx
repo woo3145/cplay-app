@@ -40,9 +40,9 @@ export default async function TracksPage({
 
   return (
     <div className="flex flex-col items-center justify-between px-4">
-      <div className="w-full max-w-screen-xl py-16 space-y-8">
+      <div className="w-full max-w-screen-xl py-16 space-y-2">
         <div className="text-5xl font-semibold">Search</div>
-        <div className="flex items-center justify-between py-4">
+        <div className="flex items-start justify-between gap-2 py-4">
           <TrackSearchBar
             selectedGenres={selectedGenres}
             selectedMoods={selectedMoods}
@@ -54,6 +54,8 @@ export default async function TracksPage({
             title={title}
           />
         </div>
+        <p>{count} results</p>
+
         <TrackList tracks={tracks} />
         <Pagination
           totalItems={count}
