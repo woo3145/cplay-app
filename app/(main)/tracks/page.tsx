@@ -4,6 +4,8 @@ import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Pagination } from './Pagination';
 import { getReleasedTracksServerAction } from '@/modules/track/domain/usecases/getReleasedTracksServerAction';
+import { TrackFilter } from './TrackFilter';
+import { useAppStore } from '@/store/useAppStore';
 
 export interface TracksSearchParams {
   page?: string;
@@ -17,24 +19,36 @@ export default async function TracksPage({
 }: {
   searchParams?: TracksSearchParams;
 }) {
+  const genres = useAppStore.getState().genres;
+  const moods = useAppStore.getState().moods;
   const page = Number(searchParams?.page);
   const title = searchParams?.title ? searchParams.title.toString() : undefined;
-  let genres = [];
-  let moods = [];
-  try {
-    genres = JSON.parse(searchParams?.genres?.toString() || '[]');
-  } catch (e) {
-    genres = [];
-  }
-  try {
-    moods = JSON.parse(searchParams?.moods?.toString() || '[]');
-  } catch (e) {
-    moods = [];
-  }
+  const parseArrayParam = (param?: string | string[]): number[] => {
+    if (!param) return [];
+    if (Array.isArray(param)) {
+      return param.map(Number).filter((item) => !isNaN(item));
+    }
+    try {
+      const parsed = JSON.parse(param);
+      return Array.isArray(parsed)
+        ? parsed.map(Number).filter((item) => !isNaN(item))
+        : [];
+    } catch (e) {
+      return [];
+    }
+  };
+  // 유효하지 않은 태그는 필터링
+  const selectedGenres = parseArrayParam(searchParams?.genres).filter(
+    (selectedId) => genres.find((genre) => genre.id === selectedId)
+  );
+  const selectedMoods = parseArrayParam(searchParams?.moods).filter(
+    (selectedId) => moods.find((mood) => mood.id === selectedId)
+  );
+
   const { tracks, count } = await getReleasedTracksServerAction({
     page: isNaN(page) ? 1 : page,
-    genres,
-    moods,
+    genres: selectedGenres,
+    moods: selectedMoods,
     title: title,
   });
 
@@ -50,9 +64,10 @@ export default async function TracksPage({
               placeholder="Search title, genres, moods"
             />
           </div>
-          <div>
-            <Button className="">Filter</Button>
-          </div>
+          <TrackFilter
+            selectedGenres={selectedGenres}
+            selectedMoods={selectedMoods}
+          />
         </div>
         <TrackList tracks={tracks} />
         <Pagination

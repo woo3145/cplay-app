@@ -13,6 +13,9 @@ import { getLikedTracksServerAction } from '@/modules/track/domain/usecases/getL
 import { useUserStore } from '@/store/useUserStore';
 import { getLikedBundlesServerAction } from '@/modules/bundle/domain/usecases/getLikedBundlesServerAction';
 import { getPlaylistsServerAction } from '@/modules/playlist/domain/usecases/getPlaylistsServerAction';
+import { getAllGenresServerAction } from '@/modules/genre/domain/usecases/getAllGenresServerAction';
+import { getAllMoodsServerAction } from '@/modules/mood/domain/usecases/getAllMoodsServerAction';
+import { useAppStore } from '@/store/useAppStore';
 
 // Next의 런타임 참고
 // https://nextjs.org/docs/app/building-your-application/rendering/edge-and-nodejs-runtimes#edge-runtime
@@ -37,6 +40,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await getServerSession(authOptions);
+  const genres = await getAllGenresServerAction();
+  const moods = await getAllMoodsServerAction();
   const likedTracks = await getLikedTracksServerAction(session?.user.id);
   const likedBundles = await getLikedBundlesServerAction(session?.user.id);
   const playlists = await getPlaylistsServerAction(session?.user.id);
@@ -44,6 +49,10 @@ export default async function RootLayout({
     likedTracks,
     likedBundles,
     playlists,
+  });
+  useAppStore.setState({
+    genres,
+    moods,
   });
   return (
     <html lang="en" suppressHydrationWarning>
@@ -53,6 +62,8 @@ export default async function RootLayout({
             likedTracks={likedTracks}
             likedBundles={likedBundles}
             playlists={playlists}
+            genres={genres}
+            moods={moods}
           >
             <ThemeProvider
               attribute="class"
