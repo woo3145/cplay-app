@@ -3,56 +3,45 @@
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Search, X } from 'lucide-react';
-import { TracksSearchParams } from './page';
 import { useRouter } from 'next/navigation';
 import { useAppStore } from '@/store/useAppStore';
 import { Badge } from '@/components/ui/badge';
+import { createTracksQueryString } from '@/lib/queryString';
 
 interface Props {
   selectedGenres: number[];
   selectedMoods: number[];
-  searchParams?: TracksSearchParams;
+  title?: string;
 }
 
 export const TrackSearchBar = ({
+  title,
   selectedGenres,
   selectedMoods,
-  searchParams,
 }: Props) => {
   const { genres, moods } = useAppStore((state) => ({
     genres: state.genres,
     moods: state.moods,
   }));
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(title ? title : '');
   const router = useRouter();
-
-  const createQueryString = ({
-    title,
-    genreIds,
-    moodIds,
-  }: {
-    title?: string;
-    genreIds?: number[];
-    moodIds?: number[];
-  }) => {
-    const query = [];
-    query.push(`page=${1}`);
-    query.push(`genres=[${genreIds ? genreIds : selectedGenres}]`);
-    query.push(`moods=[${moodIds ? moodIds : selectedMoods}]`);
-    if (title) query.push(`title=${encodeURIComponent(title)}`);
-
-    return query.join('&');
-  };
 
   const handleSearch = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
-      router.push(`/tracks?${createQueryString({ title: searchQuery })}`);
+      router.push(
+        `/tracks?${createTracksQueryString({
+          title: searchQuery,
+          genreIds: selectedGenres,
+          moodIds: selectedMoods,
+        })}`
+      );
     }
   };
 
   const onClickRemoveGenre = (id: number) => {
     try {
-      const query = createQueryString({
+      const query = createTracksQueryString({
+        title,
         genreIds: selectedGenres.filter((selectedId) => selectedId !== id),
         moodIds: selectedMoods,
       });
@@ -64,7 +53,8 @@ export const TrackSearchBar = ({
   };
   const onClickRemoveMood = (id: number) => {
     try {
-      const query = createQueryString({
+      const query = createTracksQueryString({
+        title,
         genreIds: selectedGenres,
         moodIds: selectedMoods.filter((selectedId) => selectedId !== id),
       });

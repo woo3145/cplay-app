@@ -3,31 +3,29 @@
 import { Button } from '@/components/ui/button';
 import { ChevronsLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { TracksSearchParams } from './page';
+import { createTracksQueryString } from '@/lib/queryString';
 
 interface Props {
   totalItems: number;
   take: number;
   page: number;
-  searchParams?: TracksSearchParams;
+
+  selectedGenres: number[];
+  selectedMoods: number[];
+  title?: string;
 }
 
-export const Pagination = ({ totalItems, take, page, searchParams }: Props) => {
+export const Pagination = ({
+  totalItems,
+  take,
+  page,
+  title,
+  selectedGenres,
+  selectedMoods,
+}: Props) => {
   const router = useRouter();
   const totalPages = Math.ceil(totalItems / take);
 
-  const createQueryString = (page: number) => {
-    const query = [];
-    if (searchParams?.genres && searchParams.genres.length)
-      query.push(`genres=${searchParams.genres}`);
-    if (searchParams?.moods && searchParams.moods.length)
-      query.push(`moods=${searchParams.moods}`);
-    if (searchParams?.title)
-      query.push(`title=${encodeURIComponent(searchParams.title)}`);
-    if (page) query.push(`page=${page}`);
-
-    return query.join('&');
-  };
   const renderPageNumbers = () => {
     const pages = [];
 
@@ -55,7 +53,16 @@ export const Pagination = ({ totalItems, take, page, searchParams }: Props) => {
           key={i}
           variant={page === i ? 'default' : 'outline'}
           className="w-10 h-10 p-0"
-          onClick={() => router.push(`/tracks?${createQueryString(i)}`)}
+          onClick={() =>
+            router.push(
+              `/tracks?${createTracksQueryString({
+                page: i,
+                title,
+                genreIds: selectedGenres,
+                moodIds: selectedMoods,
+              })}`
+            )
+          }
         >
           {i}
         </Button>
@@ -70,7 +77,16 @@ export const Pagination = ({ totalItems, take, page, searchParams }: Props) => {
         <>
           <Button
             variant={'outline'}
-            onClick={() => router.push(`/tracks?${createQueryString(1)}`)}
+            onClick={() =>
+              router.push(
+                `/tracks?${createTracksQueryString({
+                  page: 1,
+                  title,
+                  genreIds: selectedGenres,
+                  moodIds: selectedMoods,
+                })}`
+              )
+            }
             className="w-10 h-10 p-0"
           >
             <ChevronsLeft className="w-4 h-4" />
@@ -85,7 +101,14 @@ export const Pagination = ({ totalItems, take, page, searchParams }: Props) => {
             className="w-10 h-10 p-0"
             variant={page === totalPages ? 'default' : 'outline'}
             onClick={() =>
-              router.push(`/tracks?${createQueryString(totalPages)}`)
+              router.push(
+                `/tracks?${createTracksQueryString({
+                  page: totalPages,
+                  title,
+                  genreIds: selectedGenres,
+                  moodIds: selectedMoods,
+                })}`
+              )
             }
           >
             {totalPages}

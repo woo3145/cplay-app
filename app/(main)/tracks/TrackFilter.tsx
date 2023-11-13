@@ -8,50 +8,35 @@ import {
 } from '@/components/ui/popover';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAppStore } from '@/store/useAppStore';
-import { TracksSearchParams } from './page';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { createTracksQueryString } from '@/lib/queryString';
 
 interface Props {
   selectedGenres: number[];
   selectedMoods: number[];
-  searchParams?: TracksSearchParams;
+  title?: string;
 }
 
 export const TrackFilter = ({
   selectedGenres,
   selectedMoods,
-  searchParams,
+  title,
 }: Props) => {
   const route = useRouter();
   const { genres, moods } = useAppStore((state) => ({
     genres: state.genres,
     moods: state.moods,
   }));
-  const createQueryString = ({
-    genreIds,
-    moodIds,
-  }: {
-    genreIds: number[];
-    moodIds: number[];
-  }) => {
-    const query = [];
-    if (genreIds) query.push(`genres=[${genreIds}]`);
-    if (moodIds) query.push(`moods=[${moodIds}]`);
-    if (searchParams?.title)
-      query.push(`title=${encodeURIComponent(searchParams.title)}`);
-    query.push(`page=${1}`);
-
-    return query.join('&');
-  };
 
   const onClickToggleGenre = (id: number) => {
     try {
-      const query = createQueryString({
+      const query = createTracksQueryString({
         genreIds: selectedGenres.includes(id)
           ? selectedGenres.filter((selectedId) => selectedId !== id)
           : [id, ...selectedGenres],
         moodIds: selectedMoods,
+        title,
       });
 
       route.push(`/tracks?${query}`);
@@ -62,11 +47,12 @@ export const TrackFilter = ({
 
   const onClickToggleMood = (id: number) => {
     try {
-      const query = createQueryString({
+      const query = createTracksQueryString({
         genreIds: selectedGenres,
         moodIds: selectedMoods.includes(id)
           ? selectedMoods.filter((selectedId) => selectedId !== id)
           : [id, ...selectedMoods],
+        title,
       });
 
       route.push(`/tracks?${query}`);
@@ -76,9 +62,10 @@ export const TrackFilter = ({
   };
   const onClickClearFilter = () => {
     try {
-      const query = createQueryString({
+      const query = createTracksQueryString({
         genreIds: [],
         moodIds: [],
+        title: '',
       });
 
       route.push(`/tracks?${query}`);
