@@ -16,19 +16,9 @@ const mainSidebarNavItems = [
     icon: <Music className="h-4 w-4" />,
     title: '트랙',
   },
-  {
-    href: '/community',
-    icon: <Users className="h-4 w-4" />,
-    title: '커뮤니티',
-  },
 ];
 
 const userSideBarNavItems = [
-  {
-    href: `/studio/my`, // /studio/my에서 studio/[userId]로 redirect
-    icon: <Monitor className="h-4 w-4" />,
-    title: '내 스튜디오',
-  },
   {
     href: '/',
     icon: <Heart className="h-4 w-4" />,

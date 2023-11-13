@@ -26,9 +26,6 @@ export default async function TagsPage() {
             </TabsTrigger>
             <TabsTrigger value="mood">분위기</TabsTrigger>
             <TabsTrigger value="bundle">번들</TabsTrigger>
-            <TabsTrigger value="category" disabled>
-              커뮤니티
-            </TabsTrigger>
           </TabsList>
         </div>
         <TabsContent value="genres" className="border-none p-0 outline-none">

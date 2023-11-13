@@ -17,55 +17,51 @@ import {
 
 const sidebarNavItems = [
   {
-    href: `/admin/dashboard`,
+    href: `/admin`,
     icon: <Home className="mr-2 h-4 w-4" />,
     title: '대시보드',
   },
-  {
-    href: `/admin/users`,
-    icon: <Users className="mr-2 h-4 w-4" />,
-    title: '유저 관리',
-  },
+  // {
+  //   href: `/admin/users`,
+  //   icon: <Users className="mr-2 h-4 w-4" />,
+  //   title: '유저 관리',
+  // },
   {
     href: '/admin/sounds/tracks',
     icon: <ListMusic className="mr-2 h-4 w-4" />,
     title: '트랙 관리',
   },
-  {
-    href: '/admin/subscriptions',
-    icon: <PanelTopOpen className="mr-2 h-4 w-4" />,
-    title: '구독 관리',
-  },
-  {
-    href: '/admin/payments',
-    icon: <CreditCard className="mr-2 h-4 w-4" />,
-    title: '결제 및 환불 관리',
-  },
-  {
-    href: '/admin/community',
-    icon: <MessagesSquare className="mr-2 h-4 w-4" />,
-    title: '커뮤니티 관리',
-  },
+  // {
+  //   href: '/admin/subscriptions',
+  //   icon: <PanelTopOpen className="mr-2 h-4 w-4" />,
+  //   title: '구독 관리',
+  // },
+  // {
+  //   href: '/admin/payments',
+  //   icon: <CreditCard className="mr-2 h-4 w-4" />,
+  //   title: '결제 및 환불 관리',
+  // },
+
   {
     href: '/admin/tags',
     icon: <Tag className="mr-2 h-4 w-4" />,
     title: '태그 및 카테고리 관리',
   },
-  {
-    href: '/admin/support',
-    icon: <Home className="mr-2 h-4 w-4" />,
-    title: '고객 지원',
-  },
-  {
-    href: '/admin/analytics',
-    icon: <LineChart className="mr-2 h-4 w-4" />,
-    title: '분석',
-  },
-  {
-    href: '/admin/settings',
-    icon: <Settings className="mr-2 h-4 w-4" />,
-    title: '앱 설정',
-  },
+  // {
+  //   href: '/admin/support',
+  //   icon: <Home className="mr-2 h-4 w-4" />,
+  //   title: '고객 지원',
+  // },
+  // {
+  //   href: '/admin/analytics',
+  //   icon: <LineChart className="mr-2 h-4 w-4" />,
+  //   title: '분석',
+  // },
+  // {
+  //   href: '/admin/settings',
+  //   icon: <Settings className="mr-2 h-4 w-4" />,
+  //   title: '앱 설정',
+  // },
 ];
 
 export default async function AdminLayout({

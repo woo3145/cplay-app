@@ -47,18 +47,18 @@ export function UserMenu({ user }: Props) {
               <span>프로필 관리</span>
             </DropdownMenuItem>
           </Link>
-          <Link href="/" prefetch={false}>
+          <Link href="/account/billing" prefetch={false}>
             <DropdownMenuItem>
               <CreditCard className="mr-2 h-4 w-4" />
               <span>구독 관리</span>
             </DropdownMenuItem>
           </Link>
-          <Link href="/" prefetch={false}>
+          {/* <Link href="/" prefetch={false}>
             <DropdownMenuItem>
               <Settings className="mr-2 h-4 w-4" />
               <span>설정</span>
             </DropdownMenuItem>
-          </Link>
+          </Link> */}
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator />
