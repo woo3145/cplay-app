@@ -40,21 +40,17 @@ export const TrackFilter = ({
     if (moodIds) query.push(`moods=[${moodIds}]`);
     if (searchParams?.title)
       query.push(`title=${encodeURIComponent(searchParams.title)}`);
-    if (searchParams?.page) query.push(`page=${searchParams.page}`);
+    query.push(`page=${1}`);
 
     return query.join('&');
   };
 
   const onClickToggleGenre = (id: number) => {
     try {
-      // 만약 queryString에 유효하지 않은 genre.id가 존재한다면 없애줌
-      const _selectedGenres = selectedGenres.filter((item) =>
-        genres.find((genre) => genre.id === item)
-      );
       const query = createQueryString({
-        genreIds: _selectedGenres.includes(id)
-          ? _selectedGenres.filter((selectedId) => selectedId !== id)
-          : [id, ..._selectedGenres],
+        genreIds: selectedGenres.includes(id)
+          ? selectedGenres.filter((selectedId) => selectedId !== id)
+          : [id, ...selectedGenres],
         moodIds: selectedMoods,
       });
 
@@ -66,15 +62,11 @@ export const TrackFilter = ({
 
   const onClickToggleMood = (id: number) => {
     try {
-      // 만약 queryString에 유효하지 않은 genre.id가 존재한다면 없애줌
-      const _selectedMoods = selectedMoods.filter((item) =>
-        moods.find((mood) => mood.id === item)
-      );
       const query = createQueryString({
         genreIds: selectedGenres,
-        moodIds: _selectedMoods.includes(id)
-          ? _selectedMoods.filter((selectedId) => selectedId !== id)
-          : [id, ..._selectedMoods],
+        moodIds: selectedMoods.includes(id)
+          ? selectedMoods.filter((selectedId) => selectedId !== id)
+          : [id, ...selectedMoods],
       });
 
       route.push(`/tracks?${query}`);

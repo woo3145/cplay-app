@@ -1,11 +1,9 @@
 import { TrackList } from './TrackList';
-import { Input } from '@/components/ui/input';
-import { Search } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Pagination } from './Pagination';
 import { getReleasedTracksServerAction } from '@/modules/track/domain/usecases/getReleasedTracksServerAction';
 import { TrackFilter } from './TrackFilter';
 import { useAppStore } from '@/store/useAppStore';
+import { TrackSearchBar } from './TrackSearchBar';
 
 export interface TracksSearchParams {
   page?: string;
@@ -57,16 +55,15 @@ export default async function TracksPage({
       <div className="w-full max-w-screen-xl py-16 space-y-8">
         <div className="text-5xl font-semibold">Search</div>
         <div className="flex items-center justify-between py-4">
-          <div className="relative flex items-center w-full">
-            <Search className="absolute left-2 w-4 h-4" />
-            <Input
-              className="h-10 max-w-xl pl-8 text-md"
-              placeholder="Search title, genres, moods"
-            />
-          </div>
+          <TrackSearchBar
+            searchParams={searchParams}
+            selectedGenres={selectedGenres}
+            selectedMoods={selectedMoods}
+          />
           <TrackFilter
             selectedGenres={selectedGenres}
             selectedMoods={selectedMoods}
+            searchParams={searchParams}
           />
         </div>
         <TrackList tracks={tracks} />
