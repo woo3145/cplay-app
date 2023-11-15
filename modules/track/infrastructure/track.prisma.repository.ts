@@ -4,6 +4,8 @@ import { RepositoryCreateTrackInput } from '../domain/validations/CreateTrackTyp
 import { RepositoryEditTrackInput } from '../domain/validations/EditTrackTypes';
 import { RepositoryGetTracksQuery } from '../domain/validations/GetTrackTypes';
 import { toTrackDomainModel } from './track.prisma.mapper';
+import { handlePrismaError } from '@/lib/prismaErrorHandler';
+import { NotFoundError } from '@/lib/errors';
 
 export const trackIncludes = {
   creator: true,
@@ -14,13 +16,20 @@ export const trackIncludes = {
 
 export class TrackPrismaRepository implements TrackRepository {
   async findById(id: number) {
-    const track = await prisma.track.findFirst({
-      where: { id },
-      include: trackIncludes,
-    });
-    if (!track) return null;
+    try {
+      const track = await prisma.track.findFirst({
+        where: { id },
+        include: trackIncludes,
+      });
+      if (!track) {
+        throw new NotFoundError(`${id}에 해당하는 트랙을 찾을 수 없습니다.`);
+      }
 
-    return toTrackDomainModel(track);
+      return toTrackDomainModel(track);
+    } catch (e) {
+      console.error(`TrackPrismaRepository: findById ${id}`, e);
+      throw handlePrismaError(e);
+    }
   }
   async findAll() {
     const tracks = await prisma.track.findMany({

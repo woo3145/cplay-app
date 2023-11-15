@@ -4,8 +4,9 @@ import { repository } from '@/modules/config/repository';
 import { TrackRepository } from '../track.repository';
 import { unstable_cache } from 'next/cache';
 import { cacheKeys } from '@/modules/config/cacheHelper';
+import { getErrorMessage } from '@/lib/getErrorMessage';
+import { NotFoundError } from '@/lib/errors';
 
-// 페이지 네이션 필요
 export const getTrackServerAction = async (
   trackId: number,
   subTrackRepository: TrackRepository | null = null
@@ -26,9 +27,20 @@ export const getTrackServerAction = async (
       }
     )();
 
-    return track;
+    return {
+      data: track,
+    };
   } catch (e) {
-    console.error('getTrackServerAction Error: ', e);
-    return null;
+    if (e instanceof NotFoundError) {
+      return {
+        data: null,
+      };
+    }
+    console.error(
+      `getTrackServerAction: Error fetching track with ID ${trackId}`
+    );
+    return {
+      error: getErrorMessage(e),
+    };
   }
 };

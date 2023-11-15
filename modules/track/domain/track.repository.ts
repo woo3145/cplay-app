@@ -4,7 +4,7 @@ import { RepositoryEditTrackInput } from './validations/EditTrackTypes';
 import { RepositoryGetTracksQuery } from './validations/GetTrackTypes';
 
 export interface TrackRepository {
-  findById: (id: number) => Promise<DomainTrack | null>;
+  findById: (id: number) => Promise<DomainTrack>;
   findAll: () => Promise<DomainTrack[]>;
   findAllWithQuery: (query: RepositoryGetTracksQuery) => Promise<DomainTrack[]>;
   countTracksWithQuery: (query: RepositoryGetTracksQuery) => Promise<number>;
