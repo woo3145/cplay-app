@@ -5,19 +5,22 @@ import { TrackRepository } from '../track.repository';
 import { unstable_cache } from 'next/cache';
 import { RepositoryGetTracksQuery } from '../validations/GetTrackTypes';
 import { cacheKeys } from '@/modules/config/cacheHelper';
+import { ServerActionResponse } from '@/types/ServerActionResponse';
+import { Track } from '../track';
+import { getErrorMessage } from '@/lib/getErrorMessage';
 
 export const getReleasedTracksServerAction = async (
   query: RepositoryGetTracksQuery,
   subTrackRepository: TrackRepository | null = null
-) => {
+): Promise<ServerActionResponse<{ tracks: Track[]; count: number }>> => {
   const repo = subTrackRepository || repository.track;
   try {
     query.genres?.sort((a, b) => a - b);
     query.moods?.sort((a, b) => a - b);
 
-    const tracks = await unstable_cache(
+    const { tracks, totalCount } = await unstable_cache(
       async () => {
-        const data = await repo.findAllWithQuery({
+        const data = await repo.findAll({
           title: query.title,
           genres: query.genres,
           moods: query.moods,
@@ -39,26 +42,10 @@ export const getReleasedTracksServerAction = async (
         revalidate: 3600,
       }
     )();
-    const totalTracksCount = await unstable_cache(
-      async () => {
-        const data = await repo.countTracksWithQuery(query);
 
-        console.log(`Prisma 호출: ${cacheKeys.getCountTracksWithQuery(query)}`);
-        return data;
-      },
-      [cacheKeys.getCountTracksWithQuery(query)],
-      {
-        tags: [
-          cacheKeys.RELEASED_TRACKS,
-          cacheKeys.getCountTracksWithQuery(query),
-        ],
-        revalidate: 3600,
-      }
-    )();
-
-    return { tracks, count: totalTracksCount };
+    return { success: true, data: { tracks, count: totalCount } };
   } catch (e) {
-    console.error('getReleasedTracksServerAction Error: ', e);
-    return { tracks: [], count: 0 };
+    console.error('getReleasedTracksServerAction Error');
+    return { success: false, error: getErrorMessage(e) };
   }
 };

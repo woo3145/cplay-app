@@ -5,15 +5,16 @@ import { TrackRepository } from '../track.repository';
 import { unstable_cache } from 'next/cache';
 import { cacheKeys } from '@/modules/config/cacheHelper';
 import { getErrorMessage } from '@/lib/getErrorMessage';
-import { NotFoundError } from '@/lib/errors';
+import { ServerActionResponse } from '@/types/ServerActionResponse';
+import { Track } from '../track';
 
 export const getTrackServerAction = async (
   trackId: number,
   subTrackRepository: TrackRepository | null = null
-) => {
-  const repo = subTrackRepository || repository.track;
-
+): Promise<ServerActionResponse<Track>> => {
   try {
+    const repo = subTrackRepository || repository.track;
+
     const track = await unstable_cache(
       async () => {
         const data = await repo.findById(trackId);
@@ -28,18 +29,15 @@ export const getTrackServerAction = async (
     )();
 
     return {
+      success: true,
       data: track,
     };
   } catch (e) {
-    if (e instanceof NotFoundError) {
-      return {
-        data: null,
-      };
-    }
     console.error(
       `getTrackServerAction: Error fetching track with ID ${trackId}`
     );
     return {
+      success: false,
       error: getErrorMessage(e),
     };
   }

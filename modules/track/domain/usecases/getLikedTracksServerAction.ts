@@ -4,17 +4,22 @@ import { repository } from '@/modules/config/repository';
 import { TrackRepository } from '../track.repository';
 import { unstable_cache } from 'next/cache';
 import { cacheKeys } from '@/modules/config/cacheHelper';
+import { ServerActionResponse } from '@/types/ServerActionResponse';
+import { Track } from '../track';
+import { AuthorizationError } from '@/lib/errors';
+import { getErrorMessage } from '@/lib/getErrorMessage';
 
-// 페이지 네이션 필요
 export const getLikedTracksServerAction = async (
   userId?: string,
   subTrackRepository: TrackRepository | null = null
-) => {
-  const repo = subTrackRepository || repository.track;
-  if (!userId) {
-    return [];
-  }
+): Promise<ServerActionResponse<Track[]>> => {
   try {
+    const repo = subTrackRepository || repository.track;
+
+    if (!userId) {
+      throw new AuthorizationError();
+    }
+
     const likedTracks = await unstable_cache(
       async () => {
         const data = await repo.getLikedTracksByUser(userId);
@@ -28,9 +33,12 @@ export const getLikedTracksServerAction = async (
       }
     )();
 
-    return likedTracks;
+    return {
+      success: true,
+      data: likedTracks,
+    };
   } catch (e) {
-    console.error('getTrackServerAction Error: ', e);
-    return [];
+    console.error('getTrackServerAction Error');
+    return { success: false, error: getErrorMessage(e) };
   }
 };

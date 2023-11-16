@@ -6,7 +6,10 @@ import Link from 'next/link';
 import { trackColumns } from './TrackColumns';
 
 export default async function TracksPage() {
-  const tracks = await getAllTracksServerAction();
+  const tracksResult = await getAllTracksServerAction();
+
+  const tracks = tracksResult.success ? tracksResult.data : [];
+
   return (
     <div className="flex flex-col items-center justify-between">
       <div className="flex items-center justify-between w-full">

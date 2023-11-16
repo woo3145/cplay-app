@@ -20,16 +20,12 @@ export default async function EditTrackPage({
   }
   const genres = await getAllGenresServerAction();
   const moods = await getAllMoodsServerAction();
-  const { data: track, error } = await getTrackServerAction(
-    parsedParams.data.trackId
-  );
-  if (error) {
-    // 에러처리
-    // throw new Error(); // 가장가까운 error.tsx로 캐치
-  }
-  if (!track) {
+  const getTrackResult = await getTrackServerAction(parsedParams.data.trackId);
+
+  if (!getTrackResult.success) {
     notFound();
   }
+  const track = getTrackResult.data;
 
   return (
     <div className="flex flex-col items-center justify-between">

@@ -157,6 +157,21 @@ export class TrackPrismaRepository implements TrackRepository {
     }
   }
 
+  async isTrackLikedByUser(userId: string, trackId: number) {
+    try {
+      const likedRecord = await prisma.trackLike.findFirst({
+        where: {
+          userId,
+          trackId,
+        },
+      });
+      return likedRecord !== null;
+    } catch (e) {
+      console.error(`TrackPrismaRepository: isTrackLikedByUser`, e);
+      throw handlePrismaError(e);
+    }
+  }
+
   async likeTrack(userId: string, trackId: number) {
     try {
       const likedTrack = await prisma.trackLike.create({

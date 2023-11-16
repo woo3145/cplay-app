@@ -25,14 +25,14 @@ export const useToggleLikeTrack = (trackId: number | null) => {
     if (result.success) {
       toast({
         variant: 'success',
-        title: result.isLiked
+        title: result.data.isLiked
           ? '성공적으로 좋아요를 눌렀습니다.'
           : '성공적으로 좋아요를 취소했습니다.',
       });
     } else {
       toast({
         variant: 'destructive',
-        title: result.message,
+        title: result.error,
       });
     }
   };

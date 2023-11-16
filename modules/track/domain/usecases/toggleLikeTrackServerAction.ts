@@ -3,31 +3,26 @@
 import { repository } from '@/modules/config/repository';
 import { TrackRepository } from '../track.repository';
 import { revalidateTag } from 'next/cache';
-import { getLikedTracksServerAction } from './getLikedTracksServerAction';
 import { cacheKeys } from '@/modules/config/cacheHelper';
+import { ServerActionResponse } from '@/types/ServerActionResponse';
+import { AuthorizationError } from '@/lib/errors';
+import { getErrorMessage } from '@/lib/getErrorMessage';
 
 export const toggleLikeTrackServerAction = async (
   userId: string | null,
   trackId: number,
   subTrackRepository: TrackRepository | null = null
-) => {
-  const repo = subTrackRepository || repository.track;
-
-  if (!userId) {
-    return {
-      success: false,
-      message: '로그인이 필요합니다.',
-    };
-  }
-
+): Promise<ServerActionResponse<{ trackId: number; isLiked: boolean }>> => {
   try {
-    const likedTracks = await getLikedTracksServerAction(userId);
+    const repo = subTrackRepository || repository.track;
 
-    const likedTrackIds = likedTracks.map((track) => track.id);
+    if (!userId) {
+      throw new AuthorizationError();
+    }
 
-    const isLiked = likedTrackIds.includes(trackId);
+    const isAlreadyLiked = await repo.isTrackLikedByUser(userId, trackId);
 
-    if (isLiked) {
+    if (isAlreadyLiked) {
       await repo.unlikeTrack(userId, trackId);
     } else {
       await repo.likeTrack(userId, trackId);
@@ -37,11 +32,13 @@ export const toggleLikeTrackServerAction = async (
 
     return {
       success: true,
-      trackId,
-      isLiked: !isLiked,
+      data: {
+        trackId,
+        isLiked: !isAlreadyLiked,
+      },
     };
   } catch (e) {
-    console.error('toggleLikeTrackServerAction Error: ', e);
-    return { success: false, message: '서버에 문제가 발생하였습니다.' };
+    console.error('toggleLikeTrackServerAction Error');
+    return { success: false, error: getErrorMessage(e) };
   }
 };

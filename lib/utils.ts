@@ -25,6 +25,13 @@ export const arraysEqual = (a: any[], b: any[]): boolean => {
   return true;
 };
 
+export const isEqual = <T>(a: T | T[], b: T | T[]): boolean => {
+  if (Array.isArray(a) && Array.isArray(b)) {
+    return arraysEqual(a, b);
+  }
+  return a === b;
+};
+
 export const capitalizeFirstLetter = (text: string) => {
   if (text.length === 0) {
     return '';

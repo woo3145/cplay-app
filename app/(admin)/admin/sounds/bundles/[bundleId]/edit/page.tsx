@@ -20,7 +20,9 @@ export default async function EditTrackPage({
   }
   const bundleTypes = await getAllBundleTypesServerAction();
   const bundle = await getBundleServerAction(parsedParams.data.bundleId);
-  const allTracks = await getAllTracksServerAction();
+  const allTracksResult = await getAllTracksServerAction();
+
+  const allTracks = allTracksResult.success ? allTracksResult.data : [];
   if (!bundle) {
     notFound();
   }

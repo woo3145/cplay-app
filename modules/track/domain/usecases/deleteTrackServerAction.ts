@@ -6,24 +6,35 @@ import { TrackRepository } from '@/modules/track/domain/track.repository';
 import { revalidateTag } from 'next/cache';
 import { cacheKeys } from '@/modules/config/cacheHelper';
 import { TrackStatus } from '../track';
+import { getErrorMessage } from '@/lib/getErrorMessage';
+import { ValidationError } from '@/lib/errors';
+import { z } from 'zod';
+import { ServerActionResponse } from '@/types/ServerActionResponse';
 
 export const deleteTrackServerAction = adminGuard(
-  async (id: number, subTrackRepository: TrackRepository | null = null) => {
-    const repo = subTrackRepository || repository.track;
-
+  async (
+    id: number,
+    subTrackRepository: TrackRepository | null = null
+  ): Promise<ServerActionResponse<void>> => {
     try {
-      const exist = await repo.delete(id);
+      const parsedResult = z.number().safeParse(id);
+      const repo = subTrackRepository || repository.track;
+
+      if (!parsedResult.success) {
+        throw new ValidationError();
+      }
+
+      const exist = await repo.delete(parsedResult.data);
 
       revalidateTag(cacheKeys.ADMIN_ALL_TRACKS);
 
       if (exist.status === TrackStatus.PUBLISH) {
         revalidateTag(cacheKeys.RELEASED_TRACKS);
       }
-
-      return { success: true };
+      return { success: true, data: undefined };
     } catch (e) {
-      console.error('deleteTrackServerAction Error: ', e);
-      return { success: false, message: '서버에 문제가 발생하였습니다.' };
+      console.error(`deleteTrackServerAction Error with ID ${id}`);
+      return { success: false, error: getErrorMessage(e) };
     }
   }
 );

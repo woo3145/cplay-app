@@ -14,6 +14,7 @@ export interface TrackRepository {
   edit: (id: number, data: RepositoryEditTrackInput) => Promise<DomainTrack>;
   delete: (id: number) => Promise<DomainTrack>;
 
+  isTrackLikedByUser: (userId: string, trackId: number) => Promise<boolean>;
   likeTrack: (
     userId: string,
     trackId: number

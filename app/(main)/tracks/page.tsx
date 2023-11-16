@@ -31,12 +31,15 @@ export default async function TracksPage({
     (selectedId) => moods.find((mood) => mood.id === selectedId)
   );
 
-  const { tracks, count } = await getReleasedTracksServerAction({
+  const getReleasedTracksResult = await getReleasedTracksServerAction({
     page: isNaN(page) ? 1 : page,
     genres: selectedGenres,
     moods: selectedMoods,
     title: title,
   });
+  const { tracks, count } = getReleasedTracksResult.success
+    ? getReleasedTracksResult.data
+    : { tracks: [], count: 0 };
 
   return (
     <div className="flex flex-col items-center justify-between px-4">

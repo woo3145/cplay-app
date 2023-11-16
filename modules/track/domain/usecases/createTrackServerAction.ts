@@ -9,24 +9,31 @@ import {
 } from '../validations/CreateTrackTypes';
 import { TrackRepository } from '../track.repository';
 import { cacheKeys } from '@/modules/config/cacheHelper';
+import { getErrorMessage } from '@/lib/getErrorMessage';
+import { ValidationError } from '@/lib/errors';
+import { ServerActionResponse } from '@/types/ServerActionResponse';
+import { Track } from '../track';
 
 export const createTrackServerAction = adminGuard(
   async (
     data: UsecaseCreateTrackInput,
     subTrackRepository: TrackRepository | null = null
-  ) => {
-    const parsedData = UsecaseCreateTrackInputSchema.parse(data);
-    const repo = subTrackRepository || repository.track;
-
+  ): Promise<ServerActionResponse<Track>> => {
     try {
-      const track = await repo.create(parsedData);
+      const parsedResult = UsecaseCreateTrackInputSchema.safeParse(data);
+      const repo = subTrackRepository || repository.track;
+
+      if (!parsedResult.success) {
+        throw new ValidationError();
+      }
+      const track = await repo.create(parsedResult.data);
 
       revalidateTag(cacheKeys.ADMIN_ALL_TRACKS);
 
-      return { success: true, track };
+      return { success: true, data: track };
     } catch (e) {
-      console.error('createTrackServerAction Error', e);
-      return { success: false, message: '서버에 문제가 발생하였습니다.' };
+      console.error('createTrackServerAction Error');
+      return { success: false, error: getErrorMessage(e) };
     }
   }
 );

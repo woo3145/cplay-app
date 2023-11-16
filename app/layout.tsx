@@ -40,11 +40,18 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await getServerSession(authOptions);
+
+  const [likedTracksResult] = await Promise.all([
+    getLikedTracksServerAction(session?.user.id),
+  ]);
+
+  const likedTracks = likedTracksResult.success ? likedTracksResult.data : [];
+
   const genres = await getAllGenresServerAction();
   const moods = await getAllMoodsServerAction();
-  const likedTracks = await getLikedTracksServerAction(session?.user.id);
   const likedBundles = await getLikedBundlesServerAction(session?.user.id);
   const playlists = await getPlaylistsServerAction(session?.user.id);
+
   useUserStore.setState({
     likedTracks,
     likedBundles,
