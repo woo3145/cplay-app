@@ -18,7 +18,9 @@
 
 #### Repository 계층
 
-- 메서드 실행중 의도치 않은 동작이나 예외상황을 throw 시키고 catch문에서 발생한 컨텍스트와 원본 에러객체 로깅
+원본 에러를 로깅하고 커스텀 에러객체로 변환시켜 외부로 throw
+
+- 메서드 실행중 의도치 않은 동작이나 예외상황을 throw 시키고 catch문에서 **발생한 컨텍스트와 원본 에러객체 로깅**
 - prismaErrorHandler에서 직접 throw된 에러는 다시 throw시켜 상위레벨로 보냄
 - prismaErrorHandler에서 Prisma가 던진 에러 또는 예상치 못한 에러는 커스텀 에러객체로 변환시켜 보안을 강화
 - prismaErrorHandler에서 각 에러유형에 관한 간단한 추가 메세지를 로깅하여 문제해결에 도움

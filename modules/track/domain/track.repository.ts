@@ -5,9 +5,10 @@ import { RepositoryGetTracksQuery } from './validations/GetTrackTypes';
 
 export interface TrackRepository {
   findById: (id: number) => Promise<DomainTrack>;
-  findAll: () => Promise<DomainTrack[]>;
-  findAllWithQuery: (query: RepositoryGetTracksQuery) => Promise<DomainTrack[]>;
-  countTracksWithQuery: (query: RepositoryGetTracksQuery) => Promise<number>;
+  findAll: (
+    query?: RepositoryGetTracksQuery,
+    isAdmin?: boolean
+  ) => Promise<{ tracks: DomainTrack[]; totalCount: number }>;
 
   create: (data: RepositoryCreateTrackInput) => Promise<DomainTrack>;
   edit: (id: number, data: RepositoryEditTrackInput) => Promise<DomainTrack>;
@@ -17,9 +18,6 @@ export interface TrackRepository {
     userId: string,
     trackId: number
   ) => Promise<{ userId: string; trackId: number }>;
-  unlikeTrack: (
-    userId: string,
-    trackId: number
-  ) => Promise<{ userId: string; trackId: number }>;
+  unlikeTrack: (userId: string, trackId: number) => Promise<void>;
   getLikedTracksByUser: (userId: string) => Promise<DomainTrack[]>;
 }

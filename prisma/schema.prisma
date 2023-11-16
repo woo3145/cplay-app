@@ -81,7 +81,7 @@ enum TrackStatus {
 model Track {
   id          Int         @id @default(autoincrement())
   title       String
-  createdAt   DateTime // 트랙 추가일
+  createdAt   DateTime    @default(now()) // 트랙 추가일
   imageUrl    String
   length      Int // 트랙 길이 (초)
   bpm         Int // 트랙 템포
