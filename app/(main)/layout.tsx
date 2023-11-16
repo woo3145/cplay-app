@@ -1,9 +1,11 @@
 import { Header } from '@/components/common/Header';
 import { MainSideBar } from '@/app/(main)/MainSideBar';
-import { Heart, LayoutGrid, Monitor, Music, Users } from 'lucide-react';
+import { Heart, LayoutGrid, Music } from 'lucide-react';
 import { MobileNav } from '@/components/mobileUI/MobileNav';
 import { getSessionUserServerAction } from '@/modules/user/domain/usecases/getSessionUserServerAction';
 import { cn } from '@/lib/utils';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/api/auth/[...nextauth]/route';
 
 const mainSidebarNavItems = [
   {
@@ -31,7 +33,13 @@ export default async function MainLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = await getSessionUserServerAction();
+  const session = await getServerSession(authOptions);
+
+  const userResult = session
+    ? await getSessionUserServerAction(session.user.id)
+    : null;
+
+  const user = userResult?.success ? userResult.data : null;
 
   return (
     <div className="">

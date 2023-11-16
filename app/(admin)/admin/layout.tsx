@@ -1,19 +1,12 @@
+import { authOptions } from '@/api/auth/[...nextauth]/route';
 import { AdminSideBar } from '@/app/(admin)/admin/AdminSideBar';
 import { Header } from '@/components/common/Header';
 import { MobileNav } from '@/components/mobileUI/MobileNav';
 import { cn } from '@/lib/utils';
 import { getSessionUserServerAction } from '@/modules/user/domain/usecases/getSessionUserServerAction';
-import {
-  CreditCard,
-  Home,
-  LineChart,
-  ListMusic,
-  MessagesSquare,
-  PanelTopOpen,
-  Settings,
-  Tag,
-  Users,
-} from 'lucide-react';
+import { Home, ListMusic, Tag } from 'lucide-react';
+import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
 
 const sidebarNavItems = [
   {
@@ -69,7 +62,16 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = await getSessionUserServerAction();
+  const session = await getServerSession(authOptions);
+
+  const userResult = session?.user
+    ? await getSessionUserServerAction(session.user.id)
+    : null;
+
+  const user = userResult?.success ? userResult.data : null;
+  if (!user) {
+    redirect('/');
+  }
   return (
     <div className="">
       <Header user={user} />

@@ -46,7 +46,7 @@ export function ChangePasswordForm({ userId }: Props) {
       if (!result.success) {
         toast({
           variant: 'destructive',
-          title: result.message,
+          title: result.error,
         });
         return;
       }

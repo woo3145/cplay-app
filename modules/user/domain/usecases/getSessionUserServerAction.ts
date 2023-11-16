@@ -1,41 +1,40 @@
 'use server';
 
 import { unstable_cache } from 'next/cache';
-import { getServerSession } from 'next-auth';
 
 import { repository } from '@/modules/config/repository';
 import { UserRepository } from '../user.repository';
-import { authOptions } from '@/api/auth/[...nextauth]/route';
 import { SessionUser } from '../user';
 import { toSessionUserDomainModel } from '../../infrastructure/user.prisma.mapper';
 import { cacheKeys } from '@/modules/config/cacheHelper';
+import { ServerActionResponse } from '@/types/ServerActionResponse';
+import { NotFoundError } from '@/lib/errors';
+import { getErrorMessage } from '@/lib/getErrorMessage';
 
 export const getSessionUserServerAction = async (
+  userId: string,
   subUserRepository: UserRepository | null = null
-): Promise<SessionUser | null> => {
-  const session = await getServerSession(authOptions);
-  if (!session || !session.user || !session.user.id) {
-    return null;
-  }
-  const repo = subUserRepository || repository.user;
+): Promise<ServerActionResponse<SessionUser>> => {
   try {
-    const user = unstable_cache(
+    const repo = subUserRepository || repository.user;
+
+    const user = await unstable_cache(
       async () => {
-        const data = await repo.findById(
-          session.user.id,
-          toSessionUserDomainModel
-        );
-        console.log(
-          `Prisma 호출: ${cacheKeys.getSessionUser(session.user.id)}`
-        );
+        const data = await repo.findById(userId, toSessionUserDomainModel);
+        console.log(`Prisma 호출: ${cacheKeys.getSessionUser(userId)}`);
         return data;
       },
-      [cacheKeys.getSessionUser(session.user.id)],
-      { tags: [cacheKeys.getSessionUser(session.user.id)], revalidate: 3600 }
+      [cacheKeys.getSessionUser(userId)],
+      { tags: [cacheKeys.getSessionUser(userId)], revalidate: 3600 }
     )();
-    return user;
+
+    if (!user) {
+      throw new NotFoundError('유저를 찾을 수 없습니다.');
+    }
+
+    return { success: true, data: user };
   } catch (e) {
     console.log('getSessionUserServerAction Error: ', e);
-    return null;
+    return { success: false, error: getErrorMessage(e) };
   }
 };

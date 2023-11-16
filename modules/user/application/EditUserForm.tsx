@@ -64,11 +64,11 @@ export function EditUserForm({ user }: Props) {
       if (!result.success) {
         toast({
           variant: 'destructive',
-          title: result.message,
+          title: result.error,
         });
         return;
       }
-      if (result.user) {
+      if (result.data) {
         toast({
           variant: 'success',
           title: '성공적으로 프로필을 수정했습니다.',
