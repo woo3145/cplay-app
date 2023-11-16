@@ -62,29 +62,30 @@ export const handlePrismaError = (error: unknown) => {
 
 - 비즈니스 로직을 처리하고, 발생한 에러 관리
 - 여기서 최종적으로 throw된 에러 객체의 메세지를 사용자에게 string으로 전달
-- 반환 유형은 {data: any, error?:string} 형태로 반환해야함
+- 반환 유형은 ServerActionResponse 형태로 반환해야함 ({success:true, data:T} | {success:false, error:string})
 - 여기도 간단한 컨텍스트만 로깅
 
 ```ts
 export const getTrackServerAction = async (
   trackId: number,
   subTrackRepository: TrackRepository | null = null
-) => {
+):Promise<ServerActionResponse<Track>> => {
   const repo = subTrackRepository || repository.track;
 
   try {
     const track = await repo.findById(trackId);
 
     if(something error) throw new SomethingError("something message"); // 1.
-    if(other error) return {data: null, error: "something message"};  //  2. 둘다 가능
+    if(other error) return {success: false, error: "something message"};  //  2. 둘다 가능
 
     return {
       data: track,
     };
   } catch (e) {
-    // 에러로 처리하지 않을 상황이면 정상적인 리턴값으로 변환
+    // 특정 상황을 에러로 처리하지 않을거면 정상적인 리턴값으로 변환
     if (e instanceof NotFoundError) {
       return {
+        success:true,
         data: null,
       };
     }
@@ -92,10 +93,30 @@ export const getTrackServerAction = async (
       `getTrackServerAction: Error fetching track with ID ${trackId}`
     );
     return {
+      success:false,
       error: getErrorMessage(e),
     };
   }
 };
+
+```
+
+##### ServerAction의 응답타입
+
+```ts
+interface ServerActionSuccessResponse<T> {
+  success: true;
+  data: T;
+}
+
+interface ServerActionErrorResponse {
+  success: false;
+  error: string;
+}
+
+export type ServerActionResponse<T> =
+  | ServerActionSuccessResponse<T>
+  | ServerActionErrorResponse;
 ```
 
 #### Client 계층
@@ -103,6 +124,8 @@ export const getTrackServerAction = async (
 - serverAction의 결과에 error가 있다면 적절한 UI로 처리하거나 리다이렉트 또는 상위로 다시 throw 와 같은 처리를 함
 - nextjs의 구현에 따라 error.tsx파일이 존재하면 해당 파일경로와 하위경로를 ErrorBoundary로 감싸게됨
 - 따라서 서버컴포넌트에서 throw error가 발생하면 시점 컴포넌트에서 가장 가까운 상위의 error.tsx를 표시하게 됨
+
+- serverAction이 붙은 함수는 응답이 ServerActionResponse<T> 임을 생각하며 구현
 
 ```ts
 export default async function TrackPage({
@@ -118,13 +141,16 @@ export default async function TrackPage({
   if (!parsedParams.success) {
     notFound();
   }
-  const { data: track, error } = await getTrackServerAction(
+  const getTrackResponse = await getTrackServerAction(
     parsedParams.data.trackId
   );
-  if (error) {
+  if (!getTrackResponse.success) {
     // 에러처리를 할 경우 예시
     throw new Error(error); // error.tsx 컴포넌트로 캐치
+    // 또는 notFound
   }
+  const track = getTrackResponse.data;
+
   if (!track) {
     notFound();
   }
