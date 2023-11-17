@@ -11,22 +11,28 @@ import { revalidateTag } from 'next/cache';
 import { cacheKeys } from '@/modules/config/cacheHelper';
 import { TrackRepository } from '@/modules/track/domain/track.repository';
 import { TrackStatus } from '@/modules/track/domain/track';
+import { ValidationError } from '@/lib/errors';
+import { ServerActionResponse } from '@/types/ServerActionResponse';
+import { Stem } from '../stem';
 
 export const createStemServerAction = adminGuard(
   async (
     data: UsecaseCreateStemInput,
     subStemRepository: StemRepository | null = null,
     subTrackRepository: TrackRepository | null = null
-  ) => {
-    const { trackId, src, stemType } = UsecaseCreateStemInputSchema.parse(data);
-    const repo = subStemRepository || repository.stem;
-    const trackRepo = subTrackRepository || repository.track;
-
+  ): Promise<ServerActionResponse<Stem>> => {
     try {
-      const track = await trackRepo.findById(trackId);
-      if (!track) {
-        return { success: false, message: '트랙이 존재하지 않습니다.' };
+      const parsedResult = UsecaseCreateStemInputSchema.safeParse(data);
+      const repo = subStemRepository || repository.stem;
+      const trackRepo = subTrackRepository || repository.track;
+
+      if (!parsedResult.success) {
+        throw new ValidationError();
       }
+
+      const { trackId, src, stemType } = parsedResult.data;
+
+      const track = await trackRepo.findById(trackId);
       const stem = await repo.create({ trackId, src, stemType });
 
       revalidateTag(cacheKeys.getTrack(trackId));
@@ -35,10 +41,10 @@ export const createStemServerAction = adminGuard(
         revalidateTag(cacheKeys.RELEASED_TRACKS);
       }
 
-      return { success: true, stem };
+      return { success: true, data: stem };
     } catch (e) {
-      console.error('createStemServerAction Error', e);
-      return { success: false, message: '서버에 문제가 발생하였습니다.' };
+      console.error('createStemServerAction Error');
+      return { success: false, error: '서버에 문제가 발생하였습니다.' };
     }
   }
 );

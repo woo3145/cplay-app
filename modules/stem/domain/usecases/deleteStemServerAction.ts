@@ -14,14 +14,16 @@ export const deleteStemServerAction = adminGuard(
     subStemRepository: StemRepository | null = null,
     subTrackRepository: TrackRepository | null = null
   ) => {
-    const repo = subStemRepository || repository.stem;
-    const trackRepo = subTrackRepository || repository.track;
     try {
+      const repo = subStemRepository || repository.stem;
+      const trackRepo = subTrackRepository || repository.track;
+
       const exist = await repo.delete(id);
       const track = await trackRepo.findById(exist.id);
 
       if (track) {
         revalidateTag(cacheKeys.getTrack(track.id));
+        revalidateTag(cacheKeys.ADMIN_ALL_TRACKS);
 
         if (track.status === TrackStatus.PUBLISH) {
           revalidateTag(cacheKeys.RELEASED_TRACKS);
