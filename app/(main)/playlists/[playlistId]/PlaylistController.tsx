@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { formatSeconds } from '@/lib/dateFormat';
 import { UserPlaylist } from '@/modules/playlist/domain/playlist';
 import { usePlayerStore } from '@/store/usePlayerStore';
-import { Check, Play, Shuffle, Trash } from 'lucide-react';
+import { Play, Shuffle, Trash } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 interface Props {

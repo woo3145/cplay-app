@@ -5,6 +5,8 @@ import { PlaylistRepository } from '../domain/playlist.repository';
 import { toPlaylistDomainModel } from './playlist.prisma.mapper';
 import { RepositoryCreatePlaylistInput } from '../domain/validations/CreatePlaylistTypes';
 import { RepositoryEditPlaylistInput } from '../domain/validations/EditPlaylistTypes';
+import { handlePrismaError } from '@/lib/prismaErrorHandler';
+import { NotFoundError } from '@/lib/errors';
 
 export const playlistIncludes = {
   tracks: {
@@ -16,47 +18,92 @@ export const playlistIncludes = {
 };
 
 export class PlaylistPrismaRepository implements PlaylistRepository {
-  async findOne(id: string) {
-    const playlist = await prisma.userPlaylist.findFirst({
-      where: { id },
-      include: playlistIncludes,
-    });
-    if (!playlist) return null;
-    return toPlaylistDomainModel(playlist);
+  async findById(id: string) {
+    try {
+      const playlist = await prisma.userPlaylist.findFirst({
+        where: { id },
+        include: playlistIncludes,
+      });
+      if (!playlist) {
+        throw new NotFoundError(
+          `${id}에 해당하는 플레이리스트를 찾을 수 없습니다.`
+        );
+      }
+      return toPlaylistDomainModel(playlist);
+    } catch (e) {
+      console.error(`PlaylistPrismaRepository: findById ${id}`, e);
+      throw handlePrismaError(e);
+    }
   }
 
   async findAllByUserId(userId: string) {
-    const playlists = await prisma.userPlaylist.findMany({
-      where: {
-        userId: userId,
-      },
-      orderBy: { id: 'desc' },
-      include: playlistIncludes,
-    });
-    if (!playlists) return [];
-    return playlists.map((item) => toPlaylistDomainModel(item));
+    try {
+      const playlists = await prisma.userPlaylist.findMany({
+        where: {
+          userId: userId,
+        },
+        orderBy: { id: 'desc' },
+        include: playlistIncludes,
+      });
+      return playlists.map((item) => toPlaylistDomainModel(item));
+    } catch (e) {
+      console.error(`PlaylistPrismaRepository: findAllByUserId ${userId}`, e);
+      throw handlePrismaError(e);
+    }
   }
 
   async create(data: RepositoryCreatePlaylistInput) {
-    const { trackIds, userId, ...rest } = data;
-    const playlist = await prisma.userPlaylist.create({
-      data: {
-        ...rest,
-        userId,
-        tracks: {
-          connect: trackIds.map((id) => {
-            return { id };
-          }),
+    try {
+      const { trackIds, userId, ...rest } = data;
+      const playlist = await prisma.userPlaylist.create({
+        data: {
+          ...rest,
+          userId,
+          tracks: {
+            connect: trackIds.map((id) => {
+              return { id };
+            }),
+          },
         },
-      },
-      include: playlistIncludes,
-    });
-    return toPlaylistDomainModel(playlist);
+        include: playlistIncludes,
+      });
+      return toPlaylistDomainModel(playlist);
+    } catch (e) {
+      console.error(`PlaylistPrismaRepository: create`, e);
+      throw handlePrismaError(e);
+    }
   }
 
   async edit(id: string, updatedField: RepositoryEditPlaylistInput) {
-    const { trackIds, ...rest } = updatedField;
-    if (trackIds) {
+    try {
+      const { trackIds, ...rest } = updatedField;
+
+      const updatedPlaylist = await prisma.userPlaylist.update({
+        where: { id },
+        data: {
+          ...rest,
+          ...(trackIds && { tracks: { set: trackIds.map((id) => ({ id })) } }),
+        },
+        include: playlistIncludes,
+      });
+
+      return toPlaylistDomainModel(updatedPlaylist);
+    } catch (e) {
+      console.error(`PlaylistPrismaRepository: edit`, e);
+      throw handlePrismaError(e);
+    }
+  }
+
+  async delete(id: string) {
+    try {
+      const exist = await prisma.userPlaylist.findFirst({
+        where: { id },
+      });
+
+      if (!exist) {
+        throw new NotFoundError();
+      }
+      // 연결 된 참조 끊기
       await prisma.userPlaylist.update({
         where: { id },
         data: {
@@ -65,44 +112,10 @@ export class PlaylistPrismaRepository implements PlaylistRepository {
           },
         },
       });
+      await prisma.userPlaylist.delete({ where: { id } });
+    } catch (e) {
+      console.error(`PlaylistPrismaRepository: delete`, e);
+      throw handlePrismaError(e);
     }
-
-    const updatedPlaylist = await prisma.userPlaylist.update({
-      where: { id },
-      data: {
-        ...rest,
-        tracks:
-          trackIds && 0 < trackIds.length
-            ? {
-                connect: trackIds.map((id) => {
-                  return { id };
-                }),
-              }
-            : undefined,
-      },
-      include: playlistIncludes,
-    });
-
-    return toPlaylistDomainModel(updatedPlaylist);
-  }
-
-  async delete(id: string) {
-    const exist = await prisma.userPlaylist.findFirst({
-      where: { id },
-    });
-
-    if (!exist) {
-      throw new Error('UserPlaylist가 존재하지 않습니다.');
-    }
-    // 연결 된 참조 끊기
-    await prisma.userPlaylist.update({
-      where: { id },
-      data: {
-        tracks: {
-          set: [],
-        },
-      },
-    });
-    await prisma.userPlaylist.delete({ where: { id } });
   }
 }

@@ -2,7 +2,7 @@
 
 import { repository } from '@/modules/config/repository';
 import { revalidateTag } from 'next/cache';
-import { arraysEqual } from '@/lib/utils';
+import { isEqual } from '@/lib/utils';
 import { cacheKeys } from '@/modules/config/cacheHelper';
 import {
   UsecaseEditPlaylistInput,
@@ -10,47 +10,51 @@ import {
 } from '../validations/EditPlaylistTypes';
 import { PlaylistRepository } from '../playlist.repository';
 import { userGuard } from '@/lib/guard/userGuard';
+import { ValidationError } from '@/lib/errors';
+import { ServerActionResponse } from '@/types/ServerActionResponse';
+import { UserPlaylist } from '../playlist';
 
 export const editPlaylistServerAction = userGuard(
   async (
     id: string,
     data: UsecaseEditPlaylistInput,
     subPlaylistRepository: PlaylistRepository | null = null
-  ) => {
-    const { name, userId, trackIds } =
-      UsecaseEditPlaylistInputSchema.parse(data);
-    const repo = subPlaylistRepository || repository.playlist;
-
-    const exist = await repo.findOne(id);
-    if (!exist) {
-      return { success: false, message: '플레이리스트가 존재하지 않습니다.' };
-    }
-
-    const updatedField = {
-      name: exist.name === name ? undefined : name,
-      trackIds: arraysEqual(
-        exist.tracks.map((track) => track.id),
-        trackIds
-      )
-        ? undefined
-        : trackIds,
-    };
-    if (Object.values(updatedField).every((val) => val === undefined)) {
-      return { success: false, message: '변경 된 내용이 없습니다.' };
-    }
-
+  ): Promise<ServerActionResponse<UserPlaylist>> => {
     try {
+      const parsedResult = UsecaseEditPlaylistInputSchema.safeParse(data);
+      const repo = subPlaylistRepository || repository.playlist;
+
+      if (!parsedResult.success) {
+        throw new ValidationError();
+      }
+
+      const { name, userId, trackIds } = parsedResult.data;
+
+      const exist = await repo.findById(id);
+
+      const updatedField = {
+        name: isEqual(exist.name, name) ? undefined : name,
+        trackIds: isEqual(
+          exist.tracks.map((track) => track.id),
+          trackIds
+        )
+          ? undefined
+          : trackIds,
+      };
+
+      if (Object.values(updatedField).every((val) => val === undefined)) {
+        return { success: false, error: '변경 된 내용이 없습니다.' };
+      }
+
       const result = await repo.edit(id, updatedField);
 
-      if (updatedField.name) {
-        revalidateTag(cacheKeys.getPlaylistsByUser(userId));
-      }
+      revalidateTag(cacheKeys.getPlaylistsByUser(userId));
       revalidateTag(cacheKeys.getPlaylistById(result.id));
 
-      return { success: true, playlist: result };
+      return { success: true, data: result };
     } catch (e) {
       console.error('editPlaylistServerAction Error', e);
-      return { success: false, message: '서버에 문제가 발생하였습니다.' };
+      return { success: false, error: '서버에 문제가 발생하였습니다.' };
     }
   }
 );

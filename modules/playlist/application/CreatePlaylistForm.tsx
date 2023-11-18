@@ -53,18 +53,19 @@ export const CreatePlaylistForm = ({ closeModal }: Props) => {
       if (!result.success) {
         toast({
           variant: 'destructive',
-          title: result.message,
+          title: result.error,
         });
         form.reset();
         return;
       }
+      const playlist = result.data;
 
       toast({
         variant: 'success',
         title: '성공적으로 Playlists를 생성했습니다.',
       });
-      if (result.playlist?.id) {
-        router.push(`/playlists/${result.playlist.id}`);
+      if (playlist.id) {
+        router.push(`/playlists/${playlist.id}`);
       }
 
       closeModal();

@@ -2,14 +2,7 @@
 
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { toast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -51,7 +44,7 @@ export const EditPlaylistNameForm = ({ playlist }: Props) => {
       if (!result.success) {
         toast({
           variant: 'destructive',
-          title: result.message,
+          title: result.error,
         });
         form.reset();
         return;

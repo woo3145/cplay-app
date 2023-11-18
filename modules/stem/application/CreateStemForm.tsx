@@ -62,7 +62,7 @@ export const CreateStemForm = ({ closeModal, track }: Props) => {
       if (!result.success) {
         toast({
           variant: 'destructive',
-          title: result.message,
+          title: result.error,
         });
         return;
       }

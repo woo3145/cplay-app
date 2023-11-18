@@ -72,7 +72,7 @@ export const usePlaylistActions = () => {
       if (!result.success) {
         toast({
           variant: 'destructive',
-          title: result.message,
+          title: result.error,
         });
         return;
       }
@@ -82,9 +82,8 @@ export const usePlaylistActions = () => {
           variant: 'success',
           title: '새 플레이리스트를 생성했습니다.',
         });
-
-        if (result.playlist)
-          setPlaylist(result.playlist.id, playlistName, result.playlist.tracks);
+        if (result.data)
+          setPlaylist(result.data.id, playlistName, result.data.tracks);
 
         return;
       }
@@ -99,7 +98,7 @@ export const usePlaylistActions = () => {
       if (!result.success) {
         toast({
           variant: 'destructive',
-          title: result.message,
+          title: result.error,
         });
         return;
       }

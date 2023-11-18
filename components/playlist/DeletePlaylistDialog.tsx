@@ -39,7 +39,7 @@ export const DeletePlaylistDialog = ({ children, playlist }: Props) => {
       if (!result.success) {
         return toast({
           variant: 'destructive',
-          title: result.message,
+          title: result.error,
         });
       }
       toast({

@@ -3,13 +3,28 @@ import { PlaylistController } from './PlaylistController';
 import { PlaylistInfo } from './PlaylistInfo';
 import { PlaylistList } from './PlaylistList';
 import { Separator } from '@/components/ui/separator';
+import { z } from 'zod';
+import { notFound } from 'next/navigation';
 
 export default async function PlaylistPage({
-  params: { playlistId },
+  params,
 }: {
   params: { playlistId: string };
 }) {
-  const playlist = await getPlaylistServerAction(playlistId);
+  const routerSchema = z.object({
+    playlistId: z.coerce.string(),
+  });
+  const parsedParams = routerSchema.safeParse(params);
+  if (!parsedParams.success) {
+    notFound();
+  }
+  const getPlaylistResult = await getPlaylistServerAction(
+    parsedParams.data.playlistId
+  );
+  if (!getPlaylistResult.success) {
+    notFound();
+  }
+  const playlist = getPlaylistResult.data;
 
   if (!playlist) {
     return (

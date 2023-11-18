@@ -41,11 +41,15 @@ export default async function RootLayout({
 }) {
   const session = await getServerSession(authOptions);
 
-  const [likedTracksResult] = await Promise.all([
+  const [likedTracksResult, userPlaylistsResult] = await Promise.all([
     getLikedTracksServerAction(session?.user.id),
+    getPlaylistsServerAction(session?.user.id),
   ]);
 
   const likedTracks = likedTracksResult.success ? likedTracksResult.data : [];
+  const userPlaylists = userPlaylistsResult.success
+    ? userPlaylistsResult.data
+    : [];
 
   const genres = await getAllGenresServerAction();
   const moods = await getAllMoodsServerAction();
@@ -55,7 +59,7 @@ export default async function RootLayout({
   useUserStore.setState({
     likedTracks,
     likedBundles,
-    playlists,
+    playlists: userPlaylists,
   });
   useAppStore.setState({
     genres,
@@ -68,7 +72,7 @@ export default async function RootLayout({
           <StoreProvider
             likedTracks={likedTracks}
             likedBundles={likedBundles}
-            playlists={playlists}
+            playlists={userPlaylists}
             genres={genres}
             moods={moods}
           >

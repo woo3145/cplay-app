@@ -4,20 +4,19 @@ import { repository } from '@/modules/config/repository';
 import { unstable_cache } from 'next/cache';
 import { cacheKeys } from '@/modules/config/cacheHelper';
 import { PlaylistRepository } from '../playlist.repository';
+import { ServerActionResponse } from '@/types/ServerActionResponse';
+import { UserPlaylist } from '../playlist';
 
-// 페이지 네이션 필요
 export const getPlaylistServerAction = async (
-  playlistId?: string,
+  playlistId: string,
   subPlaylistRepository: PlaylistRepository | null = null
-) => {
-  const repo = subPlaylistRepository || repository.playlist;
-  if (!playlistId) {
-    return null;
-  }
+): Promise<ServerActionResponse<UserPlaylist>> => {
   try {
+    const repo = subPlaylistRepository || repository.playlist;
+
     const playlist = await unstable_cache(
       async () => {
-        const data = await repo.findOne(playlistId);
+        const data = await repo.findById(playlistId);
         console.log(`Prisma 호출: ${cacheKeys.getPlaylistById(playlistId)}`);
         return data;
       },
@@ -28,9 +27,9 @@ export const getPlaylistServerAction = async (
       }
     )();
 
-    return playlist;
+    return { success: true, data: playlist };
   } catch (e) {
     console.error('getPlaylistServerAction Error: ', e);
-    return null;
+    return { success: false, error: '서버에 문제가 발생하였습니다.' };
   }
 };
